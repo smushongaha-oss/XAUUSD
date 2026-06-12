@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NEXA · XAUUSD M5 Indicator</title>
+<title>NEXA · XAUUSD H1 Indicator with Alerts</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap');
 
@@ -70,6 +70,29 @@
     margin-bottom: 12px;
     text-shadow: var(--glow-purple);
   }
+
+  .notif-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .notif-btn {
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: #0d1225;
+    color: var(--text);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.65rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .notif-btn:hover { opacity: 0.85; }
+  .notif-btn.active { border-color: var(--green); background: #00e67622; }
 
   .conn-status {
     font-family: 'Share Tech Mono', monospace;
@@ -345,6 +368,8 @@
     .bottom-strip { grid-template-columns: 1fr; }
     .bs-div    { display: none; }
     .ai-key    { width: 100%; }
+    .notif-controls { gap: 5px; }
+    .notif-btn { padding: 4px 8px; font-size: 0.6rem; }
   }
 </style>
 </head>
@@ -358,7 +383,13 @@
   <span class="sell">SELL</span>
 </div>
 
-<div class="sub-label">⚡ XAUUSD · GOLD/USD · 5 MIN · COMMODITY</div>
+<div class="sub-label">⚡ XAUUSD · GOLD/USD · 1 HOUR · COMMODITY</div>
+
+<div class="notif-controls">
+  <button class="notif-btn active" id="notifBrowserBtn" onclick="toggleBrowserNotif()">🔔 Browser Alert</button>
+  <button class="notif-btn" id="notifSoundBtn" onclick="toggleSoundNotif()">🔊 Sound Alert</button>
+  <button class="notif-btn" id="notifVisualsBtn" onclick="toggleVisualNotif()">✨ Visual Flash</button>
+</div>
 
 <div class="conn-status connecting" id="connStatus">
   <div class="conn-dot"></div>
@@ -371,7 +402,7 @@
   <div class="panel-header">
     <div class="live-dot"></div>
     <div class="sym">XAUUSD</div>
-    <div class="tf">Gold/Dollar, M5</div>
+    <div class="tf">Gold/Dollar, H1</div>
     <div class="synth-badge">LIVE</div>
     <div class="sig-label">SIGNAL</div>
     <div class="sig-badge wait" id="sigBadge">WAIT ◆</div>
@@ -412,7 +443,7 @@
       </div>
       <div class="sg">
         <div class="sl">TIMEFRAME</div>
-        <div class="sv green">M5 · 5 MINUTE</div>
+        <div class="sv green">H1 · 1 HOUR</div>
       </div>
       <div class="vol-meter">
         <div class="vol-label">VOLATILITY PULSE</div>
@@ -455,7 +486,7 @@
   <div class="tk"><div class="tk-l">SESSION HIGH</div><div class="tk-v" style="color:var(--green)" id="tk-hi">--</div></div>
   <div class="tk"><div class="tk-l">SESSION LOW</div><div class="tk-v" style="color:var(--red)" id="tk-lo">--</div></div>
   <div class="tk"><div class="tk-l">CANDLES</div><div class="tk-v" style="color:var(--dim)" id="tk-count">0</div></div>
-  <div class="tk"><div class="tk-l">TIMEFRAME</div><div class="tk-v" style="color:var(--purple)">M5</div></div>
+  <div class="tk"><div class="tk-l">TIMEFRAME</div><div class="tk-v" style="color:var(--purple)">H1</div></div>
   <div class="tk"><div class="tk-l">MARKET</div><div class="tk-v" style="color:var(--purple)">DERIV · GOLD</div></div>
   <div class="tk"><div class="tk-l">SOURCE</div><div class="tk-v" style="color:var(--green)">LIVE WS</div></div>
 </div>
@@ -495,18 +526,89 @@
   <div class="ai-inputs">
     <input class="ai-inp ai-key" id="groqKey" type="password" placeholder="Groq API Key  gsk_...">
     <input class="ai-inp ai-qry" id="aiQry" type="text"
-           value="Should I take this 5-minute signal on Gold (XAUUSD)?"
+           value="Should I take this 1-hour signal on Gold (XAUUSD)?"
            placeholder="Ask anything about this Gold signal...">
     <button class="ai-btn" id="aiBtn" onclick="askGroq()">⚡ ANALYZE</button>
   </div>
-  <div class="ai-resp" id="aiResp">Enter your Groq API key and click ANALYZE to receive AI-powered analysis for the live 5-minute Gold (XAUUSD) signal.</div>
+  <div class="ai-resp" id="aiResp">Enter your Groq API key and click ANALYZE to receive AI-powered analysis for the live 1-hour Gold (XAUUSD) signal.</div>
 </div>
 
 <script>
 // ── CONFIG ──
-const GRANULARITY   = 300;   // 5 minutes in seconds
-const HISTORY_COUNT = 100;   // how many M5 candles to load
+const GRANULARITY   = 3600;  // 1 hour in seconds
+const HISTORY_COUNT = 100;   // how many H1 candles to load
 const SYMBOL        = 'frxXAUUSD'; // Deriv gold symbol
+
+// ── NOTIFICATIONS ──
+let notifSettings = {
+  browser: true,
+  sound: false,
+  visual: true
+};
+
+function toggleBrowserNotif() {
+  notifSettings.browser = !notifSettings.browser;
+  document.getElementById('notifBrowserBtn').classList.toggle('active');
+}
+
+function toggleSoundNotif() {
+  notifSettings.sound = !notifSettings.sound;
+  document.getElementById('notifSoundBtn').classList.toggle('active');
+  if (notifSettings.sound) requestNotificationPermission();
+}
+
+function toggleVisualNotif() {
+  notifSettings.visual = !notifSettings.visual;
+  document.getElementById('notifVisualsBtn').classList.toggle('active');
+}
+
+function requestNotificationPermission() {
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+}
+
+function playAlertSound() {
+  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  const oscillator = audioContext.createOscillator();
+  const gain = audioContext.createGain();
+  
+  oscillator.connect(gain);
+  gain.connect(audioContext.destination);
+  
+  oscillator.frequency.value = 800;
+  oscillator.type = 'sine';
+  gain.gain.setValueAtTime(0.3, audioContext.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+  
+  oscillator.start(audioContext.currentTime);
+  oscillator.stop(audioContext.currentTime + 0.5);
+}
+
+function flashScreen() {
+  document.body.style.backgroundColor = 'rgba(0, 230, 118, 0.1)';
+  setTimeout(() => {
+    document.body.style.backgroundColor = 'var(--bg)';
+  }, 200);
+}
+
+function sendSignalNotification(type, price, entry, stop, target) {
+  if (notifSettings.browser && 'Notification' in window && Notification.permission === 'granted') {
+    new Notification(`${type} SIGNAL - GOLD (H1)`, {
+      body: `Entry: $${entry}\nSL: $${stop}\nTP: $${target}\nPrice: $${price}`,
+      icon: '🎯',
+      tag: 'gold-signal'
+    });
+  }
+  
+  if (notifSettings.sound) {
+    playAlertSound();
+  }
+  
+  if (notifSettings.visual) {
+    flashScreen();
+  }
+}
 
 // ── STATE ──
 let candleData    = [];
@@ -551,10 +653,10 @@ function calcATR(candles, period) {
   return trs.slice(-period).reduce((a, b) => a + b, 0) / period;
 }
 
-// ── SIGNAL ENGINE (runs on every closed M5 candle) ──
+// ── SIGNAL ENGINE (runs on every closed H1 candle) ──
 function computeSignal() {
   if (candleData.length < 25) {
-    document.getElementById('waitMsg').textContent = `Loading M5 candles... (${candleData.length}/25)`;
+    document.getElementById('waitMsg').textContent = `Loading H1 candles... (${candleData.length}/25)`;
     return;
   }
 
@@ -602,7 +704,7 @@ function computeSignal() {
     currentSignal = 'WAIT';
     document.getElementById('sigBadge').textContent = 'WAIT ◆';
     document.getElementById('sigBadge').className   = 'sig-badge wait';
-    document.getElementById('waitMsg').textContent  = 'Scanning M5 candles...';
+    document.getElementById('waitMsg').textContent  = 'Scanning H1 candles...';
   }
 
   // Volatility pulse bars
@@ -626,7 +728,7 @@ function applySignal(type, price, atr) {
 
   document.getElementById('sigBadge').textContent  = isBuy ? 'BUY ▲' : 'SELL ▼';
   document.getElementById('sigBadge').className    = isBuy ? 'sig-badge buy' : 'sig-badge';
-  document.getElementById('waitMsg').textContent   = `${type} signal active (M5)`;
+  document.getElementById('waitMsg').textContent   = `${type} signal active (H1)`;
   document.getElementById('entryV').textContent    = price.toFixed(2);
   document.getElementById('stopV').textContent     = stop.toFixed(2);
   document.getElementById('targetV').textContent   = target.toFixed(2);
@@ -636,11 +738,14 @@ function applySignal(type, price, atr) {
 
   const alertEl = document.getElementById('signalAlert');
   alertEl.textContent = isBuy
-    ? `🟢 BUY SIGNAL (M5) · Entry: ${price.toFixed(2)} · SL: ${stop.toFixed(2)} · TP: ${target.toFixed(2)}`
-    : `🔴 SELL SIGNAL (M5) · Entry: ${price.toFixed(2)} · SL: ${stop.toFixed(2)} · TP: ${target.toFixed(2)}`;
+    ? `🟢 BUY SIGNAL (H1) · Entry: ${price.toFixed(2)} · SL: ${stop.toFixed(2)} · TP: ${target.toFixed(2)}`
+    : `🔴 SELL SIGNAL (H1) · Entry: ${price.toFixed(2)} · SL: ${stop.toFixed(2)} · TP: ${target.toFixed(2)}`;
   alertEl.className     = isBuy ? 'signal-alert buy' : 'signal-alert sell';
   alertEl.style.display = 'block';
   setTimeout(() => { alertEl.style.display = 'none'; }, 7000);
+
+  // Send notifications
+  sendSignalNotification(type, price, price.toFixed(2), stop.toFixed(2), target.toFixed(2));
 }
 
 function forceSignal(type) {
@@ -660,7 +765,7 @@ function processTick(price, epoch) {
   const candleStart = Math.floor(epoch / GRANULARITY) * GRANULARITY;
 
   if (candleStart > currentCandle.time) {
-    // New 5-min candle started — push completed one
+    // New 1-hour candle started — push completed one
     candleData.push({ ...currentCandle });
     if (candleData.length > HISTORY_COUNT) candleData.shift();
     document.getElementById('tk-count').textContent = candleData.length;
@@ -802,9 +907,9 @@ function connectDeriv() {
 
   ws.onopen = () => {
     statusEl.className = 'conn-status connected';
-    textEl.textContent = 'CONNECTED · LIVE GOLD M5 DATA';
+    textEl.textContent = 'CONNECTED · LIVE GOLD H1 DATA';
 
-    // Historical M5 candles (granularity=300 = 5 minutes)
+    // Historical H1 candles (granularity=3600 = 1 hour)
     ws.send(JSON.stringify({
       ticks_history: SYMBOL,
       adjust_start_time: 1,
@@ -821,7 +926,7 @@ function connectDeriv() {
   ws.onmessage = (e) => {
     const msg = JSON.parse(e.data);
 
-    // Historical M5 candles
+    // Historical H1 candles
     if (msg.msg_type === 'candles' && msg.candles) {
       candleData = msg.candles.map(c => ({
         open:  c.open,
@@ -885,7 +990,7 @@ async function askGroq() {
 
   btn.disabled = true;
   respEl.className = 'ai-resp loading';
-  respEl.textContent = '⏳ Analyzing live M5 Gold data with Groq AI...';
+  respEl.textContent = '⏳ Analyzing live H1 Gold data with Groq AI...';
 
   const price  = document.getElementById('tk-price').textContent;
   const entry  = document.getElementById('entryV').textContent;
@@ -899,13 +1004,13 @@ async function askGroq() {
   const pct    = document.getElementById('strPct').textContent;
 
   const systemPrompt = `You are an expert precious metals trader specializing in Gold (XAUUSD) trading.
-Gold is a safe-haven asset with strong technical patterns and macro influences. Analyze on the 5-minute timeframe.
+Gold is a safe-haven asset with strong technical patterns and macro influences. Analyze on the 1-hour timeframe.
 Provide concise, actionable analysis. Consider support/resistance levels, US dollar strength, and macroeconomic factors.
 Limit to 160 words.`;
 
-  const userMsg = `LIVE GOLD M5 Data:
+  const userMsg = `LIVE GOLD H1 Data:
 - Current Price: $${price}/oz
-- Timeframe: M5 (5-minute)
+- Timeframe: H1 (1-hour)
 - Signal: ${currentSignal}
 - Trend: ${trend}
 - EMA(9/21): ${ema}
