@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NEXA · US500 M5 Indicator · Deriv Live</title>
+<title>NEXA · US500 M5 · TraderMade Live</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap');
 
@@ -39,377 +39,223 @@
     background-image: radial-gradient(ellipse at 50% 0%, #1a0a3a22 0%, transparent 70%);
   }
 
-  .top-label {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.65rem;
-    letter-spacing: 0.45em;
-    color: var(--dim);
-    margin-bottom: 4px;
-  }
+  .top-label { font-family:'Orbitron',sans-serif; font-size:.65rem; letter-spacing:.45em; color:var(--dim); margin-bottom:4px; }
 
   .buy-sell-title {
-    display: flex;
-    gap: 14px;
-    align-items: center;
-    font-family: 'Orbitron', sans-serif;
-    font-size: clamp(2.8rem, 10vw, 5rem);
-    font-weight: 900;
-    line-height: 1;
-    margin-bottom: 6px;
+    display:flex; gap:14px; align-items:center;
+    font-family:'Orbitron',sans-serif;
+    font-size:clamp(2.8rem,10vw,5rem);
+    font-weight:900; line-height:1; margin-bottom:6px;
   }
+  .buy-sell-title .buy  { color:var(--green); text-shadow:var(--glow-green); }
+  .buy-sell-title .div  { color:var(--dim); font-size:2.5rem; }
+  .buy-sell-title .sell { color:var(--red); text-shadow:var(--glow-red); }
 
-  .buy-sell-title .buy  { color: var(--green); text-shadow: var(--glow-green); }
-  .buy-sell-title .div  { color: var(--dim); font-size: 2.5rem; }
-  .buy-sell-title .sell { color: var(--red); text-shadow: var(--glow-red); }
-
-  .sub-label {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--purple);
-    letter-spacing: 0.2em;
-    margin-bottom: 12px;
-    text-shadow: var(--glow-purple);
-  }
+  .sub-label { font-family:'Share Tech Mono',monospace; font-size:.75rem; color:var(--purple); letter-spacing:.2em; margin-bottom:12px; text-shadow:var(--glow-purple); }
 
   .conn-status {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.7rem;
-    padding: 4px 14px;
-    border-radius: 20px;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    border: 1px solid var(--border);
-    cursor: default;
+    font-family:'Share Tech Mono',monospace; font-size:.7rem;
+    padding:4px 14px; border-radius:20px; margin-bottom:10px;
+    display:flex; align-items:center; gap:6px; border:1px solid var(--border);
   }
-  .conn-status.connecting { color: var(--gold); border-color: var(--gold); }
-  .conn-status.connected  { color: var(--green); border-color: var(--green); }
-  .conn-status.error      { color: var(--red); border-color: var(--red); }
-  .conn-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; animation: blink 1.4s infinite; }
+  .conn-status.connecting { color:var(--gold); border-color:var(--gold); }
+  .conn-status.connected  { color:var(--green); border-color:var(--green); }
+  .conn-status.error      { color:var(--red); border-color:var(--red); }
+  .conn-dot { width:7px; height:7px; border-radius:50%; background:currentColor; animation:blink 1.4s infinite; }
 
-  /* APP ID banner */
-  .appid-bar {
-    width: 100%;
-    max-width: 940px;
-    background: #0d1225;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 8px 14px;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
+  /* API key bar */
+  .apikey-bar {
+    width:100%; max-width:940px;
+    background:#0d1225; border:1px solid var(--border); border-radius:8px;
+    padding:10px 14px; margin-bottom:10px;
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap;
   }
-  .appid-label { font-size: 0.68rem; color: var(--dim); font-family: 'Share Tech Mono', monospace; white-space: nowrap; }
-  .appid-inp {
-    background: #060912;
-    border: 1px solid var(--border);
-    border-radius: 5px;
-    color: var(--text);
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.78rem;
-    padding: 5px 10px;
-    outline: none;
-    width: 110px;
-    transition: border-color .2s;
+  .apikey-label { font-size:.68rem; color:var(--dim); font-family:'Share Tech Mono',monospace; white-space:nowrap; }
+  .apikey-inp {
+    background:#060912; border:1px solid var(--border); border-radius:5px;
+    color:var(--text); font-family:'Share Tech Mono',monospace; font-size:.78rem;
+    padding:6px 10px; outline:none; flex:1; min-width:200px; transition:border-color .2s;
   }
-  .appid-inp:focus { border-color: var(--blue); }
-  .appid-hint { font-size: 0.62rem; color: var(--dim); }
-  .appid-hint a { color: var(--blue); text-decoration: none; }
-  .appid-btn {
-    background: var(--purple); color: #fff; border: none; border-radius: 5px;
-    padding: 5px 14px;
-    font-family: 'Orbitron', sans-serif; font-size: 0.65rem; font-weight: 700;
-    cursor: pointer; transition: opacity .2s; white-space: nowrap;
+  .apikey-inp:focus { border-color:var(--blue); }
+  .apikey-btn {
+    background:var(--blue); color:#000; border:none; border-radius:5px;
+    padding:6px 16px; font-family:'Orbitron',sans-serif; font-size:.65rem; font-weight:700;
+    cursor:pointer; transition:opacity .2s; white-space:nowrap;
   }
-  .appid-btn:hover { opacity: .85; }
+  .apikey-btn:hover { opacity:.85; }
+  .apikey-hint { font-size:.62rem; color:var(--dim); width:100%; }
+  .apikey-hint a { color:var(--blue); text-decoration:none; }
 
   .main-panel {
-    width: 100%;
-    max-width: 940px;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-    margin-bottom: 12px;
-    box-shadow: 0 0 40px #0004;
+    width:100%; max-width:940px;
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    overflow:hidden; margin-bottom:12px; box-shadow:0 0 40px #0004;
   }
 
   .panel-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 9px 16px;
-    border-bottom: 1px solid var(--border);
-    flex-wrap: wrap;
-    background: #0d1225;
+    display:flex; align-items:center; gap:12px;
+    padding:9px 16px; border-bottom:1px solid var(--border);
+    flex-wrap:wrap; background:#0d1225;
   }
 
-  .live-dot {
-    width: 9px; height: 9px;
-    background: var(--green);
-    border-radius: 50%;
-    box-shadow: var(--glow-green);
-    animation: blink 1.4s infinite;
-    flex-shrink: 0;
-  }
-
+  .live-dot { width:9px; height:9px; background:var(--green); border-radius:50%; box-shadow:var(--glow-green); animation:blink 1.4s infinite; flex-shrink:0; }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
 
-  .sym { font-family: 'Orbitron', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--text); }
-  .tf  { color: var(--dim); font-size: 0.8rem; margin-left: -6px; }
+  .sym { font-family:'Orbitron',sans-serif; font-size:.9rem; font-weight:700; color:var(--text); }
+  .tf  { color:var(--dim); font-size:.8rem; margin-left:-6px; }
 
-  .synth-badge {
-    background: linear-gradient(135deg,#1a0a3a,#0a1a3a);
-    border: 1px solid var(--blue);
-    border-radius: 4px;
-    padding: 2px 8px;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.6rem;
-    color: var(--blue);
-    letter-spacing: 0.1em;
-    text-shadow: var(--glow-blue);
+  .src-pill {
+    background:linear-gradient(135deg,#001a0a,#0a1a3a);
+    border:1px solid var(--green); border-radius:4px; padding:2px 8px;
+    font-family:'Orbitron',sans-serif; font-size:.6rem; color:var(--green);
+    letter-spacing:.1em; text-shadow:var(--glow-green);
   }
+  .src-pill.wait { border-color:var(--gold); color:var(--gold); text-shadow:var(--glow-gold); background:linear-gradient(135deg,#1a1000,#0a1a3a); }
 
-  .sig-label { color: var(--dim); font-size: 0.78rem; margin-left: auto; }
+  .sig-label { color:var(--dim); font-size:.78rem; margin-left:auto; }
+  .sig-badge { font-family:'Orbitron',sans-serif; font-size:1.05rem; font-weight:900; color:var(--red); text-shadow:var(--glow-red); }
+  .sig-badge.buy  { color:var(--green); text-shadow:var(--glow-green); }
+  .sig-badge.wait { color:var(--gold);  text-shadow:var(--glow-gold); }
 
-  .sig-badge {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.05rem;
-    font-weight: 900;
-    color: var(--red);
-    text-shadow: var(--glow-red);
-  }
-  .sig-badge.buy  { color: var(--green); text-shadow: var(--glow-green); }
-  .sig-badge.wait { color: var(--gold);  text-shadow: var(--glow-gold); }
+  .str-wrap { margin-left:auto; display:flex; flex-direction:column; align-items:flex-end; gap:3px; }
+  .str-lbl  { font-size:.65rem; color:var(--dim); letter-spacing:.1em; }
+  .str-row  { display:flex; align-items:center; gap:8px; }
+  .str-bg   { width:150px; height:7px; background:#182040; border-radius:4px; }
+  .str-bar  { height:100%; border-radius:4px; background:var(--gold); box-shadow:var(--glow-gold); transition:width .6s; }
+  .str-pct  { font-family:'Orbitron',sans-serif; font-size:.95rem; color:var(--gold); min-width:40px; text-align:right; }
 
-  .str-wrap { margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
-  .str-lbl  { font-size: 0.65rem; color: var(--dim); letter-spacing: 0.1em; }
-  .str-row  { display: flex; align-items: center; gap: 8px; }
-  .str-bg   { width: 150px; height: 7px; background: #182040; border-radius: 4px; }
-  .str-bar  { height: 100%; border-radius: 4px; background: var(--gold); box-shadow: var(--glow-gold); transition: width .6s; }
-  .str-pct  { font-family: 'Orbitron', sans-serif; font-size: 0.95rem; color: var(--gold); min-width: 40px; text-align: right; }
-
-  .panel-body { display: flex; }
+  .panel-body { display:flex; }
 
   .stats-col {
-    width: 195px;
-    min-width: 175px;
-    padding: 12px 14px;
-    border-right: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    gap: 11px;
-    overflow-y: auto;
-    max-height: 500px;
+    width:195px; min-width:175px; padding:12px 14px;
+    border-right:1px solid var(--border);
+    display:flex; flex-direction:column; gap:11px;
+    overflow-y:auto; max-height:500px;
   }
 
-  .sg { display: flex; flex-direction: column; gap: 2px; }
-  .sl { font-size: 0.62rem; letter-spacing: 0.12em; color: var(--dim); }
-  .sv { font-family: 'Share Tech Mono', monospace; font-size: 0.95rem; }
-  .sv.green  { color: var(--green); }
-  .sv.red    { color: var(--red); }
-  .sv.gold   { color: var(--gold); }
-  .sv.blue   { color: var(--blue); }
-  .sv.purple { color: var(--purple); }
+  .sg { display:flex; flex-direction:column; gap:2px; }
+  .sl { font-size:.62rem; letter-spacing:.12em; color:var(--dim); }
+  .sv { font-family:'Share Tech Mono',monospace; font-size:.95rem; }
+  .sv.green  { color:var(--green); }
+  .sv.red    { color:var(--red); }
+  .sv.gold   { color:var(--gold); }
+  .sv.blue   { color:var(--blue); }
+  .sv.purple { color:var(--purple); }
 
-  .sr { display: flex; gap: 18px; }
-  .wait-msg { font-size: 0.72rem; color: var(--dim); font-style: italic; }
+  .sr { display:flex; gap:18px; }
+  .wait-msg { font-size:.72rem; color:var(--dim); font-style:italic; }
 
   .rr-pill {
-    display: inline-block;
-    background: #0a1a08;
-    border: 1px solid var(--green);
-    border-radius: 4px;
-    padding: 2px 9px;
-    color: var(--gold);
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.82rem;
+    display:inline-block; background:#0a1a08; border:1px solid var(--green);
+    border-radius:4px; padding:2px 9px; color:var(--gold);
+    font-family:'Share Tech Mono',monospace; font-size:.82rem;
   }
 
-  .ent-row { display: flex; gap: 8px; flex-wrap: wrap; }
-  .ei { display: flex; flex-direction: column; gap: 2px; }
-  .el { font-size: 0.58rem; letter-spacing: 0.1em; color: var(--dim); }
-  .ev { font-family: 'Share Tech Mono', monospace; font-size: 0.85rem; }
-  .ev.entry  { color: var(--gold); }
-  .ev.stop   { color: var(--red); }
-  .ev.target { color: var(--gold); font-size: 0.95rem; }
+  .ent-row { display:flex; gap:8px; flex-wrap:wrap; }
+  .ei { display:flex; flex-direction:column; gap:2px; }
+  .el { font-size:.58rem; letter-spacing:.1em; color:var(--dim); }
+  .ev { font-family:'Share Tech Mono',monospace; font-size:.85rem; }
+  .ev.entry  { color:var(--gold); }
+  .ev.stop   { color:var(--red); }
+  .ev.target { color:var(--gold); font-size:.95rem; }
 
-  .btn-row { display: flex; gap: 7px; }
+  .btn-row { display:flex; gap:7px; }
   .btn {
-    flex: 1; padding: 9px 0; border: none; border-radius: 6px;
-    font-family: 'Orbitron', sans-serif; font-size: 0.7rem; font-weight: 700;
-    cursor: pointer; display: flex; align-items: center; justify-content: center;
-    gap: 4px; transition: opacity .2s, transform .1s;
+    flex:1; padding:9px 0; border:none; border-radius:6px;
+    font-family:'Orbitron',sans-serif; font-size:.7rem; font-weight:700;
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+    gap:4px; transition:opacity .2s,transform .1s;
   }
-  .btn:hover  { opacity: .85; }
-  .btn:active { transform: scale(.97); }
-  .btn.long  { background: var(--green); color: #000; box-shadow: var(--glow-green); }
-  .btn.short { background: var(--red);   color: #fff; box-shadow: var(--glow-red); }
+  .btn:hover  { opacity:.85; }
+  .btn:active { transform:scale(.97); }
+  .btn.long  { background:var(--green); color:#000; box-shadow:var(--glow-green); }
+  .btn.short { background:var(--red);   color:#fff; box-shadow:var(--glow-red); }
 
-  .live-row { font-size: 0.68rem; color: var(--green); display: flex; align-items: center; gap: 5px; }
-  .live-dot2 { width: 6px; height: 6px; background: var(--green); border-radius: 50%; box-shadow: var(--glow-green); animation: blink 1.4s infinite; }
-  .live-row.sim { color: var(--gold); }
-  .live-dot2.sim { background: var(--gold); box-shadow: var(--glow-gold); }
+  .live-row { font-size:.68rem; color:var(--green); display:flex; align-items:center; gap:5px; }
+  .live-dot2 { width:6px; height:6px; background:var(--green); border-radius:50%; box-shadow:var(--glow-green); animation:blink 1.4s infinite; }
+  .live-row.wait { color:var(--gold); }
+  .live-dot2.wait { background:var(--gold); box-shadow:var(--glow-gold); }
 
-  .vol-meter { display: flex; flex-direction: column; gap: 4px; }
-  .vol-label { font-size: 0.62rem; letter-spacing: 0.12em; color: var(--dim); }
-  .vol-bars  { display: flex; gap: 3px; align-items: flex-end; height: 22px; }
-  .vol-bar   { width: 8px; border-radius: 2px 2px 0 0; background: var(--purple); opacity: 0.5; transition: height .4s; }
-  .vol-bar.active { opacity: 1; box-shadow: var(--glow-purple); }
-  .vol-val   { font-family: 'Share Tech Mono', monospace; font-size: 0.78rem; color: var(--purple); }
+  .vol-meter { display:flex; flex-direction:column; gap:4px; }
+  .vol-label { font-size:.62rem; letter-spacing:.12em; color:var(--dim); }
+  .vol-bars  { display:flex; gap:3px; align-items:flex-end; height:22px; }
+  .vol-bar   { width:8px; border-radius:2px 2px 0 0; background:var(--purple); opacity:0.5; transition:height .4s; }
+  .vol-bar.active { opacity:1; box-shadow:var(--glow-purple); }
+  .vol-val   { font-family:'Share Tech Mono',monospace; font-size:.78rem; color:var(--purple); }
 
-  .chart-area { flex: 1; position: relative; overflow: hidden; min-height: 320px; }
-  canvas#chart { display: block; width: 100%; height: 100%; }
+  .chart-area { flex:1; position:relative; overflow:hidden; min-height:320px; }
+  canvas#chart { display:block; width:100%; height:100%; }
 
   .ticker-strip {
-    width: 100%;
-    max-width: 940px;
-    background: #0d1225;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 7px 16px;
-    margin-bottom: 12px;
-    display: flex;
-    gap: 28px;
-    overflow-x: auto;
-    scrollbar-width: none;
+    width:100%; max-width:940px;
+    background:#0d1225; border:1px solid var(--border); border-radius:8px;
+    padding:7px 16px; margin-bottom:12px;
+    display:flex; gap:28px; overflow-x:auto; scrollbar-width:none;
   }
-  .ticker-strip::-webkit-scrollbar { display: none; }
-  .tk { display: flex; flex-direction: column; gap: 2px; min-width: 80px; }
-  .tk-l { font-size: 0.6rem; color: var(--dim); letter-spacing: 0.1em; }
-  .tk-v { font-family: 'Share Tech Mono', monospace; font-size: 0.85rem; }
+  .ticker-strip::-webkit-scrollbar { display:none; }
+  .tk { display:flex; flex-direction:column; gap:2px; min-width:80px; }
+  .tk-l { font-size:.6rem; color:var(--dim); letter-spacing:.1em; }
+  .tk-v { font-family:'Share Tech Mono',monospace; font-size:.85rem; }
 
   .bottom-strip {
-    width: 100%;
-    max-width: 940px;
-    display: grid;
-    grid-template-columns: 1fr 1px 1fr 1px 1fr;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-    margin-bottom: 14px;
+    width:100%; max-width:940px;
+    display:grid; grid-template-columns:1fr 1px 1fr 1px 1fr;
+    background:var(--panel); border:1px solid var(--border);
+    border-radius:12px; overflow:hidden; margin-bottom:14px;
   }
-  .bs-div { background: var(--border); }
-  .bs-cell { padding: 15px 18px; display: flex; align-items: center; gap: 13px; }
-  .bs-icon {
-    width: 42px; height: 42px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.2rem; flex-shrink: 0;
-  }
-  .bs-icon.green { border: 2px solid var(--green); color: var(--green); box-shadow: var(--glow-green); }
-  .bs-icon.red   { border: 2px solid var(--red);   color: var(--red);   box-shadow: var(--glow-red); }
-  .bs-icon.gold  { border: 2px solid var(--gold);  color: var(--gold);  box-shadow: var(--glow-gold); }
-  .bs-txt { display: flex; flex-direction: column; gap: 2px; }
-  .bs-txt .bl { font-size: 0.58rem; letter-spacing: 0.15em; color: var(--dim); }
-  .bs-txt .bv { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; font-weight: 700; }
-  .bs-txt .bv.green { color: var(--green); text-shadow: var(--glow-green); }
-  .bs-txt .bv.red   { color: var(--red);   text-shadow: var(--glow-red); }
-  .bs-txt .bv.gold  { color: var(--gold);  text-shadow: var(--glow-gold); }
+  .bs-div { background:var(--border); }
+  .bs-cell { padding:15px 18px; display:flex; align-items:center; gap:13px; }
+  .bs-icon { width:42px; height:42px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0; }
+  .bs-icon.green { border:2px solid var(--green); color:var(--green); box-shadow:var(--glow-green); }
+  .bs-icon.red   { border:2px solid var(--red);   color:var(--red);   box-shadow:var(--glow-red); }
+  .bs-icon.gold  { border:2px solid var(--gold);  color:var(--gold);  box-shadow:var(--glow-gold); }
+  .bs-txt { display:flex; flex-direction:column; gap:2px; }
+  .bs-txt .bl { font-size:.58rem; letter-spacing:.15em; color:var(--dim); }
+  .bs-txt .bv { font-family:'Orbitron',sans-serif; font-size:1.2rem; font-weight:700; }
+  .bs-txt .bv.green { color:var(--green); text-shadow:var(--glow-green); }
+  .bs-txt .bv.red   { color:var(--red);   text-shadow:var(--glow-red); }
+  .bs-txt .bv.gold  { color:var(--gold);  text-shadow:var(--glow-gold); }
 
   .signal-alert {
-    display: none;
-    width: 100%;
-    max-width: 940px;
-    padding: 12px 20px;
-    border-radius: 10px;
-    margin-bottom: 12px;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1rem;
-    font-weight: 700;
-    text-align: center;
-    letter-spacing: 0.1em;
-    animation: flashPulse 1s ease-in-out 3;
+    display:none; width:100%; max-width:940px;
+    padding:12px 20px; border-radius:10px; margin-bottom:12px;
+    font-family:'Orbitron',sans-serif; font-size:1rem; font-weight:700;
+    text-align:center; letter-spacing:.1em;
+    animation:flashPulse 1s ease-in-out 3;
   }
-  .signal-alert.buy  { background: #00e67622; border: 2px solid var(--green); color: var(--green); }
-  .signal-alert.sell { background: #ff174422; border: 2px solid var(--red);   color: var(--red); }
+  .signal-alert.buy  { background:#00e67622; border:2px solid var(--green); color:var(--green); }
+  .signal-alert.sell { background:#ff174422; border:2px solid var(--red);   color:var(--red); }
   @keyframes flashPulse { 0%,100%{opacity:1} 50%{opacity:.3} }
 
-  .ai-section {
-    width: 100%;
-    max-width: 940px;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-  }
-  .ai-hdr {
-    display: flex; align-items: center; gap: 10px;
-    padding: 9px 16px;
-    border-bottom: 1px solid var(--border);
-    background: #0a0d1e;
-  }
-  .ai-hdr-title { font-family: 'Orbitron', sans-serif; font-size: 0.78rem; color: var(--blue); letter-spacing: 0.08em; }
-  .ai-hdr-model { font-size: 0.68rem; color: var(--dim); margin-left: auto; font-family: 'Share Tech Mono', monospace; }
+  .ai-section { width:100%; max-width:940px; background:var(--panel); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+  .ai-hdr { display:flex; align-items:center; gap:10px; padding:9px 16px; border-bottom:1px solid var(--border); background:#0a0d1e; }
+  .ai-hdr-title { font-family:'Orbitron',sans-serif; font-size:.78rem; color:var(--blue); letter-spacing:.08em; }
+  .ai-hdr-model { font-size:.68rem; color:var(--dim); margin-left:auto; font-family:'Share Tech Mono',monospace; }
+  .ai-inputs { display:flex; gap:8px; padding:11px 14px; border-bottom:1px solid var(--border); flex-wrap:wrap; }
+  .ai-inp { background:#060912; border:1px solid var(--border); border-radius:5px; color:var(--text); font-family:'Share Tech Mono',monospace; font-size:.78rem; padding:8px 12px; outline:none; transition:border-color .2s; }
+  .ai-inp:focus { border-color:var(--blue); }
+  .ai-key { width:230px; }
+  .ai-qry { flex:1; min-width:200px; }
+  .ai-btn { background:var(--blue); color:#000; border:none; border-radius:5px; padding:8px 16px; font-family:'Orbitron',sans-serif; font-size:.72rem; font-weight:700; cursor:pointer; transition:opacity .2s; white-space:nowrap; }
+  .ai-btn:hover { opacity:.85; }
+  .ai-btn:disabled { opacity:.35; cursor:not-allowed; }
+  .ai-resp { padding:13px 16px; min-height:76px; font-family:'Rajdhani',sans-serif; font-size:.95rem; line-height:1.65; color:var(--text); white-space:pre-wrap; }
+  .ai-resp.loading { color:var(--dim); font-style:italic; }
+  .ai-resp.error   { color:var(--red); }
 
-  .ai-inputs {
-    display: flex; gap: 8px; padding: 11px 14px;
-    border-bottom: 1px solid var(--border);
-    flex-wrap: wrap;
-  }
-  .ai-inp {
-    background: #060912;
-    border: 1px solid var(--border);
-    border-radius: 5px;
-    color: var(--text);
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.78rem;
-    padding: 8px 12px;
-    outline: none;
-    transition: border-color .2s;
-  }
-  .ai-inp:focus { border-color: var(--blue); }
-  .ai-key  { width: 230px; }
-  .ai-qry  { flex: 1; min-width: 200px; }
-  .ai-btn  {
-    background: var(--blue); color: #000; border: none; border-radius: 5px;
-    padding: 8px 16px;
-    font-family: 'Orbitron', sans-serif; font-size: 0.72rem; font-weight: 700;
-    cursor: pointer; transition: opacity .2s;
-    white-space: nowrap;
-  }
-  .ai-btn:hover    { opacity: .85; }
-  .ai-btn:disabled { opacity: .35; cursor: not-allowed; }
-
-  .ai-resp {
-    padding: 13px 16px; min-height: 76px;
-    font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; line-height: 1.65;
-    color: var(--text); white-space: pre-wrap;
-  }
-  .ai-resp.loading { color: var(--dim); font-style: italic; }
-  .ai-resp.error   { color: var(--red); }
-
-  /* Data source badge */
-  .src-badge {
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.6rem;
-    letter-spacing: 0.08em;
-  }
-  .src-badge.live { background: #001a0a; border: 1px solid var(--green); color: var(--green); text-shadow: var(--glow-green); }
-  .src-badge.sim  { background: #1a1000; border: 1px solid var(--gold); color: var(--gold); }
-
-  /* MACD color states */
-  .sv.bullish-macd { color: var(--green); }
-  .sv.bearish-macd { color: var(--red); }
-
-  @media (max-width: 600px) {
-    .stats-col { width: 145px; min-width: 130px; }
-    .str-bg    { width: 90px; }
-    .bottom-strip { grid-template-columns: 1fr; }
-    .bs-div    { display: none; }
-    .ai-key    { width: 100%; }
-    .appid-inp { width: 100px; }
+  @media (max-width:600px) {
+    .stats-col { width:145px; min-width:130px; }
+    .str-bg    { width:90px; }
+    .bottom-strip { grid-template-columns:1fr; }
+    .bs-div    { display:none; }
+    .ai-key    { width:100%; }
+    .apikey-inp { min-width:150px; }
   }
 </style>
 </head>
 <body>
 
-<div class="top-label">INDEX &nbsp; CFD &nbsp; INDICATOR · DERIV LIVE</div>
+<div class="top-label">INDEX &nbsp; CFD &nbsp; INDICATOR · TRADERMADE LIVE</div>
 
 <div class="buy-sell-title">
   <span class="buy">BUY</span>
@@ -417,23 +263,24 @@
   <span class="sell">SELL</span>
 </div>
 
-<div class="sub-label">⚡ US500 · S&P 500 · 5 MIN · CFD · DERIV</div>
+<div class="sub-label">⚡ US500 · S&P 500 · 5 MIN · CFD · TRADERMADE</div>
 
 <div class="conn-status connecting" id="connStatus">
   <div class="conn-dot"></div>
-  <span id="connText">CONNECTING TO DERIV...</span>
+  <span id="connText">AWAITING API KEY...</span>
 </div>
 
 <div class="signal-alert" id="signalAlert"></div>
 
-<!-- App ID config bar -->
-<div class="appid-bar">
-  <div class="appid-label">DERIV APP ID:</div>
-  <input class="appid-inp" id="appIdInp" type="text" placeholder="e.g. 1089" value="1089">
-  <button class="appid-btn" onclick="reconnect()">↻ CONNECT</button>
-  <div class="appid-hint">
-    Default App ID 1089 works for demo/public streaming. 
-    Get your own free at <a href="https://app.deriv.com/account/api-token" target="_blank">app.deriv.com</a>
+<!-- TraderMade API Key bar -->
+<div class="apikey-bar">
+  <div class="apikey-label">TRADERMADE KEY:</div>
+  <input class="apikey-inp" id="tmKey" type="password" placeholder="Paste your TraderMade streaming API key...">
+  <input class="apikey-inp" id="tmRestKey" type="password" placeholder="REST API key (for history)" style="flex:0.6;min-width:160px;">
+  <button class="apikey-btn" onclick="startConnection()">▶ CONNECT</button>
+  <div class="apikey-hint">
+    Free 7-day trial (no card) at <a href="https://tradermade.com/signup" target="_blank">tradermade.com/signup</a> — 
+    get <b>Streaming key</b> for live ticks + <b>REST key</b> for M5 history. Both found in your dashboard after signup.
   </div>
 </div>
 
@@ -442,8 +289,7 @@
     <div class="live-dot"></div>
     <div class="sym">US500</div>
     <div class="tf">S&P 500, M5</div>
-    <div class="synth-badge" id="srcBadge">DERIV</div>
-    <span class="src-badge sim" id="dataSrcBadge">AWAITING</span>
+    <span class="src-pill wait" id="srcPill">AWAITING KEY</span>
     <div class="sig-label">SIGNAL</div>
     <div class="sig-badge wait" id="sigBadge">WAIT ◆</div>
     <div class="str-wrap">
@@ -458,37 +304,18 @@
   <div class="panel-body">
     <div class="stats-col">
       <div class="sr">
-        <div class="sg">
-          <div class="sl">TREND</div>
-          <div class="sv gold" id="trend">LOADING</div>
-        </div>
-        <div class="sg">
-          <div class="sl">ATR(5)</div>
-          <div class="sv blue" id="atr5">--</div>
-        </div>
+        <div class="sg"><div class="sl">TREND</div><div class="sv gold" id="trend">--</div></div>
+        <div class="sg"><div class="sl">ATR(5)</div><div class="sv blue" id="atr5">--</div></div>
       </div>
       <div class="sr">
-        <div class="sg">
-          <div class="sl">RSI(14)</div>
-          <div class="sv purple" id="rsiVal">--</div>
-        </div>
-        <div class="sg">
-          <div class="sl">ATR(14)</div>
-          <div class="sv blue" id="atr14">--</div>
-        </div>
+        <div class="sg"><div class="sl">RSI(14)</div><div class="sv purple" id="rsiVal">--</div></div>
+        <div class="sg"><div class="sl">ATR(14)</div><div class="sv blue" id="atr14">--</div></div>
       </div>
-      <div class="sg">
-        <div class="sl">EMA 9 / EMA 21</div>
-        <div class="sv gold" id="emaStatus">LOADING...</div>
-      </div>
-      <div class="sg">
-        <div class="sl">MACD LINE</div>
-        <div class="sv blue" id="macdStatus">--</div>
-      </div>
-      <div class="sg">
-        <div class="sl">TIMEFRAME</div>
-        <div class="sv green">M5 · 5 MINUTE</div>
-      </div>
+      <div class="sg"><div class="sl">EMA 9 / EMA 21</div><div class="sv gold" id="emaStatus">--</div></div>
+      <div class="sg"><div class="sl">MACD LINE</div><div class="sv blue" id="macdStatus">--</div></div>
+      <div class="sg"><div class="sl">BID / ASK</div><div class="sv green" id="bidAsk">-- / --</div></div>
+      <div class="sg"><div class="sl">SPREAD</div><div class="sv gold" id="spread">--</div></div>
+      <div class="sg"><div class="sl">TIMEFRAME</div><div class="sv green">M5 · 5 MINUTE</div></div>
       <div class="vol-meter">
         <div class="vol-label">VOLATILITY</div>
         <div class="vol-bars" id="volBars">
@@ -502,11 +329,8 @@
         </div>
         <div class="vol-val" id="volVal">σ = --</div>
       </div>
-      <div class="wait-msg" id="waitMsg">Connecting to Deriv WebSocket...</div>
-      <div class="sg">
-        <div class="sl">LEVELS</div>
-        <div class="rr-pill">R/R 1:2.0</div>
-      </div>
+      <div class="wait-msg" id="waitMsg">Enter TraderMade API key to start.</div>
+      <div class="sg"><div class="sl">LEVELS</div><div class="rr-pill">R/R 1:2.0</div></div>
       <div class="ent-row">
         <div class="ei"><div class="el">ENTRY</div><div class="ev entry" id="entryV">--</div></div>
         <div class="ei"><div class="el">STOP</div><div class="ev stop" id="stopV">--</div></div>
@@ -516,9 +340,9 @@
         <button class="btn long" onclick="forceSignal('BUY')">▲ LONG</button>
         <button class="btn short" onclick="forceSignal('SELL')">▼ SHORT</button>
       </div>
-      <div class="live-row" id="liveRow">
-        <div class="live-dot2" id="liveDot2"></div>
-        <span id="liveLabel">CONNECTING...</span>
+      <div class="live-row wait" id="liveRow">
+        <div class="live-dot2 wait" id="liveDot2"></div>
+        <span id="liveLabel">WAITING FOR KEY</span>
       </div>
     </div>
     <div class="chart-area">
@@ -529,38 +353,29 @@
 
 <div class="ticker-strip">
   <div class="tk"><div class="tk-l">LAST PRICE</div><div class="tk-v" style="color:var(--gold)" id="tk-price">--</div></div>
-  <div class="tk"><div class="tk-l">24H CHANGE</div><div class="tk-v" id="tk-chg" style="color:var(--dim)">--</div></div>
+  <div class="tk"><div class="tk-l">BID</div><div class="tk-v" style="color:var(--green)" id="tk-bid">--</div></div>
+  <div class="tk"><div class="tk-l">ASK</div><div class="tk-v" style="color:var(--red)" id="tk-ask">--</div></div>
   <div class="tk"><div class="tk-l">SESSION HIGH</div><div class="tk-v" style="color:var(--green)" id="tk-hi">--</div></div>
   <div class="tk"><div class="tk-l">SESSION LOW</div><div class="tk-v" style="color:var(--red)" id="tk-lo">--</div></div>
   <div class="tk"><div class="tk-l">CANDLES</div><div class="tk-v" style="color:var(--dim)" id="tk-count">0</div></div>
-  <div class="tk"><div class="tk-l">TIMEFRAME</div><div class="tk-v" style="color:var(--purple)">M5</div></div>
-  <div class="tk"><div class="tk-l">MARKET</div><div class="tk-v" style="color:var(--blue)" id="tk-market">DERIV</div></div>
-  <div class="tk"><div class="tk-l">STATUS</div><div class="tk-v" style="color:var(--green)" id="tk-status">--</div></div>
+  <div class="tk"><div class="tk-l">SOURCE</div><div class="tk-v" style="color:var(--blue)">TRADERMADE</div></div>
+  <div class="tk"><div class="tk-l">STATUS</div><div class="tk-v" style="color:var(--gold)" id="tk-status">OFFLINE</div></div>
 </div>
 
 <div class="bottom-strip">
   <div class="bs-cell">
     <div class="bs-icon green">↗</div>
-    <div class="bs-txt">
-      <div class="bl">ENTRY</div>
-      <div class="bv green" id="b-entry">--</div>
-    </div>
+    <div class="bs-txt"><div class="bl">ENTRY</div><div class="bv green" id="b-entry">--</div></div>
   </div>
   <div class="bs-div"></div>
   <div class="bs-cell">
     <div class="bs-icon red">🛡</div>
-    <div class="bs-txt">
-      <div class="bl">STOP LOSS</div>
-      <div class="bv red" id="b-stop">--</div>
-    </div>
+    <div class="bs-txt"><div class="bl">STOP LOSS</div><div class="bv red" id="b-stop">--</div></div>
   </div>
   <div class="bs-div"></div>
   <div class="bs-cell">
     <div class="bs-icon gold">🎯</div>
-    <div class="bs-txt">
-      <div class="bl">TP TARGET</div>
-      <div class="bv gold" id="b-target">--</div>
-    </div>
+    <div class="bs-txt"><div class="bl">TP TARGET</div><div class="bv gold" id="b-target">--</div></div>
   </div>
 </div>
 
@@ -572,9 +387,7 @@
   </div>
   <div class="ai-inputs">
     <input class="ai-inp ai-key" id="groqKey" type="password" placeholder="Groq API Key (gsk_...)">
-    <input class="ai-inp ai-qry" id="aiQry" type="text"
-           value="Analyze this US500 signal and suggest entry strategy"
-           placeholder="Ask about the signal...">
+    <input class="ai-inp ai-qry" id="aiQry" type="text" value="Analyze this US500 signal and suggest entry strategy">
     <button class="ai-btn" id="aiBtn" onclick="askGroq()">⚡ ANALYZE</button>
   </div>
   <div class="ai-resp" id="aiResp">Ready for AI analysis. Enter Groq API key and click ANALYZE.</div>
@@ -582,377 +395,311 @@
 
 <script>
 (function () {
-  // ── DERIV WEBSOCKET CONFIG ──
-  // Symbol: "WLDAUD" is not available; use "SP500" or Deriv's US500 symbol
-  // Deriv symbol for S&P 500 CFD is "WLDUSD" on synthetic or "OTC_SP500" on real markets
-  // We'll try both and fall back gracefully
-  const DERIV_WS_URL = 'wss://ws.deriv.com/websockets/v3';
-  const SYMBOL = 'OTC_SP500';        // Deriv's US500 / S&P 500 symbol
-  const GRANULARITY = 300;           // 5 minutes in seconds
-  const HISTORY_CANDLES = 120;       // How many historical candles to fetch
+
+  // ── TRADERMADE CONFIG ──
+  const WS_URL     = 'wss://stream.tradermade.com/feedAdv';
+  const REST_BASE  = 'https://marketdata.tradermade.com/api/v1';
+  const SYMBOL_WS  = 'SPX500USD';         // TraderMade CFD symbol for US500 — format: SYMBOL:QUOTE
+  const SYMBOL_SUB = 'SPX500USD:QUOTE';   // subscription format
+  const SYMBOL_REST= 'SPX500USD';         // REST timeseries symbol
+  const M5_PERIOD  = 5;                   // 5-minute candles
 
   // ── STATE ──
   let ws = null;
-  let appId = '1089';
+  let streamKey = '';
+  let restKey   = '';
   let candleData = [];
+  let currentCandle = null;
   let currentSignal = 'WAIT';
-  let lastPrice = null;
+  let lastBid = null, lastAsk = null, lastMid = null;
+  let sessionHigh = -Infinity, sessionLow = +Infinity;
   let openPrice = null;
-  let sessionHigh = -Infinity;
-  let sessionLow = +Infinity;
-  let isLive = false;
   let reconnectTimer = null;
-  let tickSubscriptionId = null;
-  let candleSubscriptionId = null;
-  let pendingReqId = 1;
+  let loggedIn = false;
 
-  // ── PRICE FORMATTING ──
-  // US500 trades around 5000-6000, show 2 decimals
-  function fmt(v, decimals = 2) {
-    if (v === null || v === undefined || isNaN(v)) return '--';
-    return parseFloat(v).toFixed(decimals);
-  }
-
-  // ── EL HELPERS ──
+  // ── HELPERS ──
   function el(id) { return document.getElementById(id); }
-  function setText(id, txt) { const e = el(id); if (e) e.textContent = txt; }
-  function setClass(id, cls) { const e = el(id); if (e) e.className = cls; }
+  function setText(id, v) { const e = el(id); if (e) e.textContent = v; }
+  function fmt(v, d = 2) { if (v == null || isNaN(v)) return '--'; return parseFloat(v).toFixed(d); }
 
-  // ── DERIV WEBSOCKET ──
-  function getAppId() {
-    return el('appIdInp')?.value?.trim() || '1089';
-  }
-
-  function connect() {
-    if (ws) {
-      try { ws.close(); } catch(e) {}
-      ws = null;
-    }
-
-    appId = getAppId();
-    const url = `${DERIV_WS_URL}?app_id=${appId}`;
-
-    setConnStatus('connecting', `CONNECTING TO DERIV (APP_ID: ${appId})...`);
-    setText('waitMsg', 'Connecting to Deriv WebSocket...');
-    setText('tk-status', 'CONNECTING');
-    setText('liveLabel', 'CONNECTING...');
-
-    try {
-      ws = new WebSocket(url);
-    } catch (e) {
-      setConnStatus('error', 'WEBSOCKET FAILED: ' + e.message);
-      scheduleReconnect();
-      return;
-    }
-
-    ws.onopen = () => {
-      setConnStatus('connecting', 'FETCHING US500 HISTORY...');
-      requestHistory();
-    };
-
-    ws.onmessage = (evt) => {
-      try {
-        const msg = JSON.parse(evt.data);
-        handleMessage(msg);
-      } catch (e) {
-        console.error('WS parse error:', e);
-      }
-    };
-
-    ws.onerror = (err) => {
-      console.error('WS error:', err);
-      setConnStatus('error', 'DERIV CONNECTION ERROR');
-    };
-
-    ws.onclose = (ev) => {
-      isLive = false;
-      setConnStatus('error', `DISCONNECTED (${ev.code}) · RECONNECTING...`);
-      updateLiveRow(false);
-      setText('tk-status', 'DISCONNECTED');
-      scheduleReconnect();
-    };
-  }
-
-  function wsSend(obj) {
-    if (ws && ws.readyState === WebSocket.OPEN) {
-      ws.send(JSON.stringify(obj));
-    }
-  }
-
-  function requestHistory() {
-    // Request historical candles (ticks_history with granularity = 300 for M5)
-    wsSend({
-      ticks_history: SYMBOL,
-      adjust_start_time: 1,
-      count: HISTORY_CANDLES,
-      end: 'latest',
-      granularity: GRANULARITY,
-      style: 'candles',
-      subscribe: 1,
-      req_id: pendingReqId++
-    });
-  }
-
-  function requestTickStream() {
-    // Subscribe to live tick feed for real-time price
-    wsSend({
-      ticks: SYMBOL,
-      subscribe: 1,
-      req_id: pendingReqId++
-    });
-  }
-
-  function handleMessage(msg) {
-    if (msg.error) {
-      handleError(msg.error);
-      return;
-    }
-
-    switch (msg.msg_type) {
-      case 'candles':
-        handleHistoricalCandles(msg.candles);
-        break;
-      case 'ohlc':
-        handleLiveCandle(msg.ohlc);
-        break;
-      case 'tick':
-        handleTick(msg.tick);
-        break;
-      case 'history':
-        // alternative response for tick history
-        if (msg.history) handleTickHistory(msg.history);
-        break;
-    }
-  }
-
-  function handleError(err) {
-    console.warn('Deriv error:', err);
-    const code = err.code || '';
-    const message = err.message || 'Unknown error';
-
-    if (code === 'InvalidSymbol' || code === 'StreamingNotAllowed') {
-      setConnStatus('error', `SYMBOL ERROR: ${message}`);
-      setText('waitMsg', `Symbol "${SYMBOL}" unavailable. Check Deriv account access.`);
-    } else if (code === 'AuthorizationRequired') {
-      setConnStatus('error', 'AUTH REQUIRED · Please use your own App ID & token');
-      setText('waitMsg', 'Authorization required for this symbol. Some symbols need a real account token.');
-    } else if (code === 'RateLimit') {
-      setTimeout(() => requestHistory(), 3000);
-    } else {
-      setConnStatus('error', `ERROR: ${message}`);
-      setText('waitMsg', `Deriv: ${message}`);
-    }
-  }
-
-  function handleHistoricalCandles(candles) {
-    if (!candles || candles.length === 0) return;
-
-    candleData = candles.map(c => ({
-      open: parseFloat(c.open),
-      high: parseFloat(c.high),
-      low: parseFloat(c.low),
-      close: parseFloat(c.close),
-      epoch: c.epoch,
-      bull: parseFloat(c.close) >= parseFloat(c.open)
-    }));
-
-    // Seed price stats from historical data
-    const closes = candleData.map(c => c.close);
-    lastPrice = closes[closes.length - 1];
-    openPrice = openPrice || closes[0];
-    sessionHigh = Math.max(...candleData.map(c => c.high));
-    sessionLow  = Math.min(...candleData.map(c => c.low));
-
-    isLive = true;
-    setConnStatus('connected', `DERIV LIVE · ${SYMBOL} · ${candleData.length} CANDLES`);
-    setText('waitMsg', `${candleData.length} M5 candles loaded`);
-    setText('tk-count', candleData.length);
-    setText('tk-status', 'LIVE');
-    setText('tk-market', 'DERIV');
-    updateLiveRow(true);
-    el('dataSrcBadge').textContent = 'DERIV LIVE';
-    el('dataSrcBadge').className = 'src-badge live';
-
-    updatePriceDisplay();
-    computeSignal();
-    resizeCanvas();
-
-    // Also subscribe to live tick stream for real-time price
-    requestTickStream();
-  }
-
-  function handleLiveCandle(ohlc) {
-    // Deriv sends ohlc updates for the current forming candle
-    if (!ohlc) return;
-
-    const epoch = ohlc.epoch || ohlc.open_time;
-    const newCandle = {
-      open: parseFloat(ohlc.open),
-      high: parseFloat(ohlc.high),
-      low: parseFloat(ohlc.low),
-      close: parseFloat(ohlc.close),
-      epoch: epoch,
-      bull: parseFloat(ohlc.close) >= parseFloat(ohlc.open)
-    };
-
-    lastPrice = newCandle.close;
-
-    // Check if this is a new candle or update to the last
-    if (candleData.length > 0 && candleData[candleData.length - 1].epoch === epoch) {
-      // Update current candle
-      candleData[candleData.length - 1] = newCandle;
-    } else if (epoch > (candleData[candleData.length - 1]?.epoch || 0)) {
-      // New candle formed
-      candleData.push(newCandle);
-      if (candleData.length > 200) candleData.shift(); // keep max 200
-      setText('tk-count', candleData.length);
-    }
-
-    // Update session stats
-    if (newCandle.high > sessionHigh) sessionHigh = newCandle.high;
-    if (newCandle.low < sessionLow) sessionLow = newCandle.low;
-
-    updatePriceDisplay();
-    computeSignal();
-    drawChart();
-  }
-
-  function handleTick(tick) {
-    if (!tick) return;
-
-    const price = parseFloat(tick.quote);
-    if (isNaN(price)) return;
-
-    if (openPrice === null) openPrice = price;
-    lastPrice = price;
-
-    if (price > sessionHigh) sessionHigh = price;
-    if (price < sessionLow) sessionLow = price;
-
-    updatePriceDisplay();
-  }
-
-  function handleTickHistory(history) {
-    // Fallback for tick-style history responses
-    if (history.prices && history.prices.length > 0) {
-      lastPrice = parseFloat(history.prices[history.prices.length - 1]);
-      openPrice = openPrice || parseFloat(history.prices[0]);
-      updatePriceDisplay();
-    }
-  }
-
-  function updatePriceDisplay() {
-    if (lastPrice === null) return;
-    setText('tk-price', fmt(lastPrice));
-    setText('tk-hi', fmt(sessionHigh));
-    setText('tk-lo', fmt(sessionLow));
-
-    if (openPrice !== null) {
-      const change = lastPrice - openPrice;
-      const chgEl = el('tk-chg');
-      if (chgEl) {
-        chgEl.textContent = (change >= 0 ? '+' : '') + fmt(change);
-        chgEl.style.color = change >= 0 ? 'var(--green)' : 'var(--red)';
-      }
-    }
-  }
-
-  function setConnStatus(state, text) {
-    const s = el('connStatus');
-    const t = el('connText');
+  function setConn(state, text) {
+    const s = el('connStatus'), t = el('connText');
     if (s) s.className = 'conn-status ' + state;
     if (t) t.textContent = text;
   }
 
-  function updateLiveRow(live) {
-    const row = el('liveRow');
-    const dot = el('liveDot2');
-    const lbl = el('liveLabel');
-    if (!row || !dot || !lbl) return;
-
+  function setLiveRow(live) {
+    const row = el('liveRow'), dot = el('liveDot2'), lbl = el('liveLabel');
+    if (!row) return;
     if (live) {
-      row.className = 'live-row';
-      dot.className = 'live-dot2';
-      lbl.textContent = 'DERIV LIVE DATA';
+      row.className = 'live-row'; dot.className = 'live-dot2';
+      lbl.textContent = 'TRADERMADE LIVE';
     } else {
-      row.className = 'live-row sim';
-      dot.className = 'live-dot2 sim';
-      lbl.textContent = 'AWAITING DATA...';
+      row.className = 'live-row wait'; dot.className = 'live-dot2 wait';
+      lbl.textContent = 'CONNECTING...';
     }
   }
 
-  function scheduleReconnect() {
-    if (reconnectTimer) clearTimeout(reconnectTimer);
-    reconnectTimer = setTimeout(() => connect(), 5000);
+  // ── REST: FETCH M5 HISTORY ──
+  async function fetchHistory(key) {
+    // TraderMade timeseries: interval=minute, period=5, max 2 days per call
+    // Get last 10 hours of M5 candles = 120 candles
+    const now   = new Date();
+    const start = new Date(now - 10 * 60 * 60 * 1000);
+
+    const pad = n => String(n).padStart(2, '0');
+    const fmtDate = d =>
+      `${d.getUTCFullYear()}-${pad(d.getUTCMonth()+1)}-${pad(d.getUTCDate())}-${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}`;
+
+    const url = `${REST_BASE}/timeseries?currency=${SYMBOL_REST}&api_key=${key}`
+      + `&start_date=${fmtDate(start)}&end_date=${fmtDate(now)}`
+      + `&interval=minute&period=${M5_PERIOD}&format=records`;
+
+    setText('waitMsg', 'Fetching M5 history from TraderMade...');
+    setConn('connecting', 'LOADING M5 CANDLE HISTORY...');
+
+    try {
+      const resp = await fetch(url);
+      const data = await resp.json();
+
+      if (data.message || data.error) {
+        const msg = data.message || data.error;
+        setText('waitMsg', 'REST error: ' + msg);
+        setConn('error', 'REST API ERROR: ' + msg);
+        return false;
+      }
+
+      const quotes = data.quotes || [];
+      if (quotes.length === 0) {
+        setText('waitMsg', 'No historical data returned. Market may be closed.');
+        setConn('error', 'NO HISTORY DATA — MARKET CLOSED?');
+        return false;
+      }
+
+      candleData = quotes.map(q => ({
+        open:  parseFloat(q.open),
+        high:  parseFloat(q.high),
+        low:   parseFloat(q.low),
+        close: parseFloat(q.close),
+        date:  q.date,
+        bull:  parseFloat(q.close) >= parseFloat(q.open)
+      }));
+
+      // seed price stats
+      openPrice   = candleData[0].close;
+      sessionHigh = Math.max(...candleData.map(c => c.high));
+      sessionLow  = Math.min(...candleData.map(c => c.low));
+      lastMid     = candleData[candleData.length - 1].close;
+
+      setText('tk-count', candleData.length);
+      setText('waitMsg', `${candleData.length} M5 candles loaded`);
+      computeSignal();
+      resizeCanvas();
+      return true;
+    } catch (e) {
+      setText('waitMsg', 'History fetch failed: ' + e.message);
+      setConn('error', 'HISTORY FETCH ERROR');
+      return false;
+    }
   }
 
-  function reconnect() {
-    if (reconnectTimer) clearTimeout(reconnectTimer);
-    connect();
+  // ── WEBSOCKET: LIVE TICK STREAM ──
+  function connectWS(key) {
+    if (ws) { try { ws.close(); } catch(e) {} ws = null; }
+    loggedIn = false;
+
+    setConn('connecting', 'CONNECTING TO TRADERMADE STREAM...');
+
+    try { ws = new WebSocket(WS_URL); }
+    catch (e) { setConn('error', 'WS FAILED: ' + e.message); scheduleReconnect(); return; }
+
+    ws.onopen = () => {
+      // Step 1: Login
+      ws.send(JSON.stringify({ action: 'login', key: key, fmt: 'JSON' }));
+    };
+
+    ws.onmessage = evt => {
+      try { handleWS(JSON.parse(evt.data)); }
+      catch(e) { console.error('WS parse:', e); }
+    };
+
+    ws.onerror = () => setConn('error', 'STREAM ERROR');
+
+    ws.onclose = ev => {
+      loggedIn = false;
+      setLiveRow(false);
+      setText('tk-status', 'RECONNECTING');
+      setConn('error', `DISCONNECTED (${ev.code}) · RECONNECTING...`);
+      scheduleReconnect();
+    };
   }
-  window.reconnect = reconnect;
+
+  function handleWS(msg) {
+    // Login response
+    if (msg.type === 'login_ok') {
+      loggedIn = true;
+      setConn('connected', `TRADERMADE LIVE · ${SYMBOL_WS} · M5`);
+      setText('tk-status', 'LIVE');
+      el('srcPill').textContent = 'TRADERMADE LIVE';
+      el('srcPill').className = 'src-pill';
+      setLiveRow(true);
+      // Step 2: Subscribe with send_last to get immediate last quote
+      ws.send(JSON.stringify({ action: 'subscribe', send_last: true, symbols: [SYMBOL_SUB] }));
+      return;
+    }
+
+    if (msg.type === 'login_reject') {
+      setConn('error', 'STREAM KEY REJECTED: ' + (msg.reason || 'invalid key'));
+      setText('waitMsg', 'Streaming key rejected. Check your TraderMade dashboard for the correct streaming key.');
+      return;
+    }
+
+    if (msg.type === 'sub_ack') {
+      const denied = msg.denied || [];
+      if (denied.includes(SYMBOL_SUB)) {
+        const reason = (msg.denied_reasons || {})[SYMBOL_SUB] || 'denied';
+        if (reason === 'cfds_not_allowed') {
+          setText('waitMsg', 'CFD data not enabled on your plan. Upgrade at tradermade.com or use a forex pair.');
+          setConn('error', 'CFD NOT ENABLED ON YOUR PLAN');
+        } else {
+          setText('waitMsg', `Subscription denied: ${reason}`);
+          setConn('error', 'SUBSCRIPTION DENIED: ' + reason);
+        }
+      }
+      return;
+    }
+
+    // Live quote tick
+    if (msg.t === 'QUOTE' || msg.t === 'LAST_QUOTE') {
+      const bid = parseFloat(msg.b);
+      const ask = parseFloat(msg.a);
+      const mid = msg.m ? parseFloat(msg.m) : (bid + ask) / 2;
+
+      if (isNaN(bid) || isNaN(ask)) return;
+
+      lastBid = bid; lastAsk = ask; lastMid = mid;
+      if (!openPrice) openPrice = mid;
+      if (mid > sessionHigh) sessionHigh = mid;
+      if (mid < sessionLow)  sessionLow  = mid;
+
+      // Update current forming candle with this tick
+      updateCurrentCandle(mid, bid, ask);
+      updatePriceDisplay();
+      computeSignal();
+      drawChart();
+    }
+  }
+
+  // ── CANDLE BUILDING FROM TICKS ──
+  // Build M5 candles from incoming ticks
+  function updateCurrentCandle(mid, bid, ask) {
+    const now    = Date.now();
+    const bucket = Math.floor(now / (5 * 60 * 1000)) * (5 * 60 * 1000); // current 5-min bucket
+
+    if (!currentCandle || currentCandle.bucket !== bucket) {
+      // New candle — push previous to history
+      if (currentCandle) {
+        candleData.push({
+          open:  currentCandle.open,
+          high:  currentCandle.high,
+          low:   currentCandle.low,
+          close: currentCandle.close,
+          bull:  currentCandle.close >= currentCandle.open
+        });
+        if (candleData.length > 250) candleData.shift();
+        setText('tk-count', candleData.length);
+        computeSignal();
+      }
+      currentCandle = { bucket, open: mid, high: mid, low: mid, close: mid };
+    } else {
+      // Update existing candle
+      currentCandle.close = mid;
+      if (mid > currentCandle.high) currentCandle.high = mid;
+      if (mid < currentCandle.low)  currentCandle.low  = mid;
+    }
+  }
+
+  // ── PRICE DISPLAY ──
+  function updatePriceDisplay() {
+    setText('tk-price', fmt(lastMid));
+    setText('tk-bid',   fmt(lastBid));
+    setText('tk-ask',   fmt(lastAsk));
+    setText('tk-hi',    fmt(sessionHigh));
+    setText('tk-lo',    fmt(sessionLow));
+
+    if (lastBid && lastAsk) {
+      const spread = (lastAsk - lastBid).toFixed(2);
+      setText('spread', spread + ' pts');
+      setText('bidAsk', `${fmt(lastBid)} / ${fmt(lastAsk)}`);
+    }
+
+    if (openPrice && lastMid) {
+      const change = lastMid - openPrice;
+      const chgEl  = el('tk-chg');
+      // no tk-chg in this layout but useful ref
+    }
+  }
 
   // ── INDICATORS ──
-  function calcEMA(data, period) {
-    if (!data || data.length < period) return null;
-    const k = 2 / (period + 1);
-    let ema = data.slice(0, period).reduce((a, b) => a + b, 0) / period;
-    for (let i = period; i < data.length; i++) {
-      ema = data[i] * k + ema * (1 - k);
-    }
+  function calcEMA(data, p) {
+    if (!data || data.length < p) return null;
+    const k = 2 / (p + 1);
+    let ema = data.slice(0, p).reduce((a, b) => a + b, 0) / p;
+    for (let i = p; i < data.length; i++) ema = data[i] * k + ema * (1 - k);
     return ema;
   }
 
-  function calcRSI(data, period = 14) {
-    if (!data || data.length < period + 1) return null;
+  function calcRSI(data, p = 14) {
+    if (!data || data.length < p + 1) return null;
     const changes = [];
-    for (let i = 1; i < data.length; i++) changes.push(data[i] - data[i - 1]);
-    const recent = changes.slice(-period);
-    const gains  = recent.filter(c => c > 0).reduce((a, b) => a + b, 0) / period;
-    const losses = Math.abs(recent.filter(c => c < 0).reduce((a, b) => a + b, 0) / period);
-    if (losses === 0) return 100;
-    return 100 - (100 / (1 + gains / losses));
+    for (let i = 1; i < data.length; i++) changes.push(data[i] - data[i-1]);
+    const r = changes.slice(-p);
+    const g = r.filter(c => c > 0).reduce((a, b) => a + b, 0) / p;
+    const l = Math.abs(r.filter(c => c < 0).reduce((a, b) => a + b, 0) / p);
+    return l === 0 ? 100 : 100 - (100 / (1 + g / l));
   }
 
-  function calcATR(candles, period) {
-    if (!candles || candles.length < period + 1) return null;
+  function calcATR(candles, p) {
+    if (!candles || candles.length < p + 1) return null;
     const trs = [];
     for (let i = 1; i < candles.length; i++) {
-      const c = candles[i], p = candles[i - 1];
-      trs.push(Math.max(c.high - c.low, Math.abs(c.high - p.close), Math.abs(c.low - p.close)));
+      const c = candles[i], pv = candles[i-1];
+      trs.push(Math.max(c.high - c.low, Math.abs(c.high - pv.close), Math.abs(c.low - pv.close)));
     }
-    return trs.slice(-period).reduce((a, b) => a + b, 0) / period;
+    return trs.slice(-p).reduce((a, b) => a + b, 0) / p;
   }
 
   function calcMACD(closes) {
     if (!closes || closes.length < 26) return null;
-    const ema12 = calcEMA(closes, 12);
-    const ema26 = calcEMA(closes, 26);
-    if (ema12 === null || ema26 === null) return null;
-    return ema12 - ema26;
+    const e12 = calcEMA(closes, 12), e26 = calcEMA(closes, 26);
+    return (e12 && e26) ? e12 - e26 : null;
   }
 
-  function calcStdDev(data, period = 20) {
-    if (!data || data.length < period) return 0;
-    const recent = data.slice(-period);
-    const mean = recent.reduce((a, b) => a + b) / period;
-    const variance = recent.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / period;
-    return Math.sqrt(variance);
+  function calcStdDev(data, p = 20) {
+    if (!data || data.length < p) return 0;
+    const r = data.slice(-p);
+    const m = r.reduce((a, b) => a + b) / p;
+    return Math.sqrt(r.reduce((a, b) => a + Math.pow(b - m, 2), 0) / p);
   }
 
-  // ── COMPUTE SIGNAL ──
+  // ── SIGNAL ──
   function computeSignal() {
-    if (candleData.length < 26) {
-      setText('waitMsg', `Loading M5 candles... (${candleData.length}/26)`);
+    // Combine confirmed candles + current forming candle for analysis
+    const allCandles = currentCandle
+      ? [...candleData, { ...currentCandle, bull: currentCandle.close >= currentCandle.open }]
+      : candleData;
+
+    if (allCandles.length < 26) {
+      setText('waitMsg', `Loading M5 candles... (${allCandles.length}/26)`);
       return;
     }
 
-    const closes = candleData.map(c => c.close);
+    const closes = allCandles.map(c => c.close);
     const ema9   = calcEMA(closes, 9);
     const ema21  = calcEMA(closes, 21);
     const rsi    = calcRSI(closes, 14);
-    const atr5   = calcATR(candleData, 5);
-    const atr14  = calcATR(candleData, 14);
+    const atr5   = calcATR(allCandles, 5);
+    const atr14  = calcATR(allCandles, 14);
     const macd   = calcMACD(closes);
     const stdDev = calcStdDev(closes, 20);
 
@@ -965,60 +712,42 @@
     const emaStr  = Math.min(100, emaDiff * 1000);
     const strength = Math.round(rsiStr * 0.5 + emaStr * 0.5);
 
-    setText('atr5', fmt(atr5, 2));
-    setText('atr14', fmt(atr14, 2));
+    setText('atr5',   fmt(atr5));
+    setText('atr14',  fmt(atr14));
     setText('rsiVal', fmt(rsi, 1));
-    el('strBar').style.width = strength + '%';
     setText('strPct', strength + '%');
     setText('volVal', `σ = ${fmt(stdDev, 2)}`);
+    if (el('strBar')) el('strBar').style.width = strength + '%';
 
     if (macd !== null) {
-      const macdEl = el('macdStatus');
-      if (macdEl) {
-        macdEl.textContent = (macd >= 0 ? '+' : '') + fmt(macd, 2);
-        macdEl.className = macd >= 0 ? 'sv green' : 'sv red';
-      }
+      const m = el('macdStatus');
+      if (m) { m.textContent = (macd >= 0 ? '+' : '') + fmt(macd, 2); m.className = macd >= 0 ? 'sv green' : 'sv red'; }
     }
 
     const emaEl = el('emaStatus');
-    if (emaEl) {
-      emaEl.textContent = `${bullish ? '▲' : '▼'} ${fmt(ema9, 1)} / ${fmt(ema21, 1)}`;
-      emaEl.className = bullish ? 'sv green' : 'sv red';
-    }
+    if (emaEl) { emaEl.textContent = `${bullish ? '▲' : '▼'} ${fmt(ema9, 1)} / ${fmt(ema21, 1)}`; emaEl.className = bullish ? 'sv green' : 'sv red'; }
 
     const trendEl = el('trend');
-    if (trendEl) {
-      trendEl.textContent = bullish ? '▲ BULLISH' : '▼ BEARISH';
-      trendEl.className = bullish ? 'sv green' : 'sv red';
-    }
+    if (trendEl) { trendEl.textContent = bullish ? '▲ BULLISH' : '▼ BEARISH'; trendEl.className = bullish ? 'sv green' : 'sv red'; }
 
-    // Update vol bars
-    const maxStd = stdDev * 2 || 1;
+    // Vol bars
     const bars = el('volBars')?.querySelectorAll('.vol-bar');
-    if (bars) {
-      bars.forEach((b, i) => {
-        const pct = Math.min(95, (stdDev / maxStd) * 60 + (i * 8));
-        b.style.height = pct + '%';
-        b.classList.toggle('active', i >= 4);
-      });
-    }
+    if (bars) bars.forEach((b, i) => { b.style.height = Math.min(95, (stdDev / (stdDev * 2 || 1)) * 60 + (i * 8)) + '%'; b.classList.toggle('active', i >= 4); });
 
-    // Signal logic — include MACD confirmation
-    let newSig = 'WAIT';
+    // Signal
     const macdBull = macd !== null ? macd > 0 : bullish;
     const macdBear = macd !== null ? macd < 0 : !bullish;
-
+    let newSig = 'WAIT';
     if (bullish && macdBull && rsi > 40 && rsi < 65) newSig = 'BUY';
     if (!bullish && macdBear && rsi > 35 && rsi < 60) newSig = 'SELL';
 
     if (newSig !== 'WAIT' && newSig !== currentSignal) {
       currentSignal = newSig;
-      applySignal(newSig, lastPrice || price, atr14 || 5);
+      applySignal(newSig, lastMid || price, atr14 || 5);
     } else if (newSig === 'WAIT' && currentSignal !== 'WAIT') {
       currentSignal = 'WAIT';
-      const badge = el('sigBadge');
-      if (badge) { badge.textContent = 'WAIT ◆'; badge.className = 'sig-badge wait'; }
-      setText('waitMsg', 'No signal — monitoring...');
+      const b = el('sigBadge'); if (b) { b.textContent = 'WAIT ◆'; b.className = 'sig-badge wait'; }
+      setText('waitMsg', 'Monitoring — no signal');
     }
   }
 
@@ -1027,107 +756,103 @@
     const stop   = isBuy ? price - atr * 1.5 : price + atr * 1.5;
     const target = isBuy ? price + atr * 3.0 : price - atr * 3.0;
 
-    const badge = el('sigBadge');
-    if (badge) {
-      badge.textContent = isBuy ? 'BUY ▲' : 'SELL ▼';
-      badge.className = isBuy ? 'sig-badge buy' : 'sig-badge';
-    }
+    const b = el('sigBadge');
+    if (b) { b.textContent = isBuy ? 'BUY ▲' : 'SELL ▼'; b.className = isBuy ? 'sig-badge buy' : 'sig-badge'; }
 
-    setText('entryV', fmt(price)); setText('stopV', fmt(stop)); setText('targetV', fmt(target));
+    setText('entryV',  fmt(price)); setText('stopV', fmt(stop)); setText('targetV', fmt(target));
     setText('b-entry', fmt(price)); setText('b-stop', fmt(stop)); setText('b-target', fmt(target));
-    setText('waitMsg', `${type} signal active · M5 Deriv`);
+    setText('waitMsg', `${type} signal · TraderMade M5`);
 
-    const alertEl = el('signalAlert');
-    if (alertEl) {
-      alertEl.textContent = isBuy
+    const a = el('signalAlert');
+    if (a) {
+      a.textContent = isBuy
         ? `🟢 BUY · Entry: ${fmt(price)} · SL: ${fmt(stop)} · TP: ${fmt(target)}`
         : `🔴 SELL · Entry: ${fmt(price)} · SL: ${fmt(stop)} · TP: ${fmt(target)}`;
-      alertEl.className = isBuy ? 'signal-alert buy' : 'signal-alert sell';
-      alertEl.style.display = 'block';
-      setTimeout(() => { alertEl.style.display = 'none'; }, 6000);
+      a.className = isBuy ? 'signal-alert buy' : 'signal-alert sell';
+      a.style.display = 'block';
+      setTimeout(() => { a.style.display = 'none'; }, 6000);
     }
   }
 
   function forceSignal(type) {
-    const price = lastPrice;
-    if (!price) return;
+    if (!lastMid) return;
     const atr = parseFloat(el('atr14')?.textContent) || 5;
-    applySignal(type, price, atr);
+    applySignal(type, lastMid, atr);
   }
   window.forceSignal = forceSignal;
 
   // ── CANVAS ──
   const canvas = el('chart');
-  const ctx = canvas ? canvas.getContext('2d') : null;
+  const ctx = canvas?.getContext('2d');
 
   function resizeCanvas() {
     if (!canvas) return;
     const area = canvas.parentElement;
-    canvas.width  = area ? area.clientWidth  : 600;
-    canvas.height = area ? area.clientHeight : 320;
+    canvas.width  = area?.clientWidth  || 600;
+    canvas.height = area?.clientHeight || 320;
     drawChart();
   }
 
   function drawChart() {
-    if (!ctx || candleData.length === 0) return;
-
+    if (!ctx) return;
     const W = canvas.width, H = canvas.height;
+
     ctx.fillStyle = '#0b0e1a';
     ctx.fillRect(0, 0, W, H);
 
-    // Grid lines
-    ctx.strokeStyle = '#182040';
-    ctx.lineWidth = 0.5;
+    // Grid
+    ctx.strokeStyle = '#182040'; ctx.lineWidth = 0.5;
     for (let i = 0; i <= 5; i++) {
       const y = (H / 5) * i;
       ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
     }
 
-    const display = candleData.slice(-80);
+    // Combine confirmed + forming candle
+    const display = [
+      ...candleData,
+      ...(currentCandle ? [{ ...currentCandle, bull: currentCandle.close >= currentCandle.open }] : [])
+    ].slice(-80);
+
     if (display.length === 0) return;
 
-    const highs = display.map(c => c.high);
-    const lows  = display.map(c => c.low);
-    const minP  = Math.min(...lows);
-    const maxP  = Math.max(...highs);
+    const minP = Math.min(...display.map(c => c.low));
+    const maxP = Math.max(...display.map(c => c.high));
     const range = maxP - minP || 1;
-    const cW    = Math.max(3, Math.floor(W / display.length));
-    const pad   = 0.05;
-    const scaleY = v => H * (1 - pad) - ((v - minP) / range) * H * (1 - 2 * pad);
+    const cW  = Math.max(3, Math.floor(W / display.length));
+    const pad = 0.05;
+    const sY  = v => H * (1 - pad) - ((v - minP) / range) * H * (1 - 2 * pad);
 
     display.forEach((c, i) => {
-      const x      = i * cW + cW / 2;
-      const yClose = scaleY(c.close);
-      const yOpen  = scaleY(c.open);
-      const yHigh  = scaleY(c.high);
-      const yLow   = scaleY(c.low);
+      const isForming = i === display.length - 1 && currentCandle;
+      const x = i * cW + cW / 2;
 
       // Wick
       ctx.strokeStyle = c.bull ? '#00e676' : '#ff1744';
-      ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.moveTo(x, yHigh); ctx.lineTo(x, yLow); ctx.stroke();
+      ctx.lineWidth = isForming ? 1.5 : 1;
+      ctx.setLineDash(isForming ? [2, 2] : []);
+      ctx.beginPath(); ctx.moveTo(x, sY(c.high)); ctx.lineTo(x, sY(c.low)); ctx.stroke();
+      ctx.setLineDash([]);
 
       // Body
-      ctx.fillStyle = c.bull ? '#00e67644' : '#ff174444';
-      const bodyTop = Math.min(yClose, yOpen);
-      const bodyH   = Math.max(2, Math.abs(yClose - yOpen));
-      ctx.fillRect(x - cW * 0.3, bodyTop, cW * 0.6, bodyH);
+      ctx.fillStyle = c.bull
+        ? (isForming ? '#00e67666' : '#00e67633')
+        : (isForming ? '#ff174466' : '#ff174433');
+      const top = Math.min(sY(c.close), sY(c.open));
+      const bH  = Math.max(2, Math.abs(sY(c.close) - sY(c.open)));
+      ctx.fillRect(x - cW * 0.3, top, cW * 0.6, bH);
     });
 
-    // Draw current price line
-    if (lastPrice !== null) {
-      const yP = scaleY(lastPrice);
-      ctx.strokeStyle = '#ffd600';
-      ctx.lineWidth = 1;
+    // Price line
+    if (lastMid !== null) {
+      const yP = sY(lastMid);
+      ctx.strokeStyle = '#ffd600'; ctx.lineWidth = 1;
       ctx.setLineDash([4, 3]);
       ctx.beginPath(); ctx.moveTo(0, yP); ctx.lineTo(W, yP); ctx.stroke();
       ctx.setLineDash([]);
-
-      // Price label
       ctx.fillStyle = '#ffd600';
       ctx.font = '11px Share Tech Mono, monospace';
       ctx.textAlign = 'right';
-      ctx.fillText(fmt(lastPrice), W - 4, yP - 3);
+      ctx.fillText(fmt(lastMid), W - 4, yP - 3);
       ctx.textAlign = 'left';
     }
   }
@@ -1136,94 +861,104 @@
   setTimeout(resizeCanvas, 200);
   setInterval(drawChart, 1000);
 
+  // ── CONNECTION ENTRY POINT ──
+  async function startConnection() {
+    streamKey = el('tmKey')?.value?.trim();
+    restKey   = el('tmRestKey')?.value?.trim();
+
+    if (!streamKey && !restKey) {
+      setConn('error', 'ENTER AT LEAST ONE API KEY');
+      setText('waitMsg', 'Please enter your TraderMade streaming and/or REST key.');
+      return;
+    }
+
+    // 1. Fetch history via REST (optional but recommended)
+    if (restKey) {
+      const ok = await fetchHistory(restKey);
+      if (!ok) {
+        // Still try streaming even if history failed
+        setText('waitMsg', 'History unavailable — streaming only mode');
+      }
+    }
+
+    // 2. Connect streaming WebSocket
+    if (streamKey) {
+      connectWS(streamKey);
+    } else {
+      setConn('error', 'NO STREAMING KEY — Enter streaming key for live ticks');
+      setText('waitMsg', 'REST history loaded. Add streaming key for live ticks.');
+    }
+  }
+  window.startConnection = startConnection;
+
+  function scheduleReconnect() {
+    if (reconnectTimer) clearTimeout(reconnectTimer);
+    reconnectTimer = setTimeout(() => {
+      if (streamKey) connectWS(streamKey);
+    }, 6000);
+  }
+
   // ── GROQ AI ──
   async function askGroq() {
     const apiKey = el('groqKey')?.value?.trim();
     const query  = el('aiQry')?.value?.trim();
     const btn    = el('aiBtn');
     const resp   = el('aiResp');
-
-    if (!apiKey) {
-      resp.textContent = 'Enter your Groq API key (gsk_...) to use AI analysis.';
-      resp.className = 'ai-resp';
-      return;
-    }
+    if (!apiKey) { resp.textContent = 'Enter your Groq API key (gsk_...) to use AI analysis.'; return; }
 
     btn.disabled = true;
-    resp.textContent = '⚡ Analyzing live US500 data...';
+    resp.textContent = '⚡ Analyzing live US500 TraderMade data...';
     resp.className = 'ai-resp loading';
 
     try {
-      const closes = candleData.map(c => c.close);
+      const allCandles = currentCandle ? [...candleData, currentCandle] : candleData;
+      const closes = allCandles.map(c => c.close);
       const ema9   = calcEMA(closes, 9);
       const ema21  = calcEMA(closes, 21);
       const rsi    = calcRSI(closes, 14);
-      const atr14  = calcATR(candleData, 14);
+      const atr14  = calcATR(allCandles, 14);
       const macd   = calcMACD(closes);
       const stdDev = calcStdDev(closes, 20);
 
-      const prompt = `You are an expert CFD and index trading analyst. Analyze this LIVE US500 (S&P 500) M5 chart data from Deriv broker:
+      const prompt = `You are an expert CFD and index trading analyst. Analyze this LIVE US500 (S&P 500) M5 data from TraderMade:
 
-LIVE MARKET DATA (Deriv WebSocket):
-- Symbol: US500 / OTC_SP500 (S&P 500 CFD)
-- Timeframe: M5 (5 minutes)
-- Current Price: ${fmt(lastPrice)}
-- Session High: ${fmt(sessionHigh)}
-- Session Low: ${fmt(sessionLow)}
+DATA SOURCE: TraderMade Real-Time CFD Feed
+Symbol: SPX500USD (S&P 500 CFD) | Timeframe: M5
+Bid: ${fmt(lastBid)} | Ask: ${fmt(lastAsk)} | Mid: ${fmt(lastMid)}
+Session High: ${fmt(sessionHigh)} | Session Low: ${fmt(sessionLow)}
+Spread: ${lastBid && lastAsk ? fmt(lastAsk - lastBid, 2) + ' pts' : '--'}
 
-INDICATORS:
-- EMA 9: ${fmt(ema9, 2)}
-- EMA 21: ${fmt(ema21, 2)}
-- EMA Bias: ${ema9 > ema21 ? 'BULLISH (EMA9 > EMA21)' : 'BEARISH (EMA9 < EMA21)'}
-- RSI(14): ${fmt(rsi, 1)} — ${rsi > 70 ? 'Overbought' : rsi < 30 ? 'Oversold' : 'Neutral'}
-- MACD Line: ${fmt(macd, 2)} — ${macd > 0 ? 'Bullish momentum' : 'Bearish momentum'}
-- ATR(5): ${fmt(calcATR(candleData, 5), 2)} | ATR(14): ${fmt(atr14, 2)}
-- Volatility (σ20): ${fmt(stdDev, 2)}
-- Candles loaded: ${candleData.length}
+INDICATORS (${allCandles.length} M5 candles):
+EMA 9: ${fmt(ema9, 2)} | EMA 21: ${fmt(ema21, 2)}
+EMA Bias: ${ema9 > ema21 ? 'BULLISH' : 'BEARISH'}
+RSI(14): ${fmt(rsi, 1)} — ${rsi > 70 ? 'Overbought' : rsi < 30 ? 'Oversold' : 'Neutral zone'}
+MACD: ${fmt(macd, 2)} — ${macd > 0 ? 'Bullish' : 'Bearish'} momentum
+ATR(14): ${fmt(atr14, 2)} | Volatility σ: ${fmt(stdDev, 2)}
+Signal: ${currentSignal}
 
-CURRENT SIGNAL: ${currentSignal}
+QUESTION: ${query}
 
-USER QUESTION: ${query}
+Give a concise professional analysis: trend, momentum, signal validity, entry/SL/TP levels (R:R 1:2), and key risks. Under 300 words.`;
 
-Provide a concise, professional analysis covering:
-1. Trend assessment based on EMAs and MACD
-2. RSI momentum and any overbought/oversold conditions
-3. Whether the current ${currentSignal} signal is confirmed or conflicted
-4. Suggested entry, stop-loss, and take-profit levels (R:R 1:2)
-5. Key risk factors to monitor on the US500 right now
-
-Keep it under 300 words, use clear headings.`;
-
-      const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`
-        },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
         body: JSON.stringify({
           model: 'llama-3.3-70b-versatile',
           messages: [{ role: 'user', content: prompt }],
-          max_tokens: 450,
-          temperature: 0.65
+          max_tokens: 450, temperature: 0.65
         })
       });
-
-      const data = await response.json();
-      if (data.error) throw new Error(data.error.message);
-      const text = data.choices?.[0]?.message?.content || 'No response';
-      resp.textContent = text;
+      const d = await r.json();
+      if (d.error) throw new Error(d.error.message);
+      resp.textContent = d.choices?.[0]?.message?.content || 'No response';
       resp.className = 'ai-resp';
     } catch (e) {
       resp.textContent = '❌ ' + e.message;
       resp.className = 'ai-resp error';
-    } finally {
-      btn.disabled = false;
-    }
+    } finally { btn.disabled = false; }
   }
   window.askGroq = askGroq;
-
-  // ── BOOT ──
-  connect();
 
 })();
 </script>
