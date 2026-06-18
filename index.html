@@ -136,7 +136,7 @@
 
 <div class="top-label">INDEX · CFD · INDICATOR · TWELVE DATA LIVE</div>
 <div class="buy-sell-title"><span class="buy">BUY</span><span class="div">|</span><span class="sell">SELL</span></div>
-<div class="sub-label">⚡ US500 · S&P 500 · M5 · TWELVE DATA · FREE</div>
+<div class="sub-label">⚡ SPY · S&P 500 ETF · M5 · TWELVE DATA · FREE</div>
 
 <div class="conn-status connecting" id="connStatus">
   <div class="conn-dot"></div>
@@ -152,7 +152,7 @@
   <div class="key-hint">
     100% free — no credit card. Sign up in 60 seconds at
     <a href="https://twelvedata.com/apikey" target="_blank">twelvedata.com/apikey</a>
-    · Free plan: 800 API calls/day · SPX supported · Refreshes every 60s
+    · Free plan: 800 API calls/day · SPY (S&P 500 ETF) supported — FREE plan · Refreshes every 60s
   </div>
 </div>
 
@@ -268,7 +268,7 @@
 (function(){
 
   // ── CONFIG ──
-  const SYMBOL    = 'SPX';          // S&P 500 on Twelve Data free plan
+  const SYMBOL    = 'SPY';   // S&P 500 ETF — free on Twelve Data basic plan
   const INTERVAL  = '5min';
   const OUTPUTSIZE = 120;           // candles to fetch
   const REFRESH_MS = 60000;        // 60 second polling (free plan friendly)
@@ -323,7 +323,7 @@
   async function fetchCandles(){
     if(!apiKey) return;
 
-    setConn('connecting', 'FETCHING SPX M5 DATA...');
+    setConn('connecting', 'FETCHING SPY M5 DATA...');
     set('waitMsg', 'Fetching from Twelve Data...');
 
     try {
@@ -368,7 +368,7 @@
       isLive = true;
       el('srcPill').textContent = 'TWELVE DATA LIVE';
       el('srcPill').className = 'src-pill live';
-      setConn('connected', `LIVE · SPX M5 · ${candleData.length} CANDLES · AUTO-REFRESH 60s`);
+      setConn('connected', `LIVE · SPY M5 · ${candleData.length} CANDLES · AUTO-REFRESH 60s`);
       set('tk-status', 'LIVE');
       set('tk-count', candleData.length);
       setLive(true);
@@ -499,7 +499,7 @@
     if(b){b.textContent=isBuy?'BUY ▲':'SELL ▼';b.className=isBuy?'sig-badge buy':'sig-badge';}
     set('entryV',fmt(price));set('stopV',fmt(stop));set('targetV',fmt(target));
     set('b-entry',fmt(price));set('b-stop',fmt(stop));set('b-target',fmt(target));
-    set('waitMsg',`${type} signal active · M5 SPX`);
+    set('waitMsg',`${type} signal active · M5 SPY`);
     const a=el('signalAlert');
     if(a){
       a.textContent=isBuy?`🟢 BUY · Entry: ${fmt(price)} · SL: ${fmt(stop)} · TP: ${fmt(target)}`:`🔴 SELL · Entry: ${fmt(price)} · SL: ${fmt(stop)} · TP: ${fmt(target)}`;
@@ -597,7 +597,7 @@
       const atr14=calcATR(candleData,14),macd=calcMACD(closes),stdDev=calcStdDev(closes,20);
       const prompt=`You are an expert CFD and index trading analyst. Analyze this LIVE US500 (S&P 500) M5 data from Twelve Data:
 
-DATA SOURCE: Twelve Data REST API · Symbol: SPX · Interval: 5min
+DATA SOURCE: Twelve Data REST API · Symbol: SPY · Interval: 5min
 Price: ${fmt(lastPrice)} | Session Open: ${fmt(sessionOpen)} | High: ${fmt(sessionHigh)} | Low: ${fmt(sessionLow)}
 Change: ${sessionOpen ? fmt(lastPrice-sessionOpen) + ' (' + fmt((lastPrice-sessionOpen)/sessionOpen*100,2) + '%)' : '--'}
 
