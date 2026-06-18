@@ -1,1 +1,1 @@
-# XAUUSD
+# US SP 500
