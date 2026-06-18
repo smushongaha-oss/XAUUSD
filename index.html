@@ -3,81 +3,696 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NEXA · SPX H1 Indicator with Alerts</title>
+<title>NEXA · SPX500 H4 Indicator with Alerts</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap');
-*{margin:0;padding:0;box-sizing:border-box}:root{--bg:#07090f;--panel:#0b0e1a;--border:#182040;--green:#00e676;--red:#ff1744;--gold:#ffd600;--blue:#00b8ff;--purple:#b040ff;--text:#dde8ff;--dim:#4a6a8a;--glow-green:0 0 14px #00e676bb;--glow-red:0 0 14px #ff1744bb;--glow-gold:0 0 14px #ffd600bb;--glow-blue:0 0 14px #00b8ffbb;--glow-purple:0 0 14px #b040ffbb}body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:14px;background-image:radial-gradient(ellipse at 50% 0%,#1a0a3a22 0%,transparent 70%)}.top-label{font-family:'Orbitron',sans-serif;font-size:0.65rem;letter-spacing:0.45em;color:var(--dim);margin-bottom:4px}.buy-sell-title{display:flex;gap:14px;align-items:center;font-family:'Orbitron',sans-serif;font-size:clamp(2.8rem,10vw,5rem);font-weight:900;line-height:1;margin-bottom:6px}.buy-sell-title .buy{color:var(--green);text-shadow:var(--glow-green)}.buy-sell-title .div{color:var(--dim);font-size:2.5rem}.buy-sell-title .sell{color:var(--red);text-shadow:var(--glow-red)}.sub-label{font-family:'Share Tech Mono',monospace;font-size:0.75rem;color:var(--purple);letter-spacing:0.2em;margin-bottom:12px;text-shadow:var(--glow-purple)}.notif-controls{display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap;justify-content:center}.notif-btn{padding:6px 12px;border:1px solid var(--border);border-radius:4px;background:#0d1225;color:var(--text);font-family:'Orbitron',sans-serif;font-size:0.65rem;cursor:pointer;transition:all 0.2s}.notif-btn:hover{opacity:0.85}.notif-btn.active{border-color:var(--green);background:#00e67622}.conn-status{font-family:'Share Tech Mono',monospace;font-size:0.7rem;padding:4px 14px;border-radius:20px;margin-bottom:10px;display:flex;align-items:center;gap:6px;border:1px solid var(--border)}.conn-status.connecting{color:var(--gold);border-color:var(--gold)}.conn-status.connected{color:var(--green);border-color:var(--green)}.conn-status.error{color:var(--red);border-color:var(--red)}.conn-dot{width:7px;height:7px;border-radius:50%;background:currentColor;animation:blink 1.4s infinite}.main-panel{width:100%;max-width:940px;background:var(--panel);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:12px;box-shadow:0 0 40px #0004;min-height:450px}.panel-header{display:flex;align-items:center;gap:12px;padding:9px 16px;border-bottom:1px solid var(--border);flex-wrap:wrap;background:#0d1225}.live-dot{width:9px;height:9px;background:var(--green);border-radius:50%;box-shadow:var(--glow-green);animation:blink 1.4s infinite;flex-shrink:0}@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}.sym{font-family:'Orbitron',sans-serif;font-size:0.9rem;font-weight:700;color:var(--text)}.tf{color:var(--dim);font-size:0.8rem;margin-left:-6px}.synth-badge{background:linear-gradient(135deg,#1a0a3a,#0a1a3a);border:1px solid var(--gold);border-radius:4px;padding:2px 8px;font-family:'Orbitron',sans-serif;font-size:0.6rem;color:var(--gold);letter-spacing:0.1em;text-shadow:var(--glow-gold)}.sig-label{color:var(--dim);font-size:0.78rem;margin-left:auto}.sig-badge{font-family:'Orbitron',sans-serif;font-size:1.05rem;font-weight:900;color:var(--red);text-shadow:var(--glow-red)}.sig-badge.buy{color:var(--green);text-shadow:var(--glow-green)}.sig-badge.wait{color:var(--gold);text-shadow:var(--glow-gold)}.str-wrap{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:3px}.str-lbl{font-size:0.65rem;color:var(--dim);letter-spacing:0.1em}.str-row{display:flex;align-items:center;gap:8px}.str-bg{width:150px;height:7px;background:#182040;border-radius:4px}.str-bar{height:100%;border-radius:4px;background:var(--gold);box-shadow:var(--glow-gold);transition:width .6s}.str-pct{font-family:'Orbitron',sans-serif;font-size:0.95rem;color:var(--gold);min-width:40px;text-align:right}.panel-body{display:flex;flex:1}.stats-col{width:195px;min-width:175px;padding:12px 14px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:11px;overflow-y:auto}.sg{display:flex;flex-direction:column;gap:2px}.sl{font-size:0.62rem;letter-spacing:0.12em;color:var(--dim)}.sv{font-family:'Share Tech Mono',monospace;font-size:0.95rem}.sv.green{color:var(--green)}.sv.red{color:var(--red)}.sv.gold{color:var(--gold)}.sv.blue{color:var(--blue)}.sv.purple{color:var(--purple)}.sr{display:flex;gap:18px}.wait-msg{font-size:0.72rem;color:var(--dim);font-style:italic}.rr-pill{display:inline-block;background:#0a1a08;border:1px solid var(--green);border-radius:4px;padding:2px 9px;color:var(--gold);font-family:'Share Tech Mono',monospace;font-size:0.82rem}.ent-row{display:flex;gap:8px;flex-wrap:wrap}.ei{display:flex;flex-direction:column;gap:2px}.el{font-size:0.58rem;letter-spacing:0.1em;color:var(--dim)}.ev{font-family:'Share Tech Mono',monospace;font-size:0.85rem}.ev.entry{color:var(--gold)}.ev.stop{color:var(--red)}.ev.target{color:var(--gold);font-size:0.95rem}.btn-row{display:flex;gap:7px}.btn{flex:1;padding:9px 0;border:none;border-radius:6px;font-family:'Orbitron',sans-serif;font-size:0.7rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;transition:opacity .2s,transform .1s}.btn:hover{opacity:.85}.btn:active{transform:scale(.97)}.btn.long{background:var(--green);color:#000;box-shadow:var(--glow-green)}.btn.short{background:var(--red);color:#fff;box-shadow:var(--glow-red)}.live-row{font-size:0.68rem;color:var(--green);display:flex;align-items:center;gap:5px}.live-dot2{width:6px;height:6px;background:var(--green);border-radius:50%;box-shadow:var(--glow-green);animation:blink 1.4s infinite}.vol-meter{display:flex;flex-direction:column;gap:4px}.vol-label{font-size:0.62rem;letter-spacing:0.12em;color:var(--dim)}.vol-bars{display:flex;gap:3px;align-items:flex-end;height:22px}.vol-bar{width:8px;border-radius:2px 2px 0 0;background:var(--purple);opacity:0.5;transition:height .4s}.vol-bar.active{opacity:1;box-shadow:var(--glow-purple)}.vol-val{font-family:'Share Tech Mono',monospace;font-size:0.78rem;color:var(--purple)}.chart-area{flex:1;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#0b0e1a}canvas#chart{display:block;width:100%!important;height:100%!important}.ticker-strip{width:100%;max-width:940px;background:#0d1225;border:1px solid var(--border);border-radius:8px;padding:7px 16px;margin-bottom:12px;display:flex;gap:28px;overflow-x:auto;scrollbar-width:none}.ticker-strip::-webkit-scrollbar{display:none}.tk{display:flex;flex-direction:column;gap:2px;min-width:80px}.tk-l{font-size:0.6rem;color:var(--dim);letter-spacing:0.1em}.tk-v{font-family:'Share Tech Mono',monospace;font-size:0.85rem}.bottom-strip{width:100%;max-width:940px;display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;background:var(--panel);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:14px}.bs-div{background:var(--border)}.bs-cell{padding:15px 18px;display:flex;align-items:center;gap:13px}.bs-icon{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}.bs-icon.green{border:2px solid var(--green);color:var(--green);box-shadow:var(--glow-green)}.bs-icon.red{border:2px solid var(--red);color:var(--red);box-shadow:var(--glow-red)}.bs-icon.gold{border:2px solid var(--gold);color:var(--gold);box-shadow:var(--glow-gold)}.bs-txt{display:flex;flex-direction:column;gap:2px}.bs-txt .bl{font-size:0.58rem;letter-spacing:0.15em;color:var(--dim)}.bs-txt .bv{font-family:'Orbitron',sans-serif;font-size:1.2rem;font-weight:700}.bs-txt .bv.green{color:var(--green);text-shadow:var(--glow-green)}.bs-txt .bv.red{color:var(--red);text-shadow:var(--glow-red)}.bs-txt .bv.gold{color:var(--gold);text-shadow:var(--glow-gold)}.signal-alert{display:none;width:100%;max-width:940px;padding:12px 20px;border-radius:10px;margin-bottom:12px;font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:700;text-align:center;letter-spacing:0.1em;animation:flashPulse 1s ease-in-out 3}.signal-alert.buy{background:#00e67622;border:2px solid var(--green);color:var(--green)}.signal-alert.sell{background:#ff174422;border:2px solid var(--red);color:var(--red)}@keyframes flashPulse{0%,100%{opacity:1}50%{opacity:.3}}.ai-section{width:100%;max-width:940px;background:var(--panel);border:1px solid var(--border);border-radius:12px;overflow:hidden}.ai-hdr{display:flex;align-items:center;gap:10px;padding:9px 16px;border-bottom:1px solid var(--border);background:#0a0d1e}.ai-hdr-title{font-family:'Orbitron',sans-serif;font-size:0.78rem;color:var(--blue);letter-spacing:0.08em}.ai-hdr-model{font-size:0.68rem;color:var(--dim);margin-left:auto;font-family:'Share Tech Mono',monospace}.ai-inputs{display:flex;gap:8px;padding:11px 14px;border-bottom:1px solid var(--border);flex-wrap:wrap}.ai-inp{background:#060912;border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:'Share Tech Mono',monospace;font-size:0.78rem;padding:8px 12px;outline:none;transition:border-color .2s}.ai-inp:focus{border-color:var(--blue)}.ai-key{width:230px}.ai-qry{flex:1;min-width:200px}.ai-btn{background:var(--blue);color:#000;border:none;border-radius:5px;padding:8px 16px;font-family:'Orbitron',sans-serif;font-size:0.72rem;font-weight:700;cursor:pointer;transition:opacity .2s;white-space:nowrap}.ai-btn:hover{opacity:.85}.ai-btn:disabled{opacity:.35;cursor:not-allowed}.ai-resp{padding:13px 16px;min-height:76px;font-family:'Rajdhani',sans-serif;font-size:0.95rem;line-height:1.65;color:var(--text);white-space:pre-wrap}.ai-resp.loading{color:var(--dim);font-style:italic}.ai-resp.error{color:var(--red)}@media (max-width:600px){.stats-col{width:145px;min-width:130px}.str-bg{width:90px}.bottom-strip{grid-template-columns:1fr}.bs-div{display:none}.ai-key{width:100%}.notif-controls{gap:5px}.notif-btn{padding:4px 8px;font-size:0.6rem}}
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #07090f;
+    --panel: #0b0e1a;
+    --border: #182040;
+    --green: #00e676;
+    --red: #ff1744;
+    --gold: #ffd600;
+    --blue: #00b8ff;
+    --purple: #b040ff;
+    --text: #dde8ff;
+    --dim: #4a6a8a;
+    --glow-green: 0 0 14px #00e676bb;
+    --glow-red: 0 0 14px #ff1744bb;
+    --glow-gold: 0 0 14px #ffd600bb;
+    --glow-blue: 0 0 14px #00b8ffbb;
+    --glow-purple: 0 0 14px #b040ffbb;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 14px;
+    background-image: radial-gradient(ellipse at 50% 0%, #1a0a3a22 0%, transparent 70%);
+  }
+
+  .top-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.45em;
+    color: var(--dim);
+    margin-bottom: 4px;
+  }
+
+  .buy-sell-title {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(2.8rem, 10vw, 5rem);
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .buy-sell-title .buy  { color: var(--green); text-shadow: var(--glow-green); }
+  .buy-sell-title .div  { color: var(--dim); font-size: 2.5rem; }
+  .buy-sell-title .sell { color: var(--red); text-shadow: var(--glow-red); }
+
+  .sub-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--purple);
+    letter-spacing: 0.2em;
+    margin-bottom: 12px;
+    text-shadow: var(--glow-purple);
+  }
+
+  .notif-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .notif-btn {
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: #0d1225;
+    color: var(--text);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.65rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .notif-btn:hover { opacity: 0.85; }
+  .notif-btn.active { border-color: var(--green); background: #00e67622; }
+
+  .conn-status {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid var(--border);
+  }
+  .conn-status.connecting { color: var(--gold); border-color: var(--gold); }
+  .conn-status.connected  { color: var(--green); border-color: var(--green); }
+  .conn-status.error      { color: var(--red); border-color: var(--red); }
+  .conn-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; animation: blink 1.4s infinite; }
+
+  .main-panel {
+    width: 100%;
+    max-width: 940px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 12px;
+    box-shadow: 0 0 40px #0004;
+  }
+
+  .panel-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 16px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    background: #0d1225;
+  }
+
+  .live-dot {
+    width: 9px; height: 9px;
+    background: var(--green);
+    border-radius: 50%;
+    box-shadow: var(--glow-green);
+    animation: blink 1.4s infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+  .sym { font-family: 'Orbitron', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--text); }
+  .tf  { color: var(--dim); font-size: 0.8rem; margin-left: -6px; }
+
+  .synth-badge {
+    background: linear-gradient(135deg,#1a0a3a,#0a1a3a);
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.6rem;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    text-shadow: var(--glow-gold);
+  }
+
+  .sig-label { color: var(--dim); font-size: 0.78rem; margin-left: auto; }
+
+  .sig-badge {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 900;
+    color: var(--red);
+    text-shadow: var(--glow-red);
+  }
+  .sig-badge.buy  { color: var(--green); text-shadow: var(--glow-green); }
+  .sig-badge.wait { color: var(--gold);  text-shadow: var(--glow-gold); }
+
+  .str-wrap { margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+  .str-lbl  { font-size: 0.65rem; color: var(--dim); letter-spacing: 0.1em; }
+  .str-row  { display: flex; align-items: center; gap: 8px; }
+  .str-bg   { width: 150px; height: 7px; background: #182040; border-radius: 4px; }
+  .str-bar  { height: 100%; border-radius: 4px; background: var(--gold); box-shadow: var(--glow-gold); transition: width .6s; }
+  .str-pct  { font-family: 'Orbitron', sans-serif; font-size: 0.95rem; color: var(--gold); min-width: 40px; text-align: right; }
+
+  .panel-body { display: flex; }
+
+  .stats-col {
+    width: 195px;
+    min-width: 175px;
+    padding: 12px 14px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+
+  .sg { display: flex; flex-direction: column; gap: 2px; }
+  .sl { font-size: 0.62rem; letter-spacing: 0.12em; color: var(--dim); }
+  .sv { font-family: 'Share Tech Mono', monospace; font-size: 0.95rem; }
+  .sv.green  { color: var(--green); }
+  .sv.red    { color: var(--red); }
+  .sv.gold   { color: var(--gold); }
+  .sv.blue   { color: var(--blue); }
+  .sv.purple { color: var(--purple); }
+
+  .sr { display: flex; gap: 18px; }
+  .wait-msg { font-size: 0.72rem; color: var(--dim); font-style: italic; }
+
+  .rr-pill {
+    display: inline-block;
+    background: #0a1a08;
+    border: 1px solid var(--green);
+    border-radius: 4px;
+    padding: 2px 9px;
+    color: var(--gold);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.82rem;
+  }
+
+  .ent-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .ei { display: flex; flex-direction: column; gap: 2px; }
+  .el { font-size: 0.58rem; letter-spacing: 0.1em; color: var(--dim); }
+  .ev { font-family: 'Share Tech Mono', monospace; font-size: 0.85rem; }
+  .ev.entry  { color: var(--gold); }
+  .ev.stop   { color: var(--red); }
+  .ev.target { color: var(--gold); font-size: 0.95rem; }
+
+  .btn-row { display: flex; gap: 7px; }
+  .btn {
+    flex: 1; padding: 9px 0; border: none; border-radius: 6px;
+    font-family: 'Orbitron', sans-serif; font-size: 0.7rem; font-weight: 700;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    gap: 4px; transition: opacity .2s, transform .1s;
+  }
+  .btn:hover  { opacity: .85; }
+  .btn:active { transform: scale(.97); }
+  .btn.long  { background: var(--green); color: #000; box-shadow: var(--glow-green); }
+  .btn.short { background: var(--red);   color: #fff; box-shadow: var(--glow-red); }
+
+  .live-row { font-size: 0.68rem; color: var(--green); display: flex; align-items: center; gap: 5px; }
+  .live-dot2 { width: 6px; height: 6px; background: var(--green); border-radius: 50%; box-shadow: var(--glow-green); animation: blink 1.4s infinite; }
+
+  .vol-meter { display: flex; flex-direction: column; gap: 4px; }
+  .vol-label { font-size: 0.62rem; letter-spacing: 0.12em; color: var(--dim); }
+  .vol-bars  { display: flex; gap: 3px; align-items: flex-end; height: 22px; }
+  .vol-bar   { width: 8px; border-radius: 2px 2px 0 0; background: var(--purple); opacity: 0.5; transition: height .4s; }
+  .vol-bar.active { opacity: 1; box-shadow: var(--glow-purple); }
+  .vol-val   { font-family: 'Share Tech Mono', monospace; font-size: 0.78rem; color: var(--purple); }
+
+  .chart-area { flex: 1; position: relative; overflow: hidden; min-height: 320px; }
+  canvas#chart { display: block; width: 100%; height: 100%; }
+
+  .ticker-strip {
+    width: 100%;
+    max-width: 940px;
+    background: #0d1225;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 16px;
+    margin-bottom: 12px;
+    display: flex;
+    gap: 28px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .ticker-strip::-webkit-scrollbar { display: none; }
+  .tk { display: flex; flex-direction: column; gap: 2px; min-width: 80px; }
+  .tk-l { font-size: 0.6rem; color: var(--dim); letter-spacing: 0.1em; }
+  .tk-v { font-family: 'Share Tech Mono', monospace; font-size: 0.85rem; }
+
+  .bottom-strip {
+    width: 100%;
+    max-width: 940px;
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr 1px 1fr;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .bs-div { background: var(--border); }
+  .bs-cell { padding: 15px 18px; display: flex; align-items: center; gap: 13px; }
+  .bs-icon {
+    width: 42px; height: 42px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; flex-shrink: 0;
+  }
+  .bs-icon.green { border: 2px solid var(--green); color: var(--green); box-shadow: var(--glow-green); }
+  .bs-icon.red   { border: 2px solid var(--red);   color: var(--red);   box-shadow: var(--glow-red); }
+  .bs-icon.gold  { border: 2px solid var(--gold);  color: var(--gold);  box-shadow: var(--glow-gold); }
+  .bs-txt { display: flex; flex-direction: column; gap: 2px; }
+  .bs-txt .bl { font-size: 0.58rem; letter-spacing: 0.15em; color: var(--dim); }
+  .bs-txt .bv { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; font-weight: 700; }
+  .bs-txt .bv.green { color: var(--green); text-shadow: var(--glow-green); }
+  .bs-txt .bv.red   { color: var(--red);   text-shadow: var(--glow-red); }
+  .bs-txt .bv.gold  { color: var(--gold);  text-shadow: var(--glow-gold); }
+
+  .signal-alert {
+    display: none;
+    width: 100%;
+    max-width: 940px;
+    padding: 12px 20px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 0.1em;
+    animation: flashPulse 1s ease-in-out 3;
+  }
+  .signal-alert.buy  { background: #00e67622; border: 2px solid var(--green); color: var(--green); }
+  .signal-alert.sell { background: #ff174422; border: 2px solid var(--red);   color: var(--red); }
+  @keyframes flashPulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+  .ai-section {
+    width: 100%;
+    max-width: 940px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .ai-hdr {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 16px;
+    border-bottom: 1px solid var(--border);
+    background: #0a0d1e;
+  }
+  .ai-hdr-title { font-family: 'Orbitron', sans-serif; font-size: 0.78rem; color: var(--blue); letter-spacing: 0.08em; }
+  .ai-hdr-model { font-size: 0.68rem; color: var(--dim); margin-left: auto; font-family: 'Share Tech Mono', monospace; }
+
+  .ai-inputs {
+    display: flex; gap: 8px; padding: 11px 14px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .ai-inp {
+    background: #060912;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.78rem;
+    padding: 8px 12px;
+    outline: none;
+    transition: border-color .2s;
+  }
+  .ai-inp:focus { border-color: var(--blue); }
+  .ai-key  { width: 230px; }
+  .ai-qry  { flex: 1; min-width: 200px; }
+  .ai-btn  {
+    background: var(--blue); color: #000; border: none; border-radius: 5px;
+    padding: 8px 16px;
+    font-family: 'Orbitron', sans-serif; font-size: 0.72rem; font-weight: 700;
+    cursor: pointer; transition: opacity .2s;
+    white-space: nowrap;
+  }
+  .ai-btn:hover    { opacity: .85; }
+  .ai-btn:disabled { opacity: .35; cursor: not-allowed; }
+
+  .ai-resp {
+    padding: 13px 16px; min-height: 76px;
+    font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; line-height: 1.65;
+    color: var(--text); white-space: pre-wrap;
+  }
+  .ai-resp.loading { color: var(--dim); font-style: italic; }
+  .ai-resp.error   { color: var(--red); }
+
+  @media (max-width: 600px) {
+    .stats-col { width: 145px; min-width: 130px; }
+    .str-bg    { width: 90px; }
+    .bottom-strip { grid-template-columns: 1fr; }
+    .bs-div    { display: none; }
+    .ai-key    { width: 100%; }
+    .notif-controls { gap: 5px; }
+    .notif-btn { padding: 4px 8px; font-size: 0.6rem; }
+  }
 </style>
 </head>
 <body>
-<div class="top-label">E Q U I T Y &nbsp; I N D E X &nbsp; I N D I C A T O R</div>
-<div class="buy-sell-title"><span class="buy">BUY</span><span class="div">|</span><span class="sell">SELL</span></div>
-<div class="sub-label">⚡ SPX · S&P 500 · 1 HOUR · EQUITY INDEX</div>
+
+<div class="top-label">U S &nbsp; I N D E X &nbsp; I N D I C A T O R</div>
+
+<div class="buy-sell-title">
+  <span class="buy">BUY</span>
+  <span class="div">|</span>
+  <span class="sell">SELL</span>
+</div>
+
+<div class="sub-label">⚡ SPX500 · S&P 500 · H4 · US INDEX</div>
+
 <div class="notif-controls">
-<button class="notif-btn active" id="notifBrowserBtn" onclick="toggleBrowserNotif()">🔔 Browser Alert</button>
-<button class="notif-btn" id="notifSoundBtn" onclick="toggleSoundNotif()">🔊 Sound Alert</button>
-<button class="notif-btn" id="notifVisualsBtn" onclick="toggleVisualNotif()">✨ Visual Flash</button>
+  <button class="notif-btn active" id="notifBrowserBtn" onclick="toggleBrowserNotif()">🔔 Browser Alert</button>
+  <button class="notif-btn" id="notifSoundBtn" onclick="toggleSoundNotif()">🔊 Sound Alert</button>
+  <button class="notif-btn" id="notifVisualsBtn" onclick="toggleVisualNotif()">✨ Visual Flash</button>
 </div>
-<div class="conn-status connecting" id="connStatus"><div class="conn-dot"></div><span id="connText">CONNECTING TO DATA...</span></div>
+
+<div class="conn-status connecting" id="connStatus">
+  <div class="conn-dot"></div>
+  <span id="connText">CONNECTING TO DERIV...</span>
+</div>
+
 <div class="signal-alert" id="signalAlert"></div>
+
 <div class="main-panel">
-<div class="panel-header">
-<div class="live-dot"></div>
-<div class="sym">SPX</div>
-<div class="tf">S&P 500, H1</div>
-<div class="synth-badge">LIVE</div>
-<div class="sig-label">SIGNAL</div>
-<div class="sig-badge wait" id="sigBadge">WAIT ◆</div>
-<div class="str-wrap"><div class="str-lbl">SIGNAL STRENGTH</div><div class="str-row"><div class="str-bg"><div class="str-bar" id="strBar" style="width:0%"></div></div><div class="str-pct" id="strPct">--</div></div></div>
-</div>
-<div class="panel-body">
-<div class="stats-col">
-<div class="sr"><div class="sg"><div class="sl">TREND</div><div class="sv gold" id="trend">LOADING</div></div><div class="sg"><div class="sl">ATR(5)</div><div class="sv blue" id="atr5">--</div></div></div>
-<div class="sr"><div class="sg"><div class="sl">RSI(14)</div><div class="sv purple" id="rsiVal">--</div></div><div class="sg"><div class="sl">ATR(14)</div><div class="sv blue" id="atr14">--</div></div></div>
-<div class="sg"><div class="sl">EMA 9 / EMA 21</div><div class="sv gold" id="emaStatus">LOADING...</div></div>
-<div class="sg"><div class="sl">TIMEFRAME</div><div class="sv green">H1 · 1 HOUR</div></div>
-<div class="vol-meter"><div class="vol-label">VOLATILITY PULSE</div><div class="vol-bars" id="volBars"><div class="vol-bar" style="height:40%"></div><div class="vol-bar" style="height:40%"></div><div class="vol-bar" style="height:40%"></div><div class="vol-bar" style="height:40%"></div><div class="vol-bar" style="height:40%"></div><div class="vol-bar" style="height:40%"></div><div class="vol-bar" style="height:40%"></div></div><div class="vol-val" id="volVal">σ = --</div></div>
-<div class="wait-msg" id="waitMsg">Connecting to live feed...</div>
-<div class="sg"><div class="sl">LEVELS</div><div class="rr-pill">R/R 1:2.0</div></div>
-<div class="ent-row"><div class="ei"><div class="el">ENTRY</div><div class="ev entry" id="entryV">--</div></div><div class="ei"><div class="el">STOP</div><div class="ev stop" id="stopV">--</div></div><div class="ei"><div class="el">TARGET</div><div class="ev target" id="targetV">--</div></div></div>
-<div class="btn-row"><button class="btn long" onclick="forceSignal('BUY')">▲ LONG</button><button class="btn short" onclick="forceSignal('SELL')">▼ SHORT</button></div>
-<div class="live-row"><div class="live-dot2"></div> LIVE · WS</div>
-</div>
-<div class="chart-area" id="chartArea"><canvas id="chart"></canvas></div>
-</div>
+  <div class="panel-header">
+    <div class="live-dot"></div>
+    <div class="sym">SPX500</div>
+    <div class="tf">S&P 500, H4</div>
+    <div class="synth-badge">LIVE</div>
+    <div class="sig-label">SIGNAL</div>
+    <div class="sig-badge wait" id="sigBadge">WAIT ◆</div>
+    <div class="str-wrap">
+      <div class="str-lbl">SIGNAL STRENGTH</div>
+      <div class="str-row">
+        <div class="str-bg"><div class="str-bar" id="strBar" style="width:0%"></div></div>
+        <div class="str-pct" id="strPct">--</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel-body">
+    <div class="stats-col">
+      <div class="sr">
+        <div class="sg">
+          <div class="sl">TREND</div>
+          <div class="sv gold" id="trend">LOADING</div>
+        </div>
+        <div class="sg">
+          <div class="sl">ATR(5)</div>
+          <div class="sv blue" id="atr5">--</div>
+        </div>
+      </div>
+      <div class="sr">
+        <div class="sg">
+          <div class="sl">RSI(14)</div>
+          <div class="sv purple" id="rsiVal">--</div>
+        </div>
+        <div class="sg">
+          <div class="sl">ATR(14)</div>
+          <div class="sv blue" id="atr14">--</div>
+        </div>
+      </div>
+      <div class="sg">
+        <div class="sl">EMA 9 / EMA 21</div>
+        <div class="sv gold" id="emaStatus">LOADING...</div>
+      </div>
+      <div class="sg">
+        <div class="sl">TIMEFRAME</div>
+        <div class="sv green">H4 · 4 HOUR</div>
+      </div>
+      <div class="vol-meter">
+        <div class="vol-label">VOLATILITY PULSE</div>
+        <div class="vol-bars" id="volBars">
+          <div class="vol-bar" style="height:40%"></div>
+          <div class="vol-bar" style="height:40%"></div>
+          <div class="vol-bar" style="height:40%"></div>
+          <div class="vol-bar" style="height:40%"></div>
+          <div class="vol-bar" style="height:40%"></div>
+          <div class="vol-bar" style="height:40%"></div>
+          <div class="vol-bar" style="height:40%"></div>
+        </div>
+        <div class="vol-val" id="volVal">σ = --</div>
+      </div>
+      <div class="wait-msg" id="waitMsg">Connecting to live feed...</div>
+      <div class="sg">
+        <div class="sl">LEVELS</div>
+        <div class="rr-pill">R/R 1:2.0</div>
+      </div>
+      <div class="ent-row">
+        <div class="ei"><div class="el">ENTRY</div><div class="ev entry" id="entryV">--</div></div>
+        <div class="ei"><div class="el">STOP</div><div class="ev stop" id="stopV">--</div></div>
+        <div class="ei"><div class="el">TARGET</div><div class="ev target" id="targetV">--</div></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn long"  onclick="forceSignal('BUY')">▲ LONG</button>
+        <button class="btn short" onclick="forceSignal('SELL')">▼ SHORT</button>
+      </div>
+      <div class="live-row"><div class="live-dot2"></div> LIVE · DERIV WS</div>
+    </div>
+    <div class="chart-area">
+      <canvas id="chart"></canvas>
+    </div>
+  </div>
 </div>
 
 <div class="ticker-strip">
-<div class="tk"><div class="tk-l">LAST PRICE</div><div class="tk-v" id="tk-price" style="color:var(--gold)">--</div></div>
-<div class="tk"><div class="tk-l">24H CHANGE</div><div class="tk-v" id="tk-chg" style="color:var(--dim)">--</div></div>
-<div class="tk"><div class="tk-l">SESSION HIGH</div><div class="tk-v" style="color:var(--green)" id="tk-hi">--</div></div>
-<div class="tk"><div class="tk-l">SESSION LOW</div><div class="tk-v" style="color:var(--red)" id="tk-lo">--</div></div>
-<div class="tk"><div class="tk-l">CANDLES</div><div class="tk-v" style="color:var(--dim)" id="tk-count">0</div></div>
-<div class="tk"><div class="tk-l">TIMEFRAME</div><div class="tk-v" style="color:var(--purple)">H1</div></div>
-<div class="tk"><div class="tk-l">MARKET</div><div class="tk-v" style="color:var(--purple)">SPX · US INDEX</div></div>
-<div class="tk"><div class="tk-l">SOURCE</div><div class="tk-v" style="color:var(--green)">LIVE</div></div>
+  <div class="tk"><div class="tk-l">LAST PRICE</div><div class="tk-v" id="tk-price" style="color:var(--gold)">--</div></div>
+  <div class="tk"><div class="tk-l">24H CHANGE</div><div class="tk-v" id="tk-chg" style="color:var(--dim)">--</div></div>
+  <div class="tk"><div class="tk-l">SESSION HIGH</div><div class="tk-v" style="color:var(--green)" id="tk-hi">--</div></div>
+  <div class="tk"><div class="tk-l">SESSION LOW</div><div class="tk-v" style="color:var(--red)" id="tk-lo">--</div></div>
+  <div class="tk"><div class="tk-l">CANDLES</div><div class="tk-v" style="color:var(--dim)" id="tk-count">0</div></div>
+  <div class="tk"><div class="tk-l">TIMEFRAME</div><div class="tk-v" style="color:var(--purple)">H4</div></div>
+  <div class="tk"><div class="tk-l">MARKET</div><div class="tk-v" style="color:var(--purple)">DERIV · SPX500</div></div>
+  <div class="tk"><div class="tk-l">SOURCE</div><div class="tk-v" style="color:var(--green)">LIVE WS</div></div>
 </div>
 
 <div class="bottom-strip">
-<div class="bs-cell"><div class="bs-icon green">↗</div><div class="bs-txt"><div class="bl">ENTRY</div><div class="bv green" id="b-entry">--</div></div></div>
-<div class="bs-div"></div>
-<div class="bs-cell"><div class="bs-icon red">🛡</div><div class="bs-txt"><div class="bl">STOP LOSS</div><div class="bv red" id="b-stop">--</div></div></div>
-<div class="bs-div"></div>
-<div class="bs-cell"><div class="bs-icon gold">🎯</div><div class="bs-txt"><div class="bl">TP TARGET</div><div class="bv gold" id="b-target">--</div></div></div>
+  <div class="bs-cell">
+    <div class="bs-icon green">↗</div>
+    <div class="bs-txt">
+      <div class="bl">ENTRY</div>
+      <div class="bv green" id="b-entry">--</div>
+    </div>
+  </div>
+  <div class="bs-div"></div>
+  <div class="bs-cell">
+    <div class="bs-icon red">🛡</div>
+    <div class="bs-txt">
+      <div class="bl">STOP LOSS</div>
+      <div class="bv red" id="b-stop">--</div>
+    </div>
+  </div>
+  <div class="bs-div"></div>
+  <div class="bs-cell">
+    <div class="bs-icon gold">🎯</div>
+    <div class="bs-txt">
+      <div class="bl">TP TARGET</div>
+      <div class="bv gold" id="b-target">--</div>
+    </div>
+  </div>
 </div>
 
 <div class="ai-section">
-<div class="ai-hdr"><span style="font-size:1.1rem">🤖</span><div class="ai-hdr-title">GROQ AI · SPX ANALYSIS</div><div class="ai-hdr-model">llama-3.3-70b-versatile · console.groq.com</div></div>
-<div class="ai-inputs">
-<input class="ai-inp ai-key" id="groqKey" type="password" placeholder="Groq API Key  gsk_...">
-<input class="ai-inp ai-qry" id="aiQry" type="text" value="Should I take this 1-hour signal on S&P 500 (SPX)?" placeholder="Ask anything about this S&P 500 signal...">
-<button class="ai-btn" id="aiBtn" onclick="askGroq()">⚡ ANALYZE</button>
-</div>
-<div class="ai-resp" id="aiResp">Enter your Groq API key and click ANALYZE to receive AI-powered analysis for the live 1-hour S&P 500 (SPX) signal.</div>
+  <div class="ai-hdr">
+    <span style="font-size:1.1rem">🤖</span>
+    <div class="ai-hdr-title">GROQ AI · SPX500 ANALYSIS</div>
+    <div class="ai-hdr-model">llama-3.3-70b-versatile · console.groq.com</div>
+  </div>
+  <div class="ai-inputs">
+    <input class="ai-inp ai-key" id="groqKey" type="password" placeholder="Groq API Key  gsk_...">
+    <input class="ai-inp ai-qry" id="aiQry" type="text"
+           value="Should I take this 4-hour signal on S&P 500 (SPX500)?"
+           placeholder="Ask anything about this SPX500 signal...">
+    <button class="ai-btn" id="aiBtn" onclick="askGroq()">⚡ ANALYZE</button>
+  </div>
+  <div class="ai-resp" id="aiResp">Enter your Groq API key and click ANALYZE to receive AI-powered analysis for the live 4-hour S&P 500 (SPX500) signal.</div>
 </div>
 
 <script>
-const GRANULARITY=3600,HISTORY_COUNT=100,SYMBOL='frxSPX500';let notifSettings={browser:true,sound:false,visual:true},candleData=[],currentCandle=null,currentSignal='WAIT',sessionHigh=-Infinity,sessionLow=+Infinity,lastPrice=null,openPrice=null,ws=null,signalEntry=null,signalStop=null,signalTarget=null;function toggleBrowserNotif(){notifSettings.browser=!notifSettings.browser;document.getElementById('notifBrowserBtn').classList.toggle('active')}function toggleSoundNotif(){notifSettings.sound=!notifSettings.sound;document.getElementById('notifSoundBtn').classList.toggle('active');if(notifSettings.sound)requestNotificationPermission()}function toggleVisualNotif(){notifSettings.visual=!notifSettings.visual;document.getElementById('notifVisualsBtn').classList.toggle('active')}function requestNotificationPermission(){if('Notification'in window&&Notification.permission==='default'){Notification.requestPermission()}}function playAlertSound(){try{const audioContext=new(window.AudioContext||window.webkitAudioContext)(),oscillator=audioContext.createOscillator(),gain=audioContext.createGain();oscillator.connect(gain);gain.connect(audioContext.destination);oscillator.frequency.value=800;oscillator.type='sine';gain.gain.setValueAtTime(0.3,audioContext.currentTime);gain.gain.exponentialRampToValueAtTime(0.01,audioContext.currentTime+0.5);oscillator.start(audioContext.currentTime);oscillator.stop(audioContext.currentTime+0.5)}catch(e){console.log('Audio error:',e)}}function flashScreen(){document.body.style.backgroundColor='rgba(0, 230, 118, 0.1)';setTimeout(()=>{document.body.style.backgroundColor='var(--bg)'},200)}function sendSignalNotification(type,price,entry,stop,target){if(notifSettings.browser&&'Notification'in window&&Notification.permission==='granted'){new Notification(`${type} SIGNAL - S&P 500 (H1)`,{body:`Entry: ${entry}\nSL: ${stop}\nTP: ${target}\nPrice: ${price}`,icon:'📈',tag:'spx-signal'})}if(notifSettings.sound)playAlertSound();if(notifSettings.visual)flashScreen()}function calcEMA(data,period){if(data.length<period)return null;const k=2/(period+1);let ema=data.slice(0,period).reduce((a,b)=>a+b,0)/period;for(let i=period;i<data.length;i++)ema=data[i]*k+ema*(1-k);return ema}function calcRSI(data,period=14){if(data.length<period+1)return null;const changes=[];for(let i=1;i<data.length;i++)changes.push(data[i]-data[i-1]);const recent=changes.slice(-period),gains=recent.filter(c=>c>0).reduce((a,b)=>a+b,0)/period,losses=recent.filter(c=>c<0).map(c=>Math.abs(c)).reduce((a,b)=>a+b,0)/period;if(losses===0)return 100;return 100-(100/(1+gains/losses))}function calcATR(candles,period){if(candles.length<period+1)return null;const trs=[];for(let i=1;i<candles.length;i++){const c=candles[i],p=candles[i-1];trs.push(Math.max(c.high-c.low,Math.abs(c.high-p.close),Math.abs(c.low-p.close)))}return trs.slice(-period).reduce((a,b)=>a+b,0)/period}function computeSignal(){if(candleData.length<25){document.getElementById('waitMsg').textContent=`Loading H1 candles... (${candleData.length}/25)`;return}const closes=candleData.map(c=>c.close),ema9=calcEMA(closes,9),ema21=calcEMA(closes,21),rsi=calcRSI(closes,14),atr5=calcATR(candleData,5),atr14=calcATR(candleData,14);if(!ema9||!ema21||rsi===null)return;const price=closes[closes.length-1],bullish=ema9>ema21,emaDiff=Math.abs((ema9-ema21)/ema21*100),rsiStr=Math.min(100,Math.abs(rsi-50)*2),emaStr=Math.min(100,emaDiff*1000),strength=Math.round(rsiStr*0.5+emaStr*0.5);if(atr5)document.getElementById('atr5').textContent=atr5.toFixed(2);if(atr14)document.getElementById('atr14').textContent=atr14.toFixed(2);document.getElementById('rsiVal').textContent=rsi.toFixed(1);const emaEl=document.getElementById('emaStatus');emaEl.textContent=`${bullish?'▲':'▼'} ${ema9.toFixed(2)} / ${ema21.toFixed(2)}`;emaEl.className=bullish?'sv green':'sv red';const trendEl=document.getElementById('trend');trendEl.textContent=bullish?'▲ Bullish':'▼ Bearish';trendEl.className=bullish?'sv green':'sv red';document.getElementById('strBar').style.width=strength+'%';document.getElementById('strPct').textContent=strength+'%';let newSig='WAIT';if(bullish&&rsi>40&&rsi<65)newSig='BUY';if(!bullish&&rsi>35&&rsi<60)newSig='SELL';if(newSig!=='WAIT'&&newSig!==currentSignal){currentSignal=newSig;applySignal(newSig,price,atr14||atr5||50)}else if(newSig==='WAIT'){currentSignal='WAIT';document.getElementById('sigBadge').textContent='WAIT ◆';document.getElementById('sigBadge').className='sig-badge wait';document.getElementById('waitMsg').textContent='Scanning H1 candles...'}const bars=document.getElementById('volBars').children;for(let b of bars){const h=30+Math.random()*70;b.style.height=h+'%';b.className=h>55?'vol-bar active':'vol-bar'}document.getElementById('volVal').textContent=`σ = ${(12+Math.random()*8).toFixed(1)}`}function applySignal(type,price,atr){const isBuy=type==='BUY',stop=isBuy?+(price-atr*1.5).toFixed(2):+(price+atr*1.5).toFixed(2),target=isBuy?+(price+atr*3.0).toFixed(2):+(price-atr*3.0).toFixed(2);signalEntry=price;signalStop=stop;signalTarget=target;document.getElementById('sigBadge').textContent=isBuy?'BUY ▲':'SELL ▼';document.getElementById('sigBadge').className=isBuy?'sig-badge buy':'sig-badge';document.getElementById('waitMsg').textContent=`${type} signal active (H1)`;document.getElementById('entryV').textContent=price.toFixed(2);document.getElementById('stopV').textContent=stop.toFixed(2);document.getElementById('targetV').textContent=target.toFixed(2);document.getElementById('b-entry').textContent=price.toFixed(2);document.getElementById('b-stop').textContent=stop.toFixed(2);document.getElementById('b-target').textContent=target.toFixed(2);const alertEl=document.getElementById('signalAlert');alertEl.textContent=isBuy?`🟢 BUY SIGNAL (H1) · Entry: ${price.toFixed(2)} · SL: ${stop.toFixed(2)} · TP: ${target.toFixed(2)}`:`🔴 SELL SIGNAL (H1) · Entry: ${price.toFixed(2)} · SL: ${stop.toFixed(2)} · TP: ${target.toFixed(2)}`;alertEl.className=isBuy?'signal-alert buy':'signal-alert sell';alertEl.style.display='block';setTimeout(()=>{alertEl.style.display='none'},7000);sendSignalNotification(type,price,price.toFixed(2),stop.toFixed(2),target.toFixed(2));drawChart()}function forceSignal(type){if(!lastPrice)return;const atr=parseFloat(document.getElementById('atr14').textContent)||50;currentSignal=type;applySignal(type,lastPrice,atr)}function processTick(price,epoch){if(!currentCandle){const candleStart=Math.floor(epoch/GRANULARITY)*GRANULARITY;currentCandle={open:price,high:price,low:price,close:price,time:candleStart,bull:true};return}const candleStart=Math.floor(epoch/GRANULARITY)*GRANULARITY;if(candleStart>currentCandle.time){candleData.push({...currentCandle});if(candleData.length>HISTORY_COUNT)candleData.shift();document.getElementById('tk-count').textContent=candleData.length;currentCandle={open:price,high:price,low:price,close:price,time:candleStart,bull:true};computeSignal()}else{currentCandle.close=price;currentCandle.high=Math.max(currentCandle.high,price);currentCandle.low=Math.min(currentCandle.low,price);currentCandle.bull=price>=currentCandle.open}}const canvas=document.getElementById('chart'),ctx=canvas.getContext('2d');function resizeCanvas(){const area=document.getElementById('chartArea');if(!area)return;canvas.width=area.clientWidth||600;canvas.height=area.clientHeight||400;if(canvas.width<100)canvas.width=400;if(canvas.height<100)canvas.height=300;drawChart()}function drawChart(){if(!canvas||!ctx||canvas.width===0||canvas.height===0)return;const allCandles=currentCandle?[...candleData,currentCandle]:[...candleData],W=canvas.width,H=canvas.height;ctx.clearRect(0,0,W,H);ctx.fillStyle='#0b0e1a';ctx.fillRect(0,0,W,H);if(allCandles.length===0){ctx.fillStyle='#4a6a8a';ctx.font='14px Share Tech Mono';ctx.textAlign='center';ctx.fillText('Awaiting candle data...',W/2,H/2);return}ctx.strokeStyle='#182040';ctx.lineWidth=1;for(let i=0;i<=8;i++){const y=H*0.06+(H*0.82/8)*i;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}for(let i=0;i<=6;i++){const x=(W/6)*i;ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H*0.88);ctx.stroke()}const prices=allCandles.flatMap(c=>[c.high,c.low]),minP=Math.min(...prices),maxP=Math.max(...prices),range=maxP-minP||1,padTop=H*0.07,padBot=H*0.22,chartH=H-padTop-padBot,toY=p=>padTop+chartH*(1-(p-minP)/range),cw=(W-50)/Math.max(allCandles.length,30),closes=allCandles.map(c=>c.close),ema9pts=[],ema21pts=[];for(let i=8;i<closes.length;i++){const e9=calcEMA(closes.slice(0,i+1),9),e21=calcEMA(closes.slice(0,i+1),21);if(e9)ema9pts.push({i,v:e9});if(e21)ema21pts.push({i,v:e21})}const drawLine=(pts,color,width)=>{if(pts.length<2)return;ctx.strokeStyle=color;ctx.lineWidth=width;ctx.beginPath();pts.forEach((pt,j)=>{const x=20+pt.i*cw+cw/2,y=toY(pt.v);if(j===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)});ctx.stroke()};drawLine(ema9pts,'#00b8ff66',1.5);drawLine(ema21pts,'#b040ff66',1.5);allCandles.forEach((c,i)=>{const x=20+i*cw,cx=x+cw/2,oY=toY(c.open),cY=toY(c.close),hY=toY(c.high),lY=toY(c.low),col=c.bull?'#00e676':'#ff1744';ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(cx,hY);ctx.lineTo(cx,lY);ctx.stroke();ctx.fillRect(x+cw*0.15,Math.min(oY,cY),cw*0.7,Math.max(Math.abs(cY-oY),1.5))});ctx.setLineDash([4,4]);ctx.lineWidth=1;if(signalEntry){ctx.strokeStyle=currentSignal==='BUY'?'#00e67688':'#ff174488';ctx.beginPath();ctx.moveTo(0,toY(signalEntry));ctx.lineTo(W-50,toY(signalEntry));ctx.stroke()}if(signalStop){ctx.strokeStyle='#ff174455';ctx.beginPath();ctx.moveTo(0,toY(signalStop));ctx.lineTo(W-50,toY(signalStop));ctx.stroke()}if(signalTarget){ctx.strokeStyle='#ffd60055';ctx.beginPath();ctx.moveTo(0,toY(signalTarget));ctx.lineTo(W-50,toY(signalTarget));ctx.stroke()}ctx.setLineDash([]);ctx.fillStyle='#4a6a8a';ctx.font='9px Share Tech Mono, monospace';for(let i=0;i<allCandles.length;i+=Math.max(1,Math.floor(allCandles.length/6))){const c=allCandles[i],d=new Date(c.time*1000),hh=String(d.getHours()).padStart(2,'0'),mm=String(d.getMinutes()).padStart(2,'0'),x=20+i*cw;if(x<W-50)ctx.fillText(`${hh}:${mm}`,x,H-6)}const pStep=range/8;for(let i=0;i<=8;i++){const p=minP+pStep*i,y=toY(p);if(y>padTop&&y<H-padBot)ctx.fillText(p.toFixed(0),W-60,y+3)}}window.addEventListener('resize',()=>{setTimeout(resizeCanvas,100)});document.addEventListener('DOMContentLoaded',()=>{setTimeout(resizeCanvas,500)});setInterval(drawChart,1000);function connectDeriv(){const statusEl=document.getElementById('connStatus'),textEl=document.getElementById('connText');statusEl.className='conn-status connecting';textEl.textContent='CONNECTING TO DATA...';ws=new WebSocket('wss://ws.binaryws.com/websockets/v3?app_id=1089');ws.onopen=()=>{statusEl.className='conn-status connected';textEl.textContent='CONNECTED · LIVE SPX H1 DATA';ws.send(JSON.stringify({ticks_history:SYMBOL,adjust_start_time:1,count:HISTORY_COUNT,end:'latest',granularity:GRANULARITY,style:'candles'}));ws.send(JSON.stringify({ticks:SYMBOL,subscribe:1}))};ws.onmessage=(e)=>{const msg=JSON.parse(e.data);if(msg.msg_type==='candles'&&msg.candles){candleData=msg.candles.map(c=>({open:c.open,high:c.high,low:c.low,close:c.close,time:c.epoch,bull:c.close>=c.open}));document.getElementById('tk-count').textContent=candleData.length;computeSignal();resizeCanvas()}if(msg.msg_type==='tick'&&msg.tick){const price=msg.tick.quote,epoch=msg.tick.epoch;lastPrice=price;if(openPrice===null)openPrice=price;if(price>sessionHigh)sessionHigh=price;if(price<sessionLow)sessionLow=price;processTick(price,epoch);const chg=openPrice?((price-openPrice)/openPrice*100).toFixed(2):'0.00',chgPos=parseFloat(chg)>=0;document.getElementById('tk-price').textContent=price.toFixed(0);document.getElementById('tk-chg').textContent=(chgPos?'+':'')+chg+'%';document.getElementById('tk-chg').style.color=chgPos?'var(--green)':'var(--red)';document.getElementById('tk-hi').textContent=sessionHigh.toFixed(0);document.getElementById('tk-lo').textContent=sessionLow.toFixed(0);drawChart()}};ws.onerror=()=>{statusEl.className='conn-status error';textEl.textContent='CONNECTION ERROR · RETRYING...'};ws.onclose=()=>{statusEl.className='conn-status connecting';textEl.textContent='RECONNECTING...';setTimeout(connectDeriv,3000)}}connectDeriv();async function askGroq(){const key=document.getElementById('groqKey').value.trim(),query=document.getElementById('aiQry').value.trim(),respEl=document.getElementById('aiResp'),btn=document.getElementById('aiBtn');if(!key){respEl.className='ai-resp error';respEl.textContent='⚠ Please enter your Groq API key.';return}if(!query){respEl.className='ai-resp error';respEl.textContent='⚠ Please enter a question.';return}btn.disabled=true;respEl.className='ai-resp loading';respEl.textContent='⏳ Analyzing live H1 S&P 500 data with Groq AI...';const price=document.getElementById('tk-price').textContent,entry=document.getElementById('entryV').textContent,stop=document.getElementById('stopV').textContent,target=document.getElementById('targetV').textContent,atr5=document.getElementById('atr5').textContent,atr14=document.getElementById('atr14').textContent,trend=document.getElementById('trend').textContent,rsi=document.getElementById('rsiVal').textContent,ema=document.getElementById('emaStatus').textContent,pct=document.getElementById('strPct').textContent,systemPrompt='You are an expert equity index trader specializing in S&P 500 (SPX) day trading. Analyze on the 1-hour timeframe. Provide concise analysis limited to 160 words.',userMsg=`LIVE S&P 500 H1: Price: ${price}, Signal: ${currentSignal}, Trend: ${trend}, EMA: ${ema}, RSI: ${rsi}, ATR(5): ${atr5}, ATR(14): ${atr14}, Strength: ${pct}%, Entry: ${entry}, SL: ${stop}, TP: ${target}. Question: ${query}`;try{const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${key}`},body:JSON.stringify({model:'llama-3.3-70b-versatile',max_tokens:350,messages:[{role:'system',content:systemPrompt},{role:'user',content:userMsg}]})});if(!res.ok){const err=await res.json().catch(()=>({}));throw new Error(err.error?.message||`HTTP ${res.status}`)}const data=await res.json();respEl.className='ai-resp';respEl.textContent=data.choices?.[0]?.message?.content||'No response received.'}catch(e){respEl.className='ai-resp error';respEl.textContent=`⚠ Error: ${e.message}`}finally{btn.disabled=false}}document.getElementById('aiQry').addEventListener('keydown',e=>{if(e.key==='Enter')askGroq()});
-</script>
-</body>
-</html>
+// ── CONFIG FOR SPX500 H4 ──
+const GRANULARITY   = 14400;  // 4 hours in seconds
+const HISTORY_COUNT = 100;    // how many H4 candles to load
+const SYMBOL        = 'frxSPX500'; // Deriv S&P 500 symbol
+
+// ── NOTIFICATIONS ──
+let notifSettings = {
+  browser: true,
+  sound: false,
+  visual: true
+};
+
+function toggleBrowserNotif() {
+  notifSettings.browser = !notifSettings.browser;
+  document.getElementById('notifBrowserBtn').classList.toggle('active');
+}
+
+function toggleSoundNotif() {
+  notifSettings.sound = !notifSettings.sound;
+  document.getElementById('notifSoundBtn').classList.toggle('active');
+  if (notifSettings.sound) requestNotificationPermission();
+}
+
+function toggleVisualNotif() {
+  notifSettings.visual = !notifSettings.visual;
+  document.getElementById('notifVisualsBtn').classList.toggle('active');
+}
+
+function requestNotificationPermission() {
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+}
+
+function playAlertSound() {
+  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  const oscillator = audioContext.createOscillator();
+  const gain = audioContext.createGain();
+  
+  oscillator.connect(gain);
+  gain.connect(audioContext.destination);
+  
+  oscillator.frequency.value = 800;
+  oscillator.type = 'sine';
+  gain.gain.setValueAtTime(0.3, audioContext.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+  
+  oscillator.start(audioContext.currentTime);
+  oscillator.stop(audioContext.currentTime + 0.5);
+}
+
+function flashScreen() {
+  document.body.style.backgroundColor = 'rgba(0, 230, 118, 0.1)';
+  setTimeout(() => {
+    document.body.style.backgroundColor = 'var(--bg)';
+  }, 200);
+}
+
+function sendSignalNotification(type, price, entry, stop, target) {
+  if (notifSettings.browser && 'Notification' in window && Notification.permission === 'granted') {
+    new Notification(`${type} SIGNAL - SPX500 (H4)`, {
+      body: `Entry: $${entry}\nSL: $${stop}\nTP: $${target}\nPrice: $${price}`,
+      icon: '📈',
+      tag: 'spx500-signal'
+    });
+  }
+  
+  if (notifSettings.sound) {
+    playAlertSound();
+  }
+  
+  if (notifSettings.visual) {
+    flashScreen();
+  }
+}
+
+// ── STATE ──
+let candleData    = [];
+let currentCandle = null;
+let currentSignal = 'WAIT';
+let sessionHigh   = -Infinity;
+let sessionLow    = +Infinity;
+let lastPrice     = null;
+let openPrice     = null;
+let ws            = null;
+let signalEntry   = null;
+let signalStop    = null;
+let signalTarget  = null;
+
+// ── INDICATORS ──
+function calcEMA(data, period) {
+  if (data.length < period) return null;
+  const k = 2 / (period + 1);
+  let ema = data.slice(0, period).reduce((a, b) => a + b, 0) / period;
+  for (let i = period; i < data.length; i++) ema = data[i] * k + ema * (1 - k);
+  return ema;
+}
+
+function calcRSI(data, period = 14) {
+  if (data.length < period + 1) return null;
+  const changes = [];
+  for (let i = 1; i < data.length; i++) changes.push(data[i] - data[i - 1]);
+  const recent = changes.slice(-period);
+  const gains  = recent.filter(c => c > 0).reduce((a, b) => a + b, 0) / period;
+  const losses = recent.filter(c => c < 0).map(c => Math.abs(c)).reduce((a, b) => a + b, 0) / period;
+  if (losses === 0) return 100;
+  return 100 - (100 / (1 + gains / losses));
+}
+
+function calcATR(candles, period) {
+  if (candles.length < period + 1) return null;
+  const trs = [];
+  for (let i = 1; i < candles.length; i++) {
+    const c = candles[i], p = candles[i - 1];
+    trs.push(Math.max(c.high - c.low, Math.abs(c.high - p.close), Math.abs(c.low - p.close)));
+  }
+  return trs.slice(-period).reduce((a, b) => a + b, 0) / period;
+}
+
+// ── SIGNAL ENGINE (runs on every closed H4 candle) ──
+function computeSignal() {
+  if (candleData.length < 25) {
+    document.getElementById('waitMsg').textContent = `Loading H4 candles... (${candleData.length}/25)`;
+    return;
+  }
+
+  const closes = candleData.map(c => c.close);
+  const ema9   = calcEMA(closes, 9);
+  const ema21  = calcEMA(closes, 21);
+  const rsi    = calcRSI(closes, 14);
+  const atr5   = calcATR(candleData, 5);
+  const atr14  = calcATR(candleData, 14);
+
+  if (!ema9 || !ema21 || rsi === null) return;
+
+  const price    = closes[closes.length - 1];
+  const bullish  = ema9 > ema21;
+  const emaDiff  = Math.abs((ema9 - ema21) / ema21 * 100);
+  const rsiStr   = Math.min(100, Math.abs(rsi - 50) * 2);
+  const emaStr   = Math.min(100, emaDiff * 1000);
+  const strength = Math.round(rsiStr * 0.5 + emaStr * 0.5);
+
+  // Update stat UI
+  if (atr5)  document.getElementById('atr5').textContent  = atr5.toFixed(2);
+  if (atr14) document.getElementById('atr14').textContent = atr14.toFixed(2);
+  document.getElementById('rsiVal').textContent = rsi.toFixed(1);
+
+  const emaEl = document.getElementById('emaStatus');
+  emaEl.textContent = `${bullish ? '▲' : '▼'} ${ema9.toFixed(2)} / ${ema21.toFixed(2)}`;
+  emaEl.className   = bullish ? 'sv green' : 'sv red';
+
+  const trendEl = document.getElementById('trend');
+  trendEl.textContent = bullish ? '▲ Bullish' : '▼ Bearish';
+  trendEl.className   = bullish ? 'sv green' : 'sv red';
+
+  document.getElementById('strBar').style.width = strength + '%';
+  document.getElementById('strPct').textContent = strength + '%';
+
+  // Determine signal - H4 filter stricter for index
+  let newSig = 'WAIT';
+  if (bullish && rsi > 45 && rsi < 65) newSig = 'BUY';
+  if (!bullish && rsi > 35 && r
