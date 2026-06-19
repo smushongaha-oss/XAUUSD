@@ -3,24 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NEXA · US500 M5 · Twelve Data Live</title>
+<title>NEXA · ZEC/USD M5 · Twelve Data Live</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap');
   *{margin:0;padding:0;box-sizing:border-box}
   :root{
-    --bg:#07090f;--panel:#0b0e1a;--border:#182040;
-    --green:#00e676;--red:#ff1744;--gold:#ffd600;--blue:#00b8ff;--purple:#b040ff;
-    --text:#dde8ff;--dim:#4a6a8a;
-    --glow-green:0 0 14px #00e676bb;--glow-red:0 0 14px #ff1744bb;
-    --glow-gold:0 0 14px #ffd600bb;--glow-blue:0 0 14px #00b8ffbb;--glow-purple:0 0 14px #b040ffbb;
+    --bg:#060a10;--panel:#090d1c;--border:#14223a;
+    --green:#00e5b0;--red:#ff2d55;--gold:#f5c518;--blue:#3d9bff;--purple:#aa44ff;
+    --zec:#f4b728;--zec-dim:#7a5a10;
+    --text:#d8eaff;--dim:#3d5a7a;
+    --glow-green:0 0 14px #00e5b0bb;--glow-red:0 0 14px #ff2d55bb;
+    --glow-gold:0 0 14px #f5c518bb;--glow-blue:0 0 14px #3d9bffbb;--glow-purple:0 0 14px #aa44ffbb;
+    --glow-zec:0 0 18px #f4b728cc;
   }
-  body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:14px;background-image:radial-gradient(ellipse at 50% 0%,#1a0a3a22 0%,transparent 70%)}
-  .top-label{font-family:'Orbitron',sans-serif;font-size:.65rem;letter-spacing:.45em;color:var(--dim);margin-bottom:4px}
-  .buy-sell-title{display:flex;gap:14px;align-items:center;font-family:'Orbitron',sans-serif;font-size:clamp(2.8rem,10vw,5rem);font-weight:900;line-height:1;margin-bottom:6px}
+  body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:14px;background-image:radial-gradient(ellipse at 50% 0%,#f4b72808 0%,transparent 65%)}
+
+  /* ZEC shield badge at top */
+  .zec-badge{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+  .zec-shield{width:32px;height:32px;background:var(--zec);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;box-shadow:var(--glow-zec);flex-shrink:0}
+  .zec-shield svg{width:18px;height:18px;fill:#000}
+  .top-label{font-family:'Orbitron',sans-serif;font-size:.65rem;letter-spacing:.45em;color:var(--dim);margin-bottom:0}
+  .buy-sell-title{display:flex;gap:14px;align-items:center;font-family:'Orbitron',sans-serif;font-size:clamp(2.6rem,9vw,4.6rem);font-weight:900;line-height:1;margin-bottom:6px}
   .buy-sell-title .buy{color:var(--green);text-shadow:var(--glow-green)}
-  .buy-sell-title .div{color:var(--dim);font-size:2.5rem}
+  .buy-sell-title .div{color:var(--dim);font-size:2.2rem}
   .buy-sell-title .sell{color:var(--red);text-shadow:var(--glow-red)}
-  .sub-label{font-family:'Share Tech Mono',monospace;font-size:.75rem;color:var(--purple);letter-spacing:.2em;margin-bottom:12px;text-shadow:var(--glow-purple)}
+  .sub-label{font-family:'Share Tech Mono',monospace;font-size:.75rem;color:var(--zec);letter-spacing:.2em;margin-bottom:12px;text-shadow:var(--glow-zec)}
+
   .conn-status{font-family:'Share Tech Mono',monospace;font-size:.7rem;padding:4px 14px;border-radius:20px;margin-bottom:10px;display:flex;align-items:center;gap:6px;border:1px solid var(--border)}
   .conn-status.connecting{color:var(--gold);border-color:var(--gold)}
   .conn-status.connected{color:var(--green);border-color:var(--green)}
@@ -28,53 +36,54 @@
   .conn-dot{width:7px;height:7px;border-radius:50%;background:currentColor;animation:blink 1.4s infinite}
   @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 
-  /* Key bar */
-  .key-bar{width:100%;max-width:940px;background:#0d1225;border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-bottom:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .key-bar{width:100%;max-width:940px;background:#090d1c;border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-bottom:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
   .key-label{font-size:.68rem;color:var(--dim);font-family:'Share Tech Mono',monospace;white-space:nowrap}
-  .key-inp{background:#060912;border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:'Share Tech Mono',monospace;font-size:.78rem;padding:6px 10px;outline:none;flex:1;min-width:220px;transition:border-color .2s}
-  .key-inp:focus{border-color:var(--blue)}
-  .key-btn{background:var(--blue);color:#000;border:none;border-radius:5px;padding:6px 16px;font-family:'Orbitron',sans-serif;font-size:.65rem;font-weight:700;cursor:pointer;transition:opacity .2s;white-space:nowrap}
+  .key-inp{background:#04070e;border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:'Share Tech Mono',monospace;font-size:.78rem;padding:6px 10px;outline:none;flex:1;min-width:220px;transition:border-color .2s}
+  .key-inp:focus{border-color:var(--zec)}
+  .key-btn{background:var(--zec);color:#000;border:none;border-radius:5px;padding:6px 16px;font-family:'Orbitron',sans-serif;font-size:.65rem;font-weight:700;cursor:pointer;transition:opacity .2s;white-space:nowrap}
   .key-btn:hover{opacity:.85}
   .key-hint{font-size:.62rem;color:var(--dim);width:100%}
-  .key-hint a{color:var(--blue);text-decoration:none}
-  .countdown-bar{width:100%;max-width:940px;background:#0d1225;border:1px solid var(--border);border-radius:8px;padding:6px 14px;margin-bottom:10px;display:flex;align-items:center;gap:12px}
-  .cd-label{font-size:.62rem;color:var(--dim);font-family:'Share Tech Mono',monospace;white-space:nowrap}
-  .cd-track{flex:1;height:5px;background:#182040;border-radius:3px}
-  .cd-fill{height:100%;border-radius:3px;background:var(--blue);box-shadow:var(--glow-blue);transition:width 1s linear}
-  .cd-val{font-family:'Orbitron',sans-serif;font-size:.75rem;color:var(--blue);min-width:36px;text-align:right}
+  .key-hint a{color:var(--zec);text-decoration:none}
 
-  .main-panel{width:100%;max-width:940px;background:var(--panel);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:12px;box-shadow:0 0 40px #0004}
-  .panel-header{display:flex;align-items:center;gap:12px;padding:9px 16px;border-bottom:1px solid var(--border);flex-wrap:wrap;background:#0d1225}
+  .countdown-bar{width:100%;max-width:940px;background:#090d1c;border:1px solid var(--border);border-radius:8px;padding:6px 14px;margin-bottom:10px;display:flex;align-items:center;gap:12px}
+  .cd-label{font-size:.62rem;color:var(--dim);font-family:'Share Tech Mono',monospace;white-space:nowrap}
+  .cd-track{flex:1;height:5px;background:#14223a;border-radius:3px}
+  .cd-fill{height:100%;border-radius:3px;background:var(--zec);box-shadow:var(--glow-zec);transition:width 1s linear}
+  .cd-val{font-family:'Orbitron',sans-serif;font-size:.75rem;color:var(--zec);min-width:36px;text-align:right}
+
+  .main-panel{width:100%;max-width:940px;background:var(--panel);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:12px;box-shadow:0 0 40px #f4b72808}
+  .panel-header{display:flex;align-items:center;gap:12px;padding:9px 16px;border-bottom:1px solid var(--border);flex-wrap:wrap;background:#0a0f1f}
   .live-dot{width:9px;height:9px;background:var(--green);border-radius:50%;box-shadow:var(--glow-green);animation:blink 1.4s infinite;flex-shrink:0}
-  .sym{font-family:'Orbitron',sans-serif;font-size:.9rem;font-weight:700;color:var(--text)}
+  .sym{font-family:'Orbitron',sans-serif;font-size:.9rem;font-weight:700;color:var(--zec);text-shadow:var(--glow-zec)}
   .tf{color:var(--dim);font-size:.8rem;margin-left:-6px}
   .src-pill{padding:2px 8px;border-radius:4px;font-family:'Orbitron',sans-serif;font-size:.6rem;letter-spacing:.08em}
-  .src-pill.live{background:#001a0a;border:1px solid var(--green);color:var(--green);text-shadow:var(--glow-green)}
-  .src-pill.wait{background:#1a1000;border:1px solid var(--gold);color:var(--gold)}
+  .src-pill.live{background:#0a150a;border:1px solid var(--green);color:var(--green);text-shadow:var(--glow-green)}
+  .src-pill.wait{background:#1a1300;border:1px solid var(--zec);color:var(--zec)}
   .sig-label{color:var(--dim);font-size:.78rem;margin-left:auto}
   .sig-badge{font-family:'Orbitron',sans-serif;font-size:1.05rem;font-weight:900;color:var(--red);text-shadow:var(--glow-red)}
   .sig-badge.buy{color:var(--green);text-shadow:var(--glow-green)}
-  .sig-badge.wait{color:var(--gold);text-shadow:var(--glow-gold)}
+  .sig-badge.wait{color:var(--zec);text-shadow:var(--glow-zec)}
   .str-wrap{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:3px}
   .str-lbl{font-size:.65rem;color:var(--dim);letter-spacing:.1em}
   .str-row{display:flex;align-items:center;gap:8px}
-  .str-bg{width:150px;height:7px;background:#182040;border-radius:4px}
-  .str-bar{height:100%;border-radius:4px;background:var(--gold);box-shadow:var(--glow-gold);transition:width .6s}
-  .str-pct{font-family:'Orbitron',sans-serif;font-size:.95rem;color:var(--gold);min-width:40px;text-align:right}
+  .str-bg{width:150px;height:7px;background:#14223a;border-radius:4px}
+  .str-bar{height:100%;border-radius:4px;background:var(--zec);box-shadow:var(--glow-zec);transition:width .6s}
+  .str-pct{font-family:'Orbitron',sans-serif;font-size:.95rem;color:var(--zec);min-width:40px;text-align:right}
+
   .panel-body{display:flex}
   .stats-col{width:195px;min-width:175px;padding:12px 14px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:11px;overflow-y:auto;max-height:500px}
   .sg{display:flex;flex-direction:column;gap:2px}
   .sl{font-size:.62rem;letter-spacing:.12em;color:var(--dim)}
   .sv{font-family:'Share Tech Mono',monospace;font-size:.95rem}
-  .sv.green{color:var(--green)}.sv.red{color:var(--red)}.sv.gold{color:var(--gold)}.sv.blue{color:var(--blue)}.sv.purple{color:var(--purple)}
+  .sv.green{color:var(--green)}.sv.red{color:var(--red)}.sv.gold{color:var(--gold)}.sv.blue{color:var(--blue)}.sv.purple{color:var(--purple)}.sv.zec{color:var(--zec)}
   .sr{display:flex;gap:18px}
   .wait-msg{font-size:.72rem;color:var(--dim);font-style:italic}
-  .rr-pill{display:inline-block;background:#0a1a08;border:1px solid var(--green);border-radius:4px;padding:2px 9px;color:var(--gold);font-family:'Share Tech Mono',monospace;font-size:.82rem}
+  .rr-pill{display:inline-block;background:#0d1300;border:1px solid var(--zec);border-radius:4px;padding:2px 9px;color:var(--zec);font-family:'Share Tech Mono',monospace;font-size:.82rem}
   .ent-row{display:flex;gap:8px;flex-wrap:wrap}
   .ei{display:flex;flex-direction:column;gap:2px}
   .el{font-size:.58rem;letter-spacing:.1em;color:var(--dim)}
   .ev{font-family:'Share Tech Mono',monospace;font-size:.85rem}
-  .ev.entry{color:var(--gold)}.ev.stop{color:var(--red)}.ev.target{color:var(--gold);font-size:.95rem}
+  .ev.entry{color:var(--zec)}.ev.stop{color:var(--red)}.ev.target{color:var(--green);font-size:.95rem}
   .btn-row{display:flex;gap:7px}
   .btn{flex:1;padding:9px 0;border:none;border-radius:6px;font-family:'Orbitron',sans-serif;font-size:.7rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;transition:opacity .2s,transform .1s}
   .btn:hover{opacity:.85}.btn:active{transform:scale(.97)}
@@ -82,49 +91,55 @@
   .btn.short{background:var(--red);color:#fff;box-shadow:var(--glow-red)}
   .live-row{font-size:.68rem;color:var(--green);display:flex;align-items:center;gap:5px}
   .live-dot2{width:6px;height:6px;background:var(--green);border-radius:50%;box-shadow:var(--glow-green);animation:blink 1.4s infinite}
-  .live-row.wait{color:var(--gold)}.live-dot2.wait{background:var(--gold);box-shadow:var(--glow-gold)}
+  .live-row.wait{color:var(--zec)}.live-dot2.wait{background:var(--zec);box-shadow:var(--glow-zec)}
   .vol-meter{display:flex;flex-direction:column;gap:4px}
   .vol-label{font-size:.62rem;letter-spacing:.12em;color:var(--dim)}
   .vol-bars{display:flex;gap:3px;align-items:flex-end;height:22px}
-  .vol-bar{width:8px;border-radius:2px 2px 0 0;background:var(--purple);opacity:0.5;transition:height .4s}
-  .vol-bar.active{opacity:1;box-shadow:var(--glow-purple)}
-  .vol-val{font-family:'Share Tech Mono',monospace;font-size:.78rem;color:var(--purple)}
+  .vol-bar{width:8px;border-radius:2px 2px 0 0;background:var(--zec);opacity:0.25;transition:height .4s}
+  .vol-bar.active{opacity:1;box-shadow:var(--glow-zec)}
+  .vol-val{font-family:'Share Tech Mono',monospace;font-size:.78rem;color:var(--zec)}
+
   .chart-area{flex:1;position:relative;overflow:hidden;min-height:320px}
   canvas#chart{display:block;width:100%;height:100%}
-  .ticker-strip{width:100%;max-width:940px;background:#0d1225;border:1px solid var(--border);border-radius:8px;padding:7px 16px;margin-bottom:12px;display:flex;gap:28px;overflow-x:auto;scrollbar-width:none}
+
+  .ticker-strip{width:100%;max-width:940px;background:#090d1c;border:1px solid var(--border);border-radius:8px;padding:7px 16px;margin-bottom:12px;display:flex;gap:28px;overflow-x:auto;scrollbar-width:none}
   .ticker-strip::-webkit-scrollbar{display:none}
   .tk{display:flex;flex-direction:column;gap:2px;min-width:80px}
   .tk-l{font-size:.6rem;color:var(--dim);letter-spacing:.1em}
   .tk-v{font-family:'Share Tech Mono',monospace;font-size:.85rem}
+
   .bottom-strip{width:100%;max-width:940px;display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;background:var(--panel);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:14px}
   .bs-div{background:var(--border)}
   .bs-cell{padding:15px 18px;display:flex;align-items:center;gap:13px}
   .bs-icon{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
   .bs-icon.green{border:2px solid var(--green);color:var(--green);box-shadow:var(--glow-green)}
   .bs-icon.red{border:2px solid var(--red);color:var(--red);box-shadow:var(--glow-red)}
-  .bs-icon.gold{border:2px solid var(--gold);color:var(--gold);box-shadow:var(--glow-gold)}
+  .bs-icon.zec{border:2px solid var(--zec);color:var(--zec);box-shadow:var(--glow-zec)}
   .bs-txt{display:flex;flex-direction:column;gap:2px}
   .bs-txt .bl{font-size:.58rem;letter-spacing:.15em;color:var(--dim)}
   .bs-txt .bv{font-family:'Orbitron',sans-serif;font-size:1.2rem;font-weight:700}
   .bs-txt .bv.green{color:var(--green);text-shadow:var(--glow-green)}
   .bs-txt .bv.red{color:var(--red);text-shadow:var(--glow-red)}
-  .bs-txt .bv.gold{color:var(--gold);text-shadow:var(--glow-gold)}
+  .bs-txt .bv.zec{color:var(--zec);text-shadow:var(--glow-zec)}
+
   .signal-alert{display:none;width:100%;max-width:940px;padding:12px 20px;border-radius:10px;margin-bottom:12px;font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:700;text-align:center;letter-spacing:.1em;animation:flashPulse 1s ease-in-out 3}
-  .signal-alert.buy{background:#00e67622;border:2px solid var(--green);color:var(--green)}
-  .signal-alert.sell{background:#ff174422;border:2px solid var(--red);color:var(--red)}
+  .signal-alert.buy{background:#00e5b015;border:2px solid var(--green);color:var(--green)}
+  .signal-alert.sell{background:#ff2d5515;border:2px solid var(--red);color:var(--red)}
   @keyframes flashPulse{0%,100%{opacity:1}50%{opacity:.3}}
+
   .ai-section{width:100%;max-width:940px;background:var(--panel);border:1px solid var(--border);border-radius:12px;overflow:hidden}
-  .ai-hdr{display:flex;align-items:center;gap:10px;padding:9px 16px;border-bottom:1px solid var(--border);background:#0a0d1e}
-  .ai-hdr-title{font-family:'Orbitron',sans-serif;font-size:.78rem;color:var(--blue);letter-spacing:.08em}
+  .ai-hdr{display:flex;align-items:center;gap:10px;padding:9px 16px;border-bottom:1px solid var(--border);background:#090c1e}
+  .ai-hdr-title{font-family:'Orbitron',sans-serif;font-size:.78rem;color:var(--zec);letter-spacing:.08em}
   .ai-hdr-model{font-size:.68rem;color:var(--dim);margin-left:auto;font-family:'Share Tech Mono',monospace}
   .ai-inputs{display:flex;gap:8px;padding:11px 14px;border-bottom:1px solid var(--border);flex-wrap:wrap}
-  .ai-inp{background:#060912;border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:'Share Tech Mono',monospace;font-size:.78rem;padding:8px 12px;outline:none;transition:border-color .2s}
-  .ai-inp:focus{border-color:var(--blue)}
+  .ai-inp{background:#04070e;border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:'Share Tech Mono',monospace;font-size:.78rem;padding:8px 12px;outline:none;transition:border-color .2s}
+  .ai-inp:focus{border-color:var(--zec)}
   .ai-key{width:230px}.ai-qry{flex:1;min-width:200px}
-  .ai-btn{background:var(--blue);color:#000;border:none;border-radius:5px;padding:8px 16px;font-family:'Orbitron',sans-serif;font-size:.72rem;font-weight:700;cursor:pointer;transition:opacity .2s;white-space:nowrap}
+  .ai-btn{background:var(--zec);color:#000;border:none;border-radius:5px;padding:8px 16px;font-family:'Orbitron',sans-serif;font-size:.72rem;font-weight:700;cursor:pointer;transition:opacity .2s;white-space:nowrap}
   .ai-btn:hover{opacity:.85}.ai-btn:disabled{opacity:.35;cursor:not-allowed}
   .ai-resp{padding:13px 16px;min-height:76px;font-family:'Rajdhani',sans-serif;font-size:.95rem;line-height:1.65;color:var(--text);white-space:pre-wrap}
   .ai-resp.loading{color:var(--dim);font-style:italic}.ai-resp.error{color:var(--red)}
+
   @media(max-width:600px){
     .stats-col{width:145px;min-width:130px}.str-bg{width:90px}
     .bottom-strip{grid-template-columns:1fr}.bs-div{display:none}
@@ -134,9 +149,15 @@
 </head>
 <body>
 
-<div class="top-label">INDEX · CFD · INDICATOR · TWELVE DATA LIVE</div>
+<div class="zec-badge">
+  <div class="zec-shield">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h7.5l-8 10H16M7 7V5h10v2M8 17v2h8v-2"/></svg>
+  </div>
+  <div class="top-label">ZCASH · CFD · INDICATOR · TWELVE DATA LIVE</div>
+</div>
+
 <div class="buy-sell-title"><span class="buy">BUY</span><span class="div">|</span><span class="sell">SELL</span></div>
-<div class="sub-label">⚡ SPY · S&P 500 ETF · M5 · TWELVE DATA · FREE</div>
+<div class="sub-label">⚡ ZEC/USD · ZCASH · M5 · TWELVE DATA · FREE</div>
 
 <div class="conn-status connecting" id="connStatus">
   <div class="conn-dot"></div>
@@ -152,11 +173,10 @@
   <div class="key-hint">
     100% free — no credit card. Sign up in 60 seconds at
     <a href="https://twelvedata.com/apikey" target="_blank">twelvedata.com/apikey</a>
-    · Free plan: 800 API calls/day · SPY (S&P 500 ETF) supported — FREE plan · Refreshes every 60s
+    · Free plan: 800 API calls/day · ZEC/USD crypto supported · Refreshes every 60s
   </div>
 </div>
 
-<!-- Refresh countdown bar -->
 <div class="countdown-bar" id="countdownBar" style="display:none">
   <div class="cd-label">NEXT REFRESH</div>
   <div class="cd-track"><div class="cd-fill" id="cdFill" style="width:100%"></div></div>
@@ -166,7 +186,7 @@
 <div class="main-panel">
   <div class="panel-header">
     <div class="live-dot"></div>
-    <div class="sym">US500</div><div class="tf">S&P 500, M5</div>
+    <div class="sym">ZEC/USD</div><div class="tf">ZCASH, M5</div>
     <span class="src-pill wait" id="srcPill">AWAITING KEY</span>
     <div class="sig-label">SIGNAL</div>
     <div class="sig-badge wait" id="sigBadge">WAIT ◆</div>
@@ -181,16 +201,16 @@
   <div class="panel-body">
     <div class="stats-col">
       <div class="sr">
-        <div class="sg"><div class="sl">TREND</div><div class="sv gold" id="trend">--</div></div>
+        <div class="sg"><div class="sl">TREND</div><div class="sv zec" id="trend">--</div></div>
         <div class="sg"><div class="sl">ATR(5)</div><div class="sv blue" id="atr5">--</div></div>
       </div>
       <div class="sr">
         <div class="sg"><div class="sl">RSI(14)</div><div class="sv purple" id="rsiVal">--</div></div>
         <div class="sg"><div class="sl">ATR(14)</div><div class="sv blue" id="atr14">--</div></div>
       </div>
-      <div class="sg"><div class="sl">EMA 9 / EMA 21</div><div class="sv gold" id="emaStatus">--</div></div>
+      <div class="sg"><div class="sl">EMA 9 / EMA 21</div><div class="sv zec" id="emaStatus">--</div></div>
       <div class="sg"><div class="sl">MACD LINE</div><div class="sv blue" id="macdStatus">--</div></div>
-      <div class="sg"><div class="sl">LAST CLOSE</div><div class="sv green" id="lastClose">--</div></div>
+      <div class="sg"><div class="sl">LAST PRICE</div><div class="sv green" id="lastClose">--</div></div>
       <div class="sg"><div class="sl">TIMEFRAME</div><div class="sv green">M5 · 5 MINUTE</div></div>
       <div class="vol-meter">
         <div class="vol-label">VOLATILITY</div>
@@ -223,14 +243,14 @@
 </div>
 
 <div class="ticker-strip">
-  <div class="tk"><div class="tk-l">LAST PRICE</div><div class="tk-v" style="color:var(--gold)" id="tk-price">--</div></div>
+  <div class="tk"><div class="tk-l">LAST PRICE</div><div class="tk-v" style="color:var(--zec)" id="tk-price">--</div></div>
   <div class="tk"><div class="tk-l">SESSION OPEN</div><div class="tk-v" style="color:var(--blue)" id="tk-open">--</div></div>
   <div class="tk"><div class="tk-l">SESSION HIGH</div><div class="tk-v" style="color:var(--green)" id="tk-hi">--</div></div>
   <div class="tk"><div class="tk-l">SESSION LOW</div><div class="tk-v" style="color:var(--red)" id="tk-lo">--</div></div>
   <div class="tk"><div class="tk-l">CHANGE</div><div class="tk-v" id="tk-chg" style="color:var(--dim)">--</div></div>
   <div class="tk"><div class="tk-l">CANDLES</div><div class="tk-v" style="color:var(--dim)" id="tk-count">0</div></div>
-  <div class="tk"><div class="tk-l">SOURCE</div><div class="tk-v" style="color:var(--blue)">TWELVE DATA</div></div>
-  <div class="tk"><div class="tk-l">STATUS</div><div class="tk-v" style="color:var(--gold)" id="tk-status">OFFLINE</div></div>
+  <div class="tk"><div class="tk-l">SOURCE</div><div class="tk-v" style="color:var(--zec)">TWELVE DATA</div></div>
+  <div class="tk"><div class="tk-l">STATUS</div><div class="tk-v" style="color:var(--zec)" id="tk-status">OFFLINE</div></div>
 </div>
 
 <div class="bottom-strip">
@@ -245,20 +265,20 @@
   </div>
   <div class="bs-div"></div>
   <div class="bs-cell">
-    <div class="bs-icon gold">🎯</div>
-    <div class="bs-txt"><div class="bl">TP TARGET</div><div class="bv gold" id="b-target">--</div></div>
+    <div class="bs-icon zec">🎯</div>
+    <div class="bs-txt"><div class="bl">TP TARGET</div><div class="bv zec" id="b-target">--</div></div>
   </div>
 </div>
 
 <div class="ai-section">
   <div class="ai-hdr">
     <span style="font-size:1.1rem">🤖</span>
-    <div class="ai-hdr-title">GROQ AI · US500 ANALYSIS</div>
+    <div class="ai-hdr-title">GROQ AI · ZEC/USD ANALYSIS</div>
     <div class="ai-hdr-model">llama-3.3-70b-versatile</div>
   </div>
   <div class="ai-inputs">
     <input class="ai-inp ai-key" id="groqKey" type="password" placeholder="Groq API Key (gsk_...)">
-    <input class="ai-inp ai-qry" id="aiQry" type="text" value="Analyze this US500 signal and suggest entry strategy">
+    <input class="ai-inp ai-qry" id="aiQry" type="text" value="Analyze this ZEC/USD signal and suggest entry strategy">
     <button class="ai-btn" id="aiBtn" onclick="askGroq()">⚡ ANALYZE</button>
   </div>
   <div class="ai-resp" id="aiResp">Ready for AI analysis. Enter Groq API key and click ANALYZE.</div>
@@ -268,10 +288,10 @@
 (function(){
 
   // ── CONFIG ──
-  const SYMBOL    = 'SPY';   // S&P 500 ETF — free on Twelve Data basic plan
-  const INTERVAL  = '5min';
-  const OUTPUTSIZE = 120;           // candles to fetch
-  const REFRESH_MS = 60000;        // 60 second polling (free plan friendly)
+  const SYMBOL     = 'ZEC/USD';    // Zcash / US Dollar — crypto pair on Twelve Data
+  const INTERVAL   = '5min';
+  const OUTPUTSIZE = 120;
+  const REFRESH_MS = 60000;        // 60s polling
   const BASE_URL   = 'https://api.twelvedata.com';
 
   // ── STATE ──
@@ -289,7 +309,7 @@
 
   // ── HELPERS ──
   const el  = id => document.getElementById(id);
-  const set = (id, v) => { const e = el(id); if (e) e.textContent = v; };
+  const set = (id, v) => { const e = el(id); if(e) e.textContent = v; };
   const fmt = (v, d=2) => (v == null || isNaN(v)) ? '--' : parseFloat(v).toFixed(d);
 
   function setConn(state, text){
@@ -301,9 +321,9 @@
   function setLive(live){
     const row = el('liveRow'), dot = el('liveDot2'), lbl = el('liveLabel');
     if(!row) return;
-    row.className  = live ? 'live-row' : 'live-row wait';
-    dot.className  = live ? 'live-dot2' : 'live-dot2 wait';
-    lbl.textContent = live ? 'TWELVE DATA LIVE' : 'CONNECTING...';
+    row.className   = live ? 'live-row' : 'live-row wait';
+    dot.className   = live ? 'live-dot2' : 'live-dot2 wait';
+    lbl.textContent = live ? 'TWELVE DATA LIVE · ZEC/USD' : 'CONNECTING...';
   }
 
   // ── COUNTDOWN BAR ──
@@ -322,12 +342,10 @@
   // ── FETCH CANDLES ──
   async function fetchCandles(){
     if(!apiKey) return;
-
-    setConn('connecting', 'FETCHING SPY M5 DATA...');
+    setConn('connecting', 'FETCHING ZEC/USD M5 DATA...');
     set('waitMsg', 'Fetching from Twelve Data...');
-
     try {
-      const url = `${BASE_URL}/time_series?symbol=${SYMBOL}&interval=${INTERVAL}&outputsize=${OUTPUTSIZE}&apikey=${apiKey}`;
+      const url = `${BASE_URL}/time_series?symbol=${encodeURIComponent(SYMBOL)}&interval=${INTERVAL}&outputsize=${OUTPUTSIZE}&apikey=${apiKey}`;
       const resp = await fetch(url);
       const data = await resp.json();
 
@@ -341,8 +359,8 @@
 
       const values = data.values;
       if(!values || values.length === 0){
-        setConn('error', 'NO DATA — Market may be closed');
-        set('waitMsg', 'No candle data returned. Market closed? Try again during US market hours (9:30–16:00 ET).');
+        setConn('error', 'NO DATA — Check your plan or try again');
+        set('waitMsg', 'No candle data returned. ZEC/USD requires a plan that includes crypto. Check your Twelve Data subscription.');
         set('tk-status', 'NO DATA');
         return;
       }
@@ -358,17 +376,15 @@
         bull:  parseFloat(v.close) >= parseFloat(v.open)
       }));
 
-      // Session stats
       lastPrice   = candleData[candleData.length - 1].close;
       sessionOpen = sessionOpen || candleData[0].open;
       sessionHigh = Math.max(...candleData.map(c => c.high));
       sessionLow  = Math.min(...candleData.map(c => c.low));
 
-      // Mark as live
       isLive = true;
       el('srcPill').textContent = 'TWELVE DATA LIVE';
-      el('srcPill').className = 'src-pill live';
-      setConn('connected', `LIVE · SPY M5 · ${candleData.length} CANDLES · AUTO-REFRESH 60s`);
+      el('srcPill').className   = 'src-pill live';
+      setConn('connected', `LIVE · ZEC/USD M5 · ${candleData.length} CANDLES · AUTO-REFRESH 60s`);
       set('tk-status', 'LIVE');
       set('tk-count', candleData.length);
       setLive(true);
@@ -387,17 +403,17 @@
 
   function updatePriceDisplay(){
     if(!lastPrice) return;
-    set('tk-price', fmt(lastPrice));
-    set('tk-open',  fmt(sessionOpen));
-    set('tk-hi',    fmt(sessionHigh));
-    set('tk-lo',    fmt(sessionLow));
-    set('lastClose', fmt(lastPrice));
+    set('tk-price', fmt(lastPrice, 4));
+    set('tk-open',  fmt(sessionOpen, 4));
+    set('tk-hi',    fmt(sessionHigh, 4));
+    set('tk-lo',    fmt(sessionLow, 4));
+    set('lastClose', '$' + fmt(lastPrice, 4));
 
     const chgEl = el('tk-chg');
     if(chgEl && sessionOpen){
       const change = lastPrice - sessionOpen;
       const pct    = (change / sessionOpen * 100).toFixed(2);
-      chgEl.textContent = (change >= 0 ? '+' : '') + fmt(change) + ' (' + (change >= 0 ? '+' : '') + pct + '%)';
+      chgEl.textContent = (change >= 0 ? '+' : '') + fmt(change, 4) + ' (' + (change >= 0 ? '+' : '') + pct + '%)';
       chgEl.style.color = change >= 0 ? 'var(--green)' : 'var(--red)';
     }
   }
@@ -439,9 +455,9 @@
     return Math.sqrt(r.reduce((a,b)=>a+Math.pow(b-m,2),0)/p);
   }
 
-  // ── SIGNAL ──
+  // ── SIGNAL (crypto-tuned: wider RSI bands for ZEC volatility) ──
   function computeSignal(){
-    if(candleData.length < 26){ set('waitMsg',`Loading... (${candleData.length}/26)`); return; }
+    if(candleData.length < 26){ set('waitMsg',`Loading... (${candleData.length}/26 candles)`); return; }
     const closes = candleData.map(c=>c.close);
     const ema9   = calcEMA(closes,9);
     const ema21  = calcEMA(closes,21);
@@ -452,57 +468,67 @@
     const stdDev = calcStdDev(closes,20);
     if(!ema9||!ema21||rsi===null) return;
 
-    const bullish = ema9 > ema21;
-    const emaDiff = Math.abs((ema9-ema21)/ema21*100);
+    const bullish  = ema9 > ema21;
+    const emaDiff  = Math.abs((ema9-ema21)/ema21*100);
     const strength = Math.round(Math.min(100,Math.abs(rsi-50)*2)*0.5 + Math.min(100,emaDiff*1000)*0.5);
 
-    set('atr5', fmt(atr5)); set('atr14', fmt(atr14));
-    set('rsiVal', fmt(rsi,1)); set('strPct', strength+'%'); set('volVal', `σ = ${fmt(stdDev,2)}`);
+    set('atr5', fmt(atr5,4));
+    set('atr14', fmt(atr14,4));
+    set('rsiVal', fmt(rsi,1));
+    set('strPct', strength+'%');
+    set('volVal', `σ = ${fmt(stdDev,4)}`);
     if(el('strBar')) el('strBar').style.width = strength+'%';
 
     if(macd!==null){
       const m=el('macdStatus');
-      if(m){m.textContent=(macd>=0?'+':'')+fmt(macd,2);m.className=macd>=0?'sv green':'sv red';}
+      if(m){m.textContent=(macd>=0?'+':'')+fmt(macd,4);m.className=macd>=0?'sv green':'sv red';}
     }
     const eEl=el('emaStatus');
-    if(eEl){eEl.textContent=`${bullish?'▲':'▼'} ${fmt(ema9,1)} / ${fmt(ema21,1)}`;eEl.className=bullish?'sv green':'sv red';}
+    if(eEl){eEl.textContent=`${bullish?'▲':'▼'} ${fmt(ema9,2)} / ${fmt(ema21,2)}`;eEl.className=bullish?'sv green':'sv red';}
     const tEl=el('trend');
     if(tEl){tEl.textContent=bullish?'▲ BULLISH':'▼ BEARISH';tEl.className=bullish?'sv green':'sv red';}
 
     const bars=el('volBars')?.querySelectorAll('.vol-bar');
     if(bars) bars.forEach((b,i)=>{b.style.height=Math.min(95,(stdDev/(stdDev*2||1))*60+(i*8))+'%';b.classList.toggle('active',i>=4);});
 
+    // Wider RSI bands for crypto (ZEC can be more volatile than SPY)
     const macdBull = macd!==null ? macd>0 : bullish;
     const macdBear = macd!==null ? macd<0 : !bullish;
     let newSig = 'WAIT';
-    if(bullish && macdBull && rsi>40 && rsi<65) newSig='BUY';
-    if(!bullish && macdBear && rsi>35 && rsi<60) newSig='SELL';
+    if(bullish && macdBull && rsi>38 && rsi<70) newSig='BUY';
+    if(!bullish && macdBear && rsi>30 && rsi<62) newSig='SELL';
 
     if(newSig!=='WAIT' && newSig!==currentSignal){
       currentSignal=newSig;
-      applySignal(newSig, lastPrice||closes[closes.length-1], atr14||5);
+      applySignal(newSig, lastPrice||closes[closes.length-1], atr14||1);
     } else if(newSig==='WAIT' && currentSignal!=='WAIT'){
       currentSignal='WAIT';
       const b=el('sigBadge');if(b){b.textContent='WAIT ◆';b.className='sig-badge wait';}
-      set('waitMsg','No signal — monitoring M5...');
+      set('waitMsg','No signal — monitoring ZEC/USD M5...');
     } else if(newSig!=='WAIT'){
-      // Signal unchanged — just update status text
       set('waitMsg',`${currentSignal} signal active · ${candleData[candleData.length-1].date}`);
     }
   }
 
   function applySignal(type, price, atr){
-    const isBuy = type==='BUY';
-    const stop   = isBuy ? price-atr*1.5 : price+atr*1.5;
-    const target = isBuy ? price+atr*3.0 : price-atr*3.0;
+    const isBuy  = type==='BUY';
+    // Crypto uses slightly wider ATR multiplier for stops due to volatility
+    const stop   = isBuy ? price-atr*1.8 : price+atr*1.8;
+    const target = isBuy ? price+atr*3.6 : price-atr*3.6;
     const b=el('sigBadge');
     if(b){b.textContent=isBuy?'BUY ▲':'SELL ▼';b.className=isBuy?'sig-badge buy':'sig-badge';}
-    set('entryV',fmt(price));set('stopV',fmt(stop));set('targetV',fmt(target));
-    set('b-entry',fmt(price));set('b-stop',fmt(stop));set('b-target',fmt(target));
-    set('waitMsg',`${type} signal active · M5 SPY`);
+    set('entryV', fmt(price,4));
+    set('stopV',  fmt(stop,4));
+    set('targetV',fmt(target,4));
+    set('b-entry',fmt(price,4));
+    set('b-stop', fmt(stop,4));
+    set('b-target',fmt(target,4));
+    set('waitMsg',`${type} signal active · M5 ZEC/USD`);
     const a=el('signalAlert');
     if(a){
-      a.textContent=isBuy?`🟢 BUY · Entry: ${fmt(price)} · SL: ${fmt(stop)} · TP: ${fmt(target)}`:`🔴 SELL · Entry: ${fmt(price)} · SL: ${fmt(stop)} · TP: ${fmt(target)}`;
+      a.textContent=isBuy
+        ?`🟢 BUY ZEC · Entry: $${fmt(price,4)} · SL: $${fmt(stop,4)} · TP: $${fmt(target,4)}`
+        :`🔴 SELL ZEC · Entry: $${fmt(price,4)} · SL: $${fmt(stop,4)} · TP: $${fmt(target,4)}`;
       a.className=isBuy?'signal-alert buy':'signal-alert sell';
       a.style.display='block';
       setTimeout(()=>{a.style.display='none';},6000);
@@ -511,7 +537,7 @@
 
   function forceSignal(type){
     if(!lastPrice) return;
-    const atr=parseFloat(el('atr14')?.textContent)||5;
+    const atr=parseFloat(el('atr14')?.textContent)||1;
     applySignal(type,lastPrice,atr);
   }
   window.forceSignal=forceSignal;
@@ -530,8 +556,10 @@
   function drawChart(){
     if(!ctx||candleData.length===0) return;
     const W=canvas.width, H=canvas.height;
-    ctx.fillStyle='#0b0e1a'; ctx.fillRect(0,0,W,H);
-    ctx.strokeStyle='#182040'; ctx.lineWidth=0.5;
+    ctx.fillStyle='#090d1c'; ctx.fillRect(0,0,W,H);
+
+    // Grid
+    ctx.strokeStyle='#14223a'; ctx.lineWidth=0.5;
     for(let i=0;i<=5;i++){const y=(H/5)*i;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
 
     const disp=candleData.slice(-80);
@@ -545,20 +573,28 @@
 
     disp.forEach((c,i)=>{
       const x=i*cW+cW/2;
-      ctx.strokeStyle=c.bull?'#00e676':'#ff1744'; ctx.lineWidth=1;
+      // Wick
+      ctx.strokeStyle=c.bull?'#00e5b0':'#ff2d55'; ctx.lineWidth=1;
       ctx.beginPath();ctx.moveTo(x,sY(c.high));ctx.lineTo(x,sY(c.low));ctx.stroke();
-      ctx.fillStyle=c.bull?'#00e67633':'#ff174433';
+      // Body
+      ctx.fillStyle=c.bull?'#00e5b030':'#ff2d5530';
       const top=Math.min(sY(c.close),sY(c.open));
       const bH=Math.max(2,Math.abs(sY(c.close)-sY(c.open)));
       ctx.fillRect(x-cW*0.3,top,cW*0.6,bH);
     });
 
+    // Price line
     if(lastPrice!==null){
       const yP=sY(lastPrice);
-      ctx.strokeStyle='#ffd600';ctx.lineWidth=1;
-      ctx.setLineDash([4,3]);ctx.beginPath();ctx.moveTo(0,yP);ctx.lineTo(W,yP);ctx.stroke();ctx.setLineDash([]);
-      ctx.fillStyle='#ffd600';ctx.font='11px Share Tech Mono,monospace';
-      ctx.textAlign='right';ctx.fillText(fmt(lastPrice),W-4,yP-3);ctx.textAlign='left';
+      ctx.strokeStyle='#f4b728'; ctx.lineWidth=1;
+      ctx.setLineDash([4,3]);
+      ctx.beginPath();ctx.moveTo(0,yP);ctx.lineTo(W,yP);ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle='#f4b728';
+      ctx.font='11px Share Tech Mono,monospace';
+      ctx.textAlign='right';
+      ctx.fillText('$'+fmt(lastPrice,4),W-4,yP-3);
+      ctx.textAlign='left';
     }
   }
 
@@ -570,50 +606,47 @@
   async function startFeed(){
     apiKey = el('tdKey')?.value?.trim();
     if(!apiKey){ setConn('error','ENTER API KEY FIRST'); return; }
-
-    // Clear any existing poll
     if(pollTimer) clearInterval(pollTimer);
-
-    // Fetch immediately
     await fetchCandles();
-
-    // Then poll every 60s
-    pollTimer = setInterval(async()=>{
-      await fetchCandles();
-    }, REFRESH_MS);
+    pollTimer = setInterval(async()=>{ await fetchCandles(); }, REFRESH_MS);
   }
   window.startFeed=startFeed;
 
   // ── GROQ AI ──
   async function askGroq(){
-    const apiKey=el('groqKey')?.value?.trim();
-    const query=el('aiQry')?.value?.trim();
-    const btn=el('aiBtn'), resp=el('aiResp');
-    if(!apiKey){resp.textContent='Enter your Groq API key (gsk_...) to use AI analysis.';return;}
-    btn.disabled=true; resp.textContent='⚡ Analyzing US500 data...'; resp.className='ai-resp loading';
+    const key  = el('groqKey')?.value?.trim();
+    const query= el('aiQry')?.value?.trim();
+    const btn  = el('aiBtn'), resp=el('aiResp');
+    if(!key){resp.textContent='Enter your Groq API key (gsk_...) to use AI analysis.';return;}
+    btn.disabled=true;
+    resp.textContent='⚡ Analyzing ZEC/USD data...';
+    resp.className='ai-resp loading';
     try{
       const closes=candleData.map(c=>c.close);
       const ema9=calcEMA(closes,9),ema21=calcEMA(closes,21),rsi=calcRSI(closes,14);
       const atr14=calcATR(candleData,14),macd=calcMACD(closes),stdDev=calcStdDev(closes,20);
-      const prompt=`You are an expert CFD and index trading analyst. Analyze this LIVE US500 (S&P 500) M5 data from Twelve Data:
+      const prompt=`You are an expert cryptocurrency trader and technical analyst specializing in privacy coins and altcoins. Analyze this LIVE ZEC/USD (Zcash) M5 data from Twelve Data:
 
-DATA SOURCE: Twelve Data REST API · Symbol: SPY · Interval: 5min
-Price: ${fmt(lastPrice)} | Session Open: ${fmt(sessionOpen)} | High: ${fmt(sessionHigh)} | Low: ${fmt(sessionLow)}
-Change: ${sessionOpen ? fmt(lastPrice-sessionOpen) + ' (' + fmt((lastPrice-sessionOpen)/sessionOpen*100,2) + '%)' : '--'}
+DATA SOURCE: Twelve Data REST API · Symbol: ZEC/USD · Interval: 5min
+Price: $${fmt(lastPrice,4)} | Session Open: $${fmt(sessionOpen,4)} | High: $${fmt(sessionHigh,4)} | Low: $${fmt(sessionLow,4)}
+Change: ${sessionOpen ? fmt(lastPrice-sessionOpen,4) + ' (' + fmt((lastPrice-sessionOpen)/sessionOpen*100,2) + '%)' : '--'}
 
 INDICATORS (${candleData.length} M5 candles):
-EMA 9: ${fmt(ema9,2)} | EMA 21: ${fmt(ema21,2)} | Bias: ${ema9>ema21?'BULLISH':'BEARISH'}
+EMA 9: ${fmt(ema9,4)} | EMA 21: ${fmt(ema21,4)} | Bias: ${ema9>ema21?'BULLISH':'BEARISH'}
 RSI(14): ${fmt(rsi,1)} — ${rsi>70?'Overbought':rsi<30?'Oversold':'Neutral'}
-MACD: ${fmt(macd,2)} — ${macd>0?'Bullish':'Bearish'} momentum
-ATR(14): ${fmt(atr14,2)} | Volatility σ: ${fmt(stdDev,2)}
+MACD: ${fmt(macd,4)} — ${macd>0?'Bullish':'Bearish'} momentum
+ATR(14): ${fmt(atr14,4)} | Volatility σ: ${fmt(stdDev,4)}
 Current Signal: ${currentSignal}
+
+Note: ZEC/USD is a privacy coin with crypto-native volatility — wider ATR-based stops are used (1.8× ATR).
 
 USER QUESTION: ${query}
 
-Provide concise professional analysis: trend, RSI/MACD confluence, signal validity, specific entry/SL/TP levels (R:R 1:2), and key risks for US500 right now. Under 300 words.`;
+Provide concise professional analysis: trend strength, RSI/MACD confluence, signal validity, specific entry/SL/TP levels at R:R 1:2, key support/resistance, and crypto-specific risks (liquidity, exchange exposure, BTC correlation). Under 300 words.`;
+
       const r=await fetch('https://api.groq.com/openai/v1/chat/completions',{
         method:'POST',
-        headers:{'Content-Type':'application/json','Authorization':`Bearer ${apiKey}`},
+        headers:{'Content-Type':'application/json','Authorization':`Bearer ${key}`},
         body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'user',content:prompt}],max_tokens:450,temperature:0.65})
       });
       const d=await r.json();
