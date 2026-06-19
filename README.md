@@ -1,1 +1,1 @@
-# US SP 500
+ZEC USD
