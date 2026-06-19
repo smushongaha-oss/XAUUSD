@@ -3,32 +3,42 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NEXA · ZEC/USD M5 · Twelve Data Live</title>
+<title>NEXA · ZEC/USD · H1 + H4 · Twelve Data</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap');
   *{margin:0;padding:0;box-sizing:border-box}
   :root{
     --bg:#060a10;--panel:#090d1c;--border:#14223a;
     --green:#00e5b0;--red:#ff2d55;--gold:#f5c518;--blue:#3d9bff;--purple:#aa44ff;
-    --zec:#f4b728;--zec-dim:#7a5a10;
+    --zec:#f4b728;
     --text:#d8eaff;--dim:#3d5a7a;
+    --h1-accent:#3d9bff;--h4-accent:#aa44ff;
     --glow-green:0 0 14px #00e5b0bb;--glow-red:0 0 14px #ff2d55bb;
-    --glow-gold:0 0 14px #f5c518bb;--glow-blue:0 0 14px #3d9bffbb;--glow-purple:0 0 14px #aa44ffbb;
-    --glow-zec:0 0 18px #f4b728cc;
+    --glow-gold:0 0 14px #f5c518bb;--glow-blue:0 0 14px #3d9bffbb;
+    --glow-purple:0 0 14px #aa44ffbb;--glow-zec:0 0 18px #f4b728cc;
+    --glow-h1:0 0 14px #3d9bffbb;--glow-h4:0 0 14px #aa44ffbb;
   }
-  body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:14px;background-image:radial-gradient(ellipse at 50% 0%,#f4b72808 0%,transparent 65%)}
+  body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:14px;background-image:radial-gradient(ellipse at 50% 0%,#f4b72806 0%,transparent 65%)}
 
-  /* ZEC shield badge at top */
+  /* ── HEADER ── */
   .zec-badge{display:flex;align-items:center;gap:10px;margin-bottom:4px}
   .zec-shield{width:32px;height:32px;background:var(--zec);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;box-shadow:var(--glow-zec);flex-shrink:0}
   .zec-shield svg{width:18px;height:18px;fill:#000}
-  .top-label{font-family:'Orbitron',sans-serif;font-size:.65rem;letter-spacing:.45em;color:var(--dim);margin-bottom:0}
-  .buy-sell-title{display:flex;gap:14px;align-items:center;font-family:'Orbitron',sans-serif;font-size:clamp(2.6rem,9vw,4.6rem);font-weight:900;line-height:1;margin-bottom:6px}
+  .top-label{font-family:'Orbitron',sans-serif;font-size:.65rem;letter-spacing:.45em;color:var(--dim)}
+  .buy-sell-title{display:flex;gap:14px;align-items:center;font-family:'Orbitron',sans-serif;font-size:clamp(2.4rem,8vw,4.2rem);font-weight:900;line-height:1;margin-bottom:5px}
   .buy-sell-title .buy{color:var(--green);text-shadow:var(--glow-green)}
-  .buy-sell-title .div{color:var(--dim);font-size:2.2rem}
+  .buy-sell-title .div{color:var(--dim);font-size:2rem}
   .buy-sell-title .sell{color:var(--red);text-shadow:var(--glow-red)}
-  .sub-label{font-family:'Share Tech Mono',monospace;font-size:.75rem;color:var(--zec);letter-spacing:.2em;margin-bottom:12px;text-shadow:var(--glow-zec)}
+  .sub-label{font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--zec);letter-spacing:.2em;margin-bottom:10px;text-shadow:var(--glow-zec)}
 
+  /* TF pill badges */
+  .tf-pills{display:flex;gap:8px;margin-bottom:10px}
+  .tf-pill{font-family:'Orbitron',sans-serif;font-size:.65rem;font-weight:700;padding:4px 14px;border-radius:20px;letter-spacing:.08em}
+  .tf-pill.h1{background:#0a1830;border:1px solid var(--h1-accent);color:var(--h1-accent);box-shadow:var(--glow-h1)}
+  .tf-pill.h4{background:#160a2e;border:1px solid var(--h4-accent);color:var(--h4-accent);box-shadow:var(--glow-h4)}
+  .tf-pill.conf{background:#0d1a0a;border:1px solid var(--green);color:var(--green);box-shadow:var(--glow-green)}
+
+  /* ── STATUS BAR ── */
   .conn-status{font-family:'Share Tech Mono',monospace;font-size:.7rem;padding:4px 14px;border-radius:20px;margin-bottom:10px;display:flex;align-items:center;gap:6px;border:1px solid var(--border)}
   .conn-status.connecting{color:var(--gold);border-color:var(--gold)}
   .conn-status.connected{color:var(--green);border-color:var(--green)}
@@ -36,114 +46,136 @@
   .conn-dot{width:7px;height:7px;border-radius:50%;background:currentColor;animation:blink 1.4s infinite}
   @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 
-  .key-bar{width:100%;max-width:940px;background:#090d1c;border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-bottom:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  /* ── SIGNAL ALERT ── */
+  .signal-alert{display:none;width:100%;max-width:980px;padding:12px 20px;border-radius:10px;margin-bottom:12px;font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:700;text-align:center;letter-spacing:.1em;animation:flashPulse 1s ease-in-out 3}
+  .signal-alert.buy{background:#00e5b015;border:2px solid var(--green);color:var(--green)}
+  .signal-alert.sell{background:#ff2d5515;border:2px solid var(--red);color:var(--red)}
+  @keyframes flashPulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+  /* ── KEY BAR ── */
+  .key-bar{width:100%;max-width:980px;background:#090d1c;border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-bottom:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
   .key-label{font-size:.68rem;color:var(--dim);font-family:'Share Tech Mono',monospace;white-space:nowrap}
-  .key-inp{background:#04070e;border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:'Share Tech Mono',monospace;font-size:.78rem;padding:6px 10px;outline:none;flex:1;min-width:220px;transition:border-color .2s}
+  .key-inp{background:#04070e;border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:'Share Tech Mono',monospace;font-size:.78rem;padding:6px 10px;outline:none;flex:1;min-width:200px;transition:border-color .2s}
   .key-inp:focus{border-color:var(--zec)}
   .key-btn{background:var(--zec);color:#000;border:none;border-radius:5px;padding:6px 16px;font-family:'Orbitron',sans-serif;font-size:.65rem;font-weight:700;cursor:pointer;transition:opacity .2s;white-space:nowrap}
   .key-btn:hover{opacity:.85}
   .key-hint{font-size:.62rem;color:var(--dim);width:100%}
   .key-hint a{color:var(--zec);text-decoration:none}
 
-  .countdown-bar{width:100%;max-width:940px;background:#090d1c;border:1px solid var(--border);border-radius:8px;padding:6px 14px;margin-bottom:10px;display:flex;align-items:center;gap:12px}
+  /* ── COUNTDOWN ── */
+  .countdown-bar{width:100%;max-width:980px;background:#090d1c;border:1px solid var(--border);border-radius:8px;padding:6px 14px;margin-bottom:10px;display:flex;align-items:center;gap:10px}
   .cd-label{font-size:.62rem;color:var(--dim);font-family:'Share Tech Mono',monospace;white-space:nowrap}
-  .cd-track{flex:1;height:5px;background:#14223a;border-radius:3px}
-  .cd-fill{height:100%;border-radius:3px;background:var(--zec);box-shadow:var(--glow-zec);transition:width 1s linear}
-  .cd-val{font-family:'Orbitron',sans-serif;font-size:.75rem;color:var(--zec);min-width:36px;text-align:right}
+  .cd-block{display:flex;align-items:center;gap:6px;flex:1}
+  .cd-tf{font-size:.6rem;font-family:'Orbitron',sans-serif;min-width:22px}
+  .cd-tf.h1{color:var(--h1-accent)}
+  .cd-tf.h4{color:var(--h4-accent)}
+  .cd-track{flex:1;height:4px;background:#14223a;border-radius:3px}
+  .cd-fill{height:100%;border-radius:3px;transition:width 1s linear}
+  .cd-fill.h1{background:var(--h1-accent)}
+  .cd-fill.h4{background:var(--h4-accent)}
+  .cd-val{font-family:'Orbitron',sans-serif;font-size:.72rem;min-width:38px;text-align:right}
+  .cd-val.h1{color:var(--h1-accent)}
+  .cd-val.h4{color:var(--h4-accent)}
 
-  .main-panel{width:100%;max-width:940px;background:var(--panel);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:12px;box-shadow:0 0 40px #f4b72808}
-  .panel-header{display:flex;align-items:center;gap:12px;padding:9px 16px;border-bottom:1px solid var(--border);flex-wrap:wrap;background:#0a0f1f}
-  .live-dot{width:9px;height:9px;background:var(--green);border-radius:50%;box-shadow:var(--glow-green);animation:blink 1.4s infinite;flex-shrink:0}
-  .sym{font-family:'Orbitron',sans-serif;font-size:.9rem;font-weight:700;color:var(--zec);text-shadow:var(--glow-zec)}
-  .tf{color:var(--dim);font-size:.8rem;margin-left:-6px}
-  .src-pill{padding:2px 8px;border-radius:4px;font-family:'Orbitron',sans-serif;font-size:.6rem;letter-spacing:.08em}
-  .src-pill.live{background:#0a150a;border:1px solid var(--green);color:var(--green);text-shadow:var(--glow-green)}
-  .src-pill.wait{background:#1a1300;border:1px solid var(--zec);color:var(--zec)}
-  .sig-label{color:var(--dim);font-size:.78rem;margin-left:auto}
-  .sig-badge{font-family:'Orbitron',sans-serif;font-size:1.05rem;font-weight:900;color:var(--red);text-shadow:var(--glow-red)}
-  .sig-badge.buy{color:var(--green);text-shadow:var(--glow-green)}
-  .sig-badge.wait{color:var(--zec);text-shadow:var(--glow-zec)}
-  .str-wrap{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:3px}
-  .str-lbl{font-size:.65rem;color:var(--dim);letter-spacing:.1em}
+  /* ── CONFLUENCE BANNER ── */
+  .conf-banner{width:100%;max-width:980px;border-radius:10px;padding:10px 18px;margin-bottom:12px;display:flex;align-items:center;gap:14px;border:1px solid var(--border);background:var(--panel)}
+  .conf-title{font-family:'Orbitron',sans-serif;font-size:.68rem;color:var(--dim);letter-spacing:.12em;white-space:nowrap}
+  .conf-sig{font-family:'Orbitron',sans-serif;font-size:1.6rem;font-weight:900;min-width:90px}
+  .conf-sig.buy{color:var(--green);text-shadow:var(--glow-green)}
+  .conf-sig.sell{color:var(--red);text-shadow:var(--glow-red)}
+  .conf-sig.wait{color:var(--zec);text-shadow:var(--glow-zec)}
+  .conf-detail{display:flex;flex-direction:column;gap:3px;flex:1}
+  .conf-row{display:flex;gap:14px}
+  .conf-item{display:flex;flex-direction:column;gap:1px}
+  .conf-lbl{font-size:.58rem;color:var(--dim);letter-spacing:.1em}
+  .conf-val{font-family:'Share Tech Mono',monospace;font-size:.88rem}
+  .conf-val.green{color:var(--green)}.conf-val.red{color:var(--red)}.conf-val.zec{color:var(--zec)}
+  .str-wrap{display:flex;flex-direction:column;align-items:flex-end;gap:3px;margin-left:auto}
+  .str-lbl{font-size:.6rem;color:var(--dim);letter-spacing:.1em}
   .str-row{display:flex;align-items:center;gap:8px}
-  .str-bg{width:150px;height:7px;background:#14223a;border-radius:4px}
+  .str-bg{width:120px;height:7px;background:#14223a;border-radius:4px}
   .str-bar{height:100%;border-radius:4px;background:var(--zec);box-shadow:var(--glow-zec);transition:width .6s}
-  .str-pct{font-family:'Orbitron',sans-serif;font-size:.95rem;color:var(--zec);min-width:40px;text-align:right}
+  .str-pct{font-family:'Orbitron',sans-serif;font-size:.9rem;color:var(--zec);min-width:40px;text-align:right}
 
-  .panel-body{display:flex}
-  .stats-col{width:195px;min-width:175px;padding:12px 14px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:11px;overflow-y:auto;max-height:500px}
-  .sg{display:flex;flex-direction:column;gap:2px}
-  .sl{font-size:.62rem;letter-spacing:.12em;color:var(--dim)}
-  .sv{font-family:'Share Tech Mono',monospace;font-size:.95rem}
-  .sv.green{color:var(--green)}.sv.red{color:var(--red)}.sv.gold{color:var(--gold)}.sv.blue{color:var(--blue)}.sv.purple{color:var(--purple)}.sv.zec{color:var(--zec)}
-  .sr{display:flex;gap:18px}
-  .wait-msg{font-size:.72rem;color:var(--dim);font-style:italic}
-  .rr-pill{display:inline-block;background:#0d1300;border:1px solid var(--zec);border-radius:4px;padding:2px 9px;color:var(--zec);font-family:'Share Tech Mono',monospace;font-size:.82rem}
-  .ent-row{display:flex;gap:8px;flex-wrap:wrap}
-  .ei{display:flex;flex-direction:column;gap:2px}
-  .el{font-size:.58rem;letter-spacing:.1em;color:var(--dim)}
-  .ev{font-family:'Share Tech Mono',monospace;font-size:.85rem}
-  .ev.entry{color:var(--zec)}.ev.stop{color:var(--red)}.ev.target{color:var(--green);font-size:.95rem}
-  .btn-row{display:flex;gap:7px}
-  .btn{flex:1;padding:9px 0;border:none;border-radius:6px;font-family:'Orbitron',sans-serif;font-size:.7rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;transition:opacity .2s,transform .1s}
-  .btn:hover{opacity:.85}.btn:active{transform:scale(.97)}
-  .btn.long{background:var(--green);color:#000;box-shadow:var(--glow-green)}
-  .btn.short{background:var(--red);color:#fff;box-shadow:var(--glow-red)}
-  .live-row{font-size:.68rem;color:var(--green);display:flex;align-items:center;gap:5px}
-  .live-dot2{width:6px;height:6px;background:var(--green);border-radius:50%;box-shadow:var(--glow-green);animation:blink 1.4s infinite}
-  .live-row.wait{color:var(--zec)}.live-dot2.wait{background:var(--zec);box-shadow:var(--glow-zec)}
-  .vol-meter{display:flex;flex-direction:column;gap:4px}
-  .vol-label{font-size:.62rem;letter-spacing:.12em;color:var(--dim)}
-  .vol-bars{display:flex;gap:3px;align-items:flex-end;height:22px}
-  .vol-bar{width:8px;border-radius:2px 2px 0 0;background:var(--zec);opacity:0.25;transition:height .4s}
-  .vol-bar.active{opacity:1;box-shadow:var(--glow-zec)}
-  .vol-val{font-family:'Share Tech Mono',monospace;font-size:.78rem;color:var(--zec)}
+  /* ── DUAL CHART GRID ── */
+  .dual-grid{width:100%;max-width:980px;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+  .tf-panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+  .tf-panel.h1-panel{border-color:#1a2e4a}
+  .tf-panel.h4-panel{border-color:#221040}
+  .tp-header{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--border)}
+  .tp-header.h1{background:#0a1222;border-bottom-color:#1a2e4a}
+  .tp-header.h4{background:#0f0820;border-bottom-color:#221040}
+  .tp-dot{width:8px;height:8px;border-radius:50%;animation:blink 1.4s infinite;flex-shrink:0}
+  .tp-dot.h1{background:var(--h1-accent);box-shadow:var(--glow-h1)}
+  .tp-dot.h4{background:var(--h4-accent);box-shadow:var(--glow-h4)}
+  .tp-sym{font-family:'Orbitron',sans-serif;font-size:.78rem;font-weight:700}
+  .tp-sym.h1{color:var(--h1-accent)}
+  .tp-sym.h4{color:var(--h4-accent)}
+  .tp-sig{font-family:'Orbitron',sans-serif;font-size:.82rem;font-weight:900;margin-left:auto}
+  .tp-sig.buy{color:var(--green);text-shadow:var(--glow-green)}
+  .tp-sig.sell{color:var(--red);text-shadow:var(--glow-red)}
+  .tp-sig.wait{color:var(--dim)}
+  .tp-body{display:flex}
+  .tp-stats{width:120px;min-width:110px;padding:8px 10px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:8px}
+  .tp-stats.h1{border-right-color:#1a2e4a}
+  .tp-stats.h4{border-right-color:#221040}
+  .sg{display:flex;flex-direction:column;gap:1px}
+  .sl{font-size:.58rem;letter-spacing:.1em;color:var(--dim)}
+  .sv{font-family:'Share Tech Mono',monospace;font-size:.82rem}
+  .sv.green{color:var(--green)}.sv.red{color:var(--red)}.sv.zec{color:var(--zec)}
+  .sv.h1c{color:var(--h1-accent)}.sv.h4c{color:var(--h4-accent)}
+  .tp-chart{flex:1;min-height:200px;position:relative}
+  .tp-chart canvas{display:block;width:100%;height:100%}
 
-  .chart-area{flex:1;position:relative;overflow:hidden;min-height:320px}
-  canvas#chart{display:block;width:100%;height:100%}
-
-  .ticker-strip{width:100%;max-width:940px;background:#090d1c;border:1px solid var(--border);border-radius:8px;padding:7px 16px;margin-bottom:12px;display:flex;gap:28px;overflow-x:auto;scrollbar-width:none}
+  /* ── TICKER STRIP ── */
+  .ticker-strip{width:100%;max-width:980px;background:#090d1c;border:1px solid var(--border);border-radius:8px;padding:7px 16px;margin-bottom:10px;display:flex;gap:22px;overflow-x:auto;scrollbar-width:none}
   .ticker-strip::-webkit-scrollbar{display:none}
-  .tk{display:flex;flex-direction:column;gap:2px;min-width:80px}
-  .tk-l{font-size:.6rem;color:var(--dim);letter-spacing:.1em}
-  .tk-v{font-family:'Share Tech Mono',monospace;font-size:.85rem}
+  .tk{display:flex;flex-direction:column;gap:2px;min-width:72px}
+  .tk-l{font-size:.58rem;color:var(--dim);letter-spacing:.08em}
+  .tk-v{font-family:'Share Tech Mono',monospace;font-size:.82rem}
 
-  .bottom-strip{width:100%;max-width:940px;display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;background:var(--panel);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:14px}
-  .bs-div{background:var(--border)}
-  .bs-cell{padding:15px 18px;display:flex;align-items:center;gap:13px}
-  .bs-icon{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
-  .bs-icon.green{border:2px solid var(--green);color:var(--green);box-shadow:var(--glow-green)}
-  .bs-icon.red{border:2px solid var(--red);color:var(--red);box-shadow:var(--glow-red)}
-  .bs-icon.zec{border:2px solid var(--zec);color:var(--zec);box-shadow:var(--glow-zec)}
-  .bs-txt{display:flex;flex-direction:column;gap:2px}
-  .bs-txt .bl{font-size:.58rem;letter-spacing:.15em;color:var(--dim)}
-  .bs-txt .bv{font-family:'Orbitron',sans-serif;font-size:1.2rem;font-weight:700}
-  .bs-txt .bv.green{color:var(--green);text-shadow:var(--glow-green)}
-  .bs-txt .bv.red{color:var(--red);text-shadow:var(--glow-red)}
-  .bs-txt .bv.zec{color:var(--zec);text-shadow:var(--glow-zec)}
+  /* ── TRADE LEVELS ── */
+  .levels-strip{width:100%;max-width:980px;display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;background:var(--panel);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:12px}
+  .ls-div{background:var(--border)}
+  .ls-cell{padding:14px 16px;display:flex;align-items:center;gap:12px}
+  .ls-icon{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+  .ls-icon.green{border:2px solid var(--green);color:var(--green);box-shadow:var(--glow-green)}
+  .ls-icon.red{border:2px solid var(--red);color:var(--red);box-shadow:var(--glow-red)}
+  .ls-icon.zec{border:2px solid var(--zec);color:var(--zec);box-shadow:var(--glow-zec)}
+  .ls-txt .bl{font-size:.56rem;letter-spacing:.15em;color:var(--dim)}
+  .ls-txt .bv{font-family:'Orbitron',sans-serif;font-size:1.1rem;font-weight:700}
+  .ls-txt .bv.green{color:var(--green);text-shadow:var(--glow-green)}
+  .ls-txt .bv.red{color:var(--red);text-shadow:var(--glow-red)}
+  .ls-txt .bv.zec{color:var(--zec);text-shadow:var(--glow-zec)}
+  .ls-sub{font-size:.6rem;color:var(--dim);font-family:'Share Tech Mono',monospace;margin-top:2px}
 
-  .signal-alert{display:none;width:100%;max-width:940px;padding:12px 20px;border-radius:10px;margin-bottom:12px;font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:700;text-align:center;letter-spacing:.1em;animation:flashPulse 1s ease-in-out 3}
-  .signal-alert.buy{background:#00e5b015;border:2px solid var(--green);color:var(--green)}
-  .signal-alert.sell{background:#ff2d5515;border:2px solid var(--red);color:var(--red)}
-  @keyframes flashPulse{0%,100%{opacity:1}50%{opacity:.3}}
-
-  .ai-section{width:100%;max-width:940px;background:var(--panel);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+  /* ── AI SECTION ── */
+  .ai-section{width:100%;max-width:980px;background:var(--panel);border:1px solid var(--border);border-radius:12px;overflow:hidden}
   .ai-hdr{display:flex;align-items:center;gap:10px;padding:9px 16px;border-bottom:1px solid var(--border);background:#090c1e}
   .ai-hdr-title{font-family:'Orbitron',sans-serif;font-size:.78rem;color:var(--zec);letter-spacing:.08em}
   .ai-hdr-model{font-size:.68rem;color:var(--dim);margin-left:auto;font-family:'Share Tech Mono',monospace}
-  .ai-inputs{display:flex;gap:8px;padding:11px 14px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+  .ai-inputs{display:flex;gap:8px;padding:10px 14px;border-bottom:1px solid var(--border);flex-wrap:wrap}
   .ai-inp{background:#04070e;border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:'Share Tech Mono',monospace;font-size:.78rem;padding:8px 12px;outline:none;transition:border-color .2s}
   .ai-inp:focus{border-color:var(--zec)}
-  .ai-key{width:230px}.ai-qry{flex:1;min-width:200px}
-  .ai-btn{background:var(--zec);color:#000;border:none;border-radius:5px;padding:8px 16px;font-family:'Orbitron',sans-serif;font-size:.72rem;font-weight:700;cursor:pointer;transition:opacity .2s;white-space:nowrap}
+  .ai-key{width:220px}.ai-qry{flex:1;min-width:180px}
+  .ai-btn{background:var(--zec);color:#000;border:none;border-radius:5px;padding:8px 16px;font-family:'Orbitron',sans-serif;font-size:.72rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:opacity .2s}
   .ai-btn:hover{opacity:.85}.ai-btn:disabled{opacity:.35;cursor:not-allowed}
   .ai-resp{padding:13px 16px;min-height:76px;font-family:'Rajdhani',sans-serif;font-size:.95rem;line-height:1.65;color:var(--text);white-space:pre-wrap}
   .ai-resp.loading{color:var(--dim);font-style:italic}.ai-resp.error{color:var(--red)}
 
-  @media(max-width:600px){
-    .stats-col{width:145px;min-width:130px}.str-bg{width:90px}
-    .bottom-strip{grid-template-columns:1fr}.bs-div{display:none}
-    .ai-key{width:100%}.key-inp{min-width:150px}
+  /* ── FORCE BTNS ── */
+  .force-row{display:flex;gap:8px;width:100%;max-width:980px;margin-bottom:12px}
+  .btn{flex:1;padding:10px 0;border:none;border-radius:6px;font-family:'Orbitron',sans-serif;font-size:.75rem;font-weight:700;cursor:pointer;transition:opacity .2s,transform .1s}
+  .btn:hover{opacity:.85}.btn:active{transform:scale(.97)}
+  .btn.long{background:var(--green);color:#000;box-shadow:var(--glow-green)}
+  .btn.short{background:var(--red);color:#fff;box-shadow:var(--glow-red)}
+
+  @media(max-width:680px){
+    .dual-grid{grid-template-columns:1fr}
+    .levels-strip{grid-template-columns:1fr}.ls-div{display:none}
+    .str-bg{width:80px}
+    .ai-key{width:100%}
+    .conf-row{flex-wrap:wrap}
   }
 </style>
 </head>
@@ -151,13 +183,19 @@
 
 <div class="zec-badge">
   <div class="zec-shield">
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h7.5l-8 10H16M7 7V5h10v2M8 17v2h8v-2"/></svg>
+    <svg viewBox="0 0 24 24"><path d="M7 7h7.5l-8 10H16M7 7V5h10v2M8 17v2h8v-2"/></svg>
   </div>
-  <div class="top-label">ZCASH · CFD · INDICATOR · TWELVE DATA LIVE</div>
+  <div class="top-label">ZCASH · DUAL TIMEFRAME · TWELVE DATA LIVE</div>
 </div>
 
 <div class="buy-sell-title"><span class="buy">BUY</span><span class="div">|</span><span class="sell">SELL</span></div>
-<div class="sub-label">⚡ ZEC/USD · ZCASH · M5 · TWELVE DATA · FREE</div>
+<div class="sub-label">⚡ ZEC/USD · H1 + H4 CONFLUENCE · TWELVE DATA</div>
+
+<div class="tf-pills">
+  <div class="tf-pill h1">H1 · 1 HOUR</div>
+  <div class="tf-pill h4">H4 · 4 HOUR</div>
+  <div class="tf-pill conf">DUAL-TF CONFLUENCE</div>
+</div>
 
 <div class="conn-status connecting" id="connStatus">
   <div class="conn-dot"></div>
@@ -169,116 +207,155 @@
 <div class="key-bar">
   <div class="key-label">TWELVE DATA KEY:</div>
   <input class="key-inp" id="tdKey" type="password" placeholder="Paste your free Twelve Data API key...">
-  <button class="key-btn" onclick="startFeed()">▶ START LIVE FEED</button>
+  <button class="key-btn" onclick="startFeed()">▶ START H1 + H4 FEED</button>
   <div class="key-hint">
-    100% free — no credit card. Sign up in 60 seconds at
-    <a href="https://twelvedata.com/apikey" target="_blank">twelvedata.com/apikey</a>
-    · Free plan: 800 API calls/day · ZEC/USD crypto supported · Refreshes every 60s
+    Free plan at <a href="https://twelvedata.com/apikey" target="_blank">twelvedata.com/apikey</a>
+    · H1 refreshes every 5 min · H4 refreshes every 15 min · ZEC/USD crypto pair
   </div>
 </div>
 
+<!-- Dual countdown bars -->
 <div class="countdown-bar" id="countdownBar" style="display:none">
-  <div class="cd-label">NEXT REFRESH</div>
-  <div class="cd-track"><div class="cd-fill" id="cdFill" style="width:100%"></div></div>
-  <div class="cd-val" id="cdVal">60s</div>
-</div>
-
-<div class="main-panel">
-  <div class="panel-header">
-    <div class="live-dot"></div>
-    <div class="sym">ZEC/USD</div><div class="tf">ZCASH, M5</div>
-    <span class="src-pill wait" id="srcPill">AWAITING KEY</span>
-    <div class="sig-label">SIGNAL</div>
-    <div class="sig-badge wait" id="sigBadge">WAIT ◆</div>
-    <div class="str-wrap">
-      <div class="str-lbl">SIGNAL STRENGTH</div>
-      <div class="str-row">
-        <div class="str-bg"><div class="str-bar" id="strBar" style="width:0%"></div></div>
-        <div class="str-pct" id="strPct">--</div>
-      </div>
-    </div>
+  <div class="cd-label">REFRESH</div>
+  <div class="cd-block">
+    <span class="cd-tf h1">H1</span>
+    <div class="cd-track"><div class="cd-fill h1" id="cdFill1" style="width:100%"></div></div>
+    <span class="cd-val h1" id="cdVal1">5m</span>
   </div>
-  <div class="panel-body">
-    <div class="stats-col">
-      <div class="sr">
-        <div class="sg"><div class="sl">TREND</div><div class="sv zec" id="trend">--</div></div>
-        <div class="sg"><div class="sl">ATR(5)</div><div class="sv blue" id="atr5">--</div></div>
-      </div>
-      <div class="sr">
-        <div class="sg"><div class="sl">RSI(14)</div><div class="sv purple" id="rsiVal">--</div></div>
-        <div class="sg"><div class="sl">ATR(14)</div><div class="sv blue" id="atr14">--</div></div>
-      </div>
-      <div class="sg"><div class="sl">EMA 9 / EMA 21</div><div class="sv zec" id="emaStatus">--</div></div>
-      <div class="sg"><div class="sl">MACD LINE</div><div class="sv blue" id="macdStatus">--</div></div>
-      <div class="sg"><div class="sl">LAST PRICE</div><div class="sv green" id="lastClose">--</div></div>
-      <div class="sg"><div class="sl">TIMEFRAME</div><div class="sv green">M5 · 5 MINUTE</div></div>
-      <div class="vol-meter">
-        <div class="vol-label">VOLATILITY</div>
-        <div class="vol-bars" id="volBars">
-          <div class="vol-bar" style="height:40%"></div><div class="vol-bar" style="height:40%"></div>
-          <div class="vol-bar" style="height:40%"></div><div class="vol-bar" style="height:40%"></div>
-          <div class="vol-bar" style="height:40%"></div><div class="vol-bar" style="height:40%"></div>
-          <div class="vol-bar" style="height:40%"></div>
-        </div>
-        <div class="vol-val" id="volVal">σ = --</div>
-      </div>
-      <div class="wait-msg" id="waitMsg">Enter your free Twelve Data API key above.</div>
-      <div class="sg"><div class="sl">LEVELS</div><div class="rr-pill">R/R 1:2.0</div></div>
-      <div class="ent-row">
-        <div class="ei"><div class="el">ENTRY</div><div class="ev entry" id="entryV">--</div></div>
-        <div class="ei"><div class="el">STOP</div><div class="ev stop" id="stopV">--</div></div>
-        <div class="ei"><div class="el">TARGET</div><div class="ev target" id="targetV">--</div></div>
-      </div>
-      <div class="btn-row">
-        <button class="btn long" onclick="forceSignal('BUY')">▲ LONG</button>
-        <button class="btn short" onclick="forceSignal('SELL')">▼ SHORT</button>
-      </div>
-      <div class="live-row wait" id="liveRow">
-        <div class="live-dot2 wait" id="liveDot2"></div>
-        <span id="liveLabel">WAITING FOR KEY</span>
-      </div>
-    </div>
-    <div class="chart-area"><canvas id="chart"></canvas></div>
+  <div class="cd-block">
+    <span class="cd-tf h4">H4</span>
+    <div class="cd-track"><div class="cd-fill h4" id="cdFill4" style="width:100%"></div></div>
+    <span class="cd-val h4" id="cdVal4">15m</span>
   </div>
 </div>
 
+<!-- CONFLUENCE BANNER -->
+<div class="conf-banner" id="confBanner">
+  <div class="conf-title">CONFLUENCE<br>SIGNAL</div>
+  <div class="conf-sig wait" id="confSig">WAIT ◆</div>
+  <div class="conf-detail">
+    <div class="conf-row">
+      <div class="conf-item"><div class="conf-lbl">H1 BIAS</div><div class="conf-val zec" id="h1bias">--</div></div>
+      <div class="conf-item"><div class="conf-lbl">H4 BIAS</div><div class="conf-val zec" id="h4bias">--</div></div>
+      <div class="conf-item"><div class="conf-lbl">H1 RSI</div><div class="conf-val zec" id="h1rsi">--</div></div>
+      <div class="conf-item"><div class="conf-lbl">H4 RSI</div><div class="conf-val zec" id="h4rsi">--</div></div>
+      <div class="conf-item"><div class="conf-lbl">LAST PRICE</div><div class="conf-val zec" id="confPrice">--</div></div>
+    </div>
+  </div>
+  <div class="str-wrap">
+    <div class="str-lbl">CONFLUENCE STRENGTH</div>
+    <div class="str-row">
+      <div class="str-bg"><div class="str-bar" id="strBar" style="width:0%"></div></div>
+      <div class="str-pct" id="strPct">--</div>
+    </div>
+  </div>
+</div>
+
+<!-- DUAL CHART PANELS -->
+<div class="dual-grid">
+
+  <!-- H1 Panel -->
+  <div class="tf-panel h1-panel">
+    <div class="tp-header h1">
+      <div class="tp-dot h1"></div>
+      <div class="tp-sym h1">ZEC/USD · H1</div>
+      <div class="tp-sig wait" id="h1sig">WAIT</div>
+    </div>
+    <div class="tp-body">
+      <div class="tp-stats h1">
+        <div class="sg"><div class="sl">EMA 9</div><div class="sv h1c" id="h1ema9">--</div></div>
+        <div class="sg"><div class="sl">EMA 21</div><div class="sv h1c" id="h1ema21">--</div></div>
+        <div class="sg"><div class="sl">RSI(14)</div><div class="sv" id="h1rsiV">--</div></div>
+        <div class="sg"><div class="sl">MACD</div><div class="sv" id="h1macd">--</div></div>
+        <div class="sg"><div class="sl">ATR(14)</div><div class="sv h1c" id="h1atr">--</div></div>
+        <div class="sg"><div class="sl">TREND</div><div class="sv" id="h1trend">--</div></div>
+        <div class="sg"><div class="sl">CANDLES</div><div class="sv h1c" id="h1count">--</div></div>
+      </div>
+      <div class="tp-chart"><canvas id="chartH1"></canvas></div>
+    </div>
+  </div>
+
+  <!-- H4 Panel -->
+  <div class="tf-panel h4-panel">
+    <div class="tp-header h4">
+      <div class="tp-dot h4"></div>
+      <div class="tp-sym h4">ZEC/USD · H4</div>
+      <div class="tp-sig wait" id="h4sig">WAIT</div>
+    </div>
+    <div class="tp-body">
+      <div class="tp-stats h4">
+        <div class="sg"><div class="sl">EMA 9</div><div class="sv h4c" id="h4ema9">--</div></div>
+        <div class="sg"><div class="sl">EMA 21</div><div class="sv h4c" id="h4ema21">--</div></div>
+        <div class="sg"><div class="sl">RSI(14)</div><div class="sv" id="h4rsiV">--</div></div>
+        <div class="sg"><div class="sl">MACD</div><div class="sv" id="h4macd">--</div></div>
+        <div class="sg"><div class="sl">ATR(14)</div><div class="sv h4c" id="h4atr">--</div></div>
+        <div class="sg"><div class="sl">TREND</div><div class="sv" id="h4trend">--</div></div>
+        <div class="sg"><div class="sl">CANDLES</div><div class="sv h4c" id="h4count">--</div></div>
+      </div>
+      <div class="tp-chart"><canvas id="chartH4"></canvas></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- TICKER STRIP -->
 <div class="ticker-strip">
   <div class="tk"><div class="tk-l">LAST PRICE</div><div class="tk-v" style="color:var(--zec)" id="tk-price">--</div></div>
-  <div class="tk"><div class="tk-l">SESSION OPEN</div><div class="tk-v" style="color:var(--blue)" id="tk-open">--</div></div>
-  <div class="tk"><div class="tk-l">SESSION HIGH</div><div class="tk-v" style="color:var(--green)" id="tk-hi">--</div></div>
-  <div class="tk"><div class="tk-l">SESSION LOW</div><div class="tk-v" style="color:var(--red)" id="tk-lo">--</div></div>
-  <div class="tk"><div class="tk-l">CHANGE</div><div class="tk-v" id="tk-chg" style="color:var(--dim)">--</div></div>
-  <div class="tk"><div class="tk-l">CANDLES</div><div class="tk-v" style="color:var(--dim)" id="tk-count">0</div></div>
+  <div class="tk"><div class="tk-l">H1 HIGH</div><div class="tk-v" style="color:var(--green)" id="tk-h1hi">--</div></div>
+  <div class="tk"><div class="tk-l">H1 LOW</div><div class="tk-v" style="color:var(--red)" id="tk-h1lo">--</div></div>
+  <div class="tk"><div class="tk-l">H4 HIGH</div><div class="tk-v" style="color:var(--green)" id="tk-h4hi">--</div></div>
+  <div class="tk"><div class="tk-l">H4 LOW</div><div class="tk-v" style="color:var(--red)" id="tk-h4lo">--</div></div>
+  <div class="tk"><div class="tk-l">H1 CHANGE</div><div class="tk-v" id="tk-chg">--</div></div>
   <div class="tk"><div class="tk-l">SOURCE</div><div class="tk-v" style="color:var(--zec)">TWELVE DATA</div></div>
   <div class="tk"><div class="tk-l">STATUS</div><div class="tk-v" style="color:var(--zec)" id="tk-status">OFFLINE</div></div>
 </div>
 
-<div class="bottom-strip">
-  <div class="bs-cell">
-    <div class="bs-icon green">↗</div>
-    <div class="bs-txt"><div class="bl">ENTRY</div><div class="bv green" id="b-entry">--</div></div>
+<!-- TRADE LEVELS -->
+<div class="levels-strip">
+  <div class="ls-cell">
+    <div class="ls-icon green">↗</div>
+    <div class="ls-txt">
+      <div class="bl">ENTRY</div>
+      <div class="bv green" id="b-entry">--</div>
+      <div class="ls-sub" id="b-entry-tf">H1 + H4 CONFLUENCE</div>
+    </div>
   </div>
-  <div class="bs-div"></div>
-  <div class="bs-cell">
-    <div class="bs-icon red">🛡</div>
-    <div class="bs-txt"><div class="bl">STOP LOSS</div><div class="bv red" id="b-stop">--</div></div>
+  <div class="ls-div"></div>
+  <div class="ls-cell">
+    <div class="ls-icon red">🛡</div>
+    <div class="ls-txt">
+      <div class="bl">STOP LOSS</div>
+      <div class="bv red" id="b-stop">--</div>
+      <div class="ls-sub">ATR × 1.8 · H4 BASED</div>
+    </div>
   </div>
-  <div class="bs-div"></div>
-  <div class="bs-cell">
-    <div class="bs-icon zec">🎯</div>
-    <div class="bs-txt"><div class="bl">TP TARGET</div><div class="bv zec" id="b-target">--</div></div>
+  <div class="ls-div"></div>
+  <div class="ls-cell">
+    <div class="ls-icon zec">🎯</div>
+    <div class="ls-txt">
+      <div class="bl">TP TARGET</div>
+      <div class="bv zec" id="b-target">--</div>
+      <div class="ls-sub">R:R 1:2 · H4 ATR BASED</div>
+    </div>
   </div>
 </div>
 
+<!-- FORCE SIGNAL BUTTONS -->
+<div class="force-row">
+  <button class="btn long" onclick="forceSignal('BUY')">▲ FORCE LONG</button>
+  <button class="btn short" onclick="forceSignal('SELL')">▼ FORCE SHORT</button>
+</div>
+
+<!-- AI SECTION -->
 <div class="ai-section">
   <div class="ai-hdr">
     <span style="font-size:1.1rem">🤖</span>
-    <div class="ai-hdr-title">GROQ AI · ZEC/USD ANALYSIS</div>
+    <div class="ai-hdr-title">GROQ AI · ZEC/USD H1+H4 CONFLUENCE ANALYSIS</div>
     <div class="ai-hdr-model">llama-3.3-70b-versatile</div>
   </div>
   <div class="ai-inputs">
     <input class="ai-inp ai-key" id="groqKey" type="password" placeholder="Groq API Key (gsk_...)">
-    <input class="ai-inp ai-qry" id="aiQry" type="text" value="Analyze this ZEC/USD signal and suggest entry strategy">
+    <input class="ai-inp ai-qry" id="aiQry" type="text" value="Analyze H1 + H4 confluence and suggest the best ZEC/USD entry">
     <button class="ai-btn" id="aiBtn" onclick="askGroq()">⚡ ANALYZE</button>
   </div>
   <div class="ai-resp" id="aiResp">Ready for AI analysis. Enter Groq API key and click ANALYZE.</div>
@@ -288,24 +365,27 @@
 (function(){
 
   // ── CONFIG ──
-  const SYMBOL     = 'ZEC/USD';    // Zcash / US Dollar — crypto pair on Twelve Data
-  const INTERVAL   = '5min';
-  const OUTPUTSIZE = 120;
-  const REFRESH_MS = 60000;        // 60s polling
-  const BASE_URL   = 'https://api.twelvedata.com';
+  const SYMBOL   = 'ZEC/USD';
+  const BASE_URL = 'https://api.twelvedata.com';
+  const REFRESH_H1 = 5 * 60 * 1000;    // 5 min
+  const REFRESH_H4 = 15 * 60 * 1000;   // 15 min
+  const SIZE_H1  = 100;
+  const SIZE_H4  = 80;
 
   // ── STATE ──
   let apiKey      = '';
-  let candleData  = [];
-  let currentSignal = 'WAIT';
+  let dataH1      = [];
+  let dataH4      = [];
+  let sigH1       = 'WAIT';
+  let sigH4       = 'WAIT';
+  let confSig     = 'WAIT';
   let lastPrice   = null;
-  let sessionOpen = null;
-  let sessionHigh = -Infinity;
-  let sessionLow  = +Infinity;
-  let pollTimer   = null;
+  let atrH4val    = null;
+  let pollH1      = null;
+  let pollH4      = null;
+  let cd1Rem      = REFRESH_H1/1000;
+  let cd4Rem      = REFRESH_H4/1000;
   let cdTimer     = null;
-  let cdRemaining = 60;
-  let isLive      = false;
 
   // ── HELPERS ──
   const el  = id => document.getElementById(id);
@@ -313,302 +393,337 @@
   const fmt = (v, d=2) => (v == null || isNaN(v)) ? '--' : parseFloat(v).toFixed(d);
 
   function setConn(state, text){
-    const s = el('connStatus'), t = el('connText');
-    if(s) s.className = 'conn-status ' + state;
-    if(t) t.textContent = text;
+    const s=el('connStatus'), t=el('connText');
+    if(s) s.className='conn-status '+state;
+    if(t) t.textContent=text;
   }
 
-  function setLive(live){
-    const row = el('liveRow'), dot = el('liveDot2'), lbl = el('liveLabel');
-    if(!row) return;
-    row.className   = live ? 'live-row' : 'live-row wait';
-    dot.className   = live ? 'live-dot2' : 'live-dot2 wait';
-    lbl.textContent = live ? 'TWELVE DATA LIVE · ZEC/USD' : 'CONNECTING...';
-  }
-
-  // ── COUNTDOWN BAR ──
-  function startCountdown(){
-    el('countdownBar').style.display = 'flex';
-    cdRemaining = REFRESH_MS / 1000;
+  // ── COUNTDOWN ──
+  function startCountdowns(){
+    el('countdownBar').style.display='flex';
+    cd1Rem = REFRESH_H1/1000;
+    cd4Rem = REFRESH_H4/1000;
     if(cdTimer) clearInterval(cdTimer);
-    cdTimer = setInterval(() => {
-      cdRemaining = Math.max(0, cdRemaining - 1);
-      const pct = (cdRemaining / (REFRESH_MS / 1000)) * 100;
-      el('cdFill').style.width = pct + '%';
-      set('cdVal', cdRemaining + 's');
-    }, 1000);
-  }
-
-  // ── FETCH CANDLES ──
-  async function fetchCandles(){
-    if(!apiKey) return;
-    setConn('connecting', 'FETCHING ZEC/USD M5 DATA...');
-    set('waitMsg', 'Fetching from Twelve Data...');
-    try {
-      const url = `${BASE_URL}/time_series?symbol=${encodeURIComponent(SYMBOL)}&interval=${INTERVAL}&outputsize=${OUTPUTSIZE}&apikey=${apiKey}`;
-      const resp = await fetch(url);
-      const data = await resp.json();
-
-      if(data.status === 'error' || data.code){
-        const msg = data.message || 'API error';
-        setConn('error', 'API ERROR: ' + msg);
-        set('waitMsg', msg);
-        set('tk-status', 'ERROR');
-        return;
-      }
-
-      const values = data.values;
-      if(!values || values.length === 0){
-        setConn('error', 'NO DATA — Check your plan or try again');
-        set('waitMsg', 'No candle data returned. ZEC/USD requires a plan that includes crypto. Check your Twelve Data subscription.');
-        set('tk-status', 'NO DATA');
-        return;
-      }
-
-      // Twelve Data returns newest first — reverse to oldest-first
-      const raw = [...values].reverse();
-      candleData = raw.map(v => ({
-        open:  parseFloat(v.open),
-        high:  parseFloat(v.high),
-        low:   parseFloat(v.low),
-        close: parseFloat(v.close),
-        date:  v.datetime,
-        bull:  parseFloat(v.close) >= parseFloat(v.open)
-      }));
-
-      lastPrice   = candleData[candleData.length - 1].close;
-      sessionOpen = sessionOpen || candleData[0].open;
-      sessionHigh = Math.max(...candleData.map(c => c.high));
-      sessionLow  = Math.min(...candleData.map(c => c.low));
-
-      isLive = true;
-      el('srcPill').textContent = 'TWELVE DATA LIVE';
-      el('srcPill').className   = 'src-pill live';
-      setConn('connected', `LIVE · ZEC/USD M5 · ${candleData.length} CANDLES · AUTO-REFRESH 60s`);
-      set('tk-status', 'LIVE');
-      set('tk-count', candleData.length);
-      setLive(true);
-
-      updatePriceDisplay();
-      computeSignal();
-      resizeCanvas();
-      startCountdown();
-
-    } catch(e) {
-      setConn('error', 'FETCH ERROR: ' + e.message);
-      set('waitMsg', 'Network error: ' + e.message);
-      set('tk-status', 'ERROR');
-    }
-  }
-
-  function updatePriceDisplay(){
-    if(!lastPrice) return;
-    set('tk-price', fmt(lastPrice, 4));
-    set('tk-open',  fmt(sessionOpen, 4));
-    set('tk-hi',    fmt(sessionHigh, 4));
-    set('tk-lo',    fmt(sessionLow, 4));
-    set('lastClose', '$' + fmt(lastPrice, 4));
-
-    const chgEl = el('tk-chg');
-    if(chgEl && sessionOpen){
-      const change = lastPrice - sessionOpen;
-      const pct    = (change / sessionOpen * 100).toFixed(2);
-      chgEl.textContent = (change >= 0 ? '+' : '') + fmt(change, 4) + ' (' + (change >= 0 ? '+' : '') + pct + '%)';
-      chgEl.style.color = change >= 0 ? 'var(--green)' : 'var(--red)';
-    }
+    cdTimer = setInterval(()=>{
+      cd1Rem = Math.max(0, cd1Rem-1);
+      cd4Rem = Math.max(0, cd4Rem-1);
+      const p1=(cd1Rem/(REFRESH_H1/1000))*100;
+      const p4=(cd4Rem/(REFRESH_H4/1000))*100;
+      el('cdFill1').style.width=p1+'%';
+      el('cdFill4').style.width=p4+'%';
+      set('cdVal1', cd1Rem>=60 ? Math.floor(cd1Rem/60)+'m'+(cd1Rem%60>0?cd1Rem%60+'s':'') : cd1Rem+'s');
+      set('cdVal4', cd4Rem>=60 ? Math.floor(cd4Rem/60)+'m'+(cd4Rem%60>0?cd4Rem%60+'s':'') : cd4Rem+'s');
+    },1000);
   }
 
   // ── INDICATORS ──
   function calcEMA(d, p){
-    if(!d || d.length < p) return null;
-    const k = 2/(p+1);
-    let e = d.slice(0,p).reduce((a,b)=>a+b,0)/p;
-    for(let i=p;i<d.length;i++) e = d[i]*k + e*(1-k);
+    if(!d||d.length<p) return null;
+    const k=2/(p+1);
+    let e=d.slice(0,p).reduce((a,b)=>a+b,0)/p;
+    for(let i=p;i<d.length;i++) e=d[i]*k+e*(1-k);
     return e;
   }
   function calcRSI(d, p=14){
-    if(!d || d.length < p+1) return null;
-    const ch = [];
+    if(!d||d.length<p+1) return null;
+    const ch=[];
     for(let i=1;i<d.length;i++) ch.push(d[i]-d[i-1]);
-    const r = ch.slice(-p);
-    const g = r.filter(c=>c>0).reduce((a,b)=>a+b,0)/p;
-    const l = Math.abs(r.filter(c=>c<0).reduce((a,b)=>a+b,0)/p);
-    return l===0 ? 100 : 100-(100/(1+g/l));
+    const r=ch.slice(-p);
+    const g=r.filter(c=>c>0).reduce((a,b)=>a+b,0)/p;
+    const l=Math.abs(r.filter(c=>c<0).reduce((a,b)=>a+b,0)/p);
+    return l===0?100:100-(100/(1+g/l));
   }
   function calcATR(c, p){
-    if(!c || c.length < p+1) return null;
+    if(!c||c.length<p+1) return null;
     const trs=[];
     for(let i=1;i<c.length;i++){
-      const cv=c[i], pv=c[i-1];
-      trs.push(Math.max(cv.high-cv.low, Math.abs(cv.high-pv.close), Math.abs(cv.low-pv.close)));
+      const cv=c[i],pv=c[i-1];
+      trs.push(Math.max(cv.high-cv.low,Math.abs(cv.high-pv.close),Math.abs(cv.low-pv.close)));
     }
     return trs.slice(-p).reduce((a,b)=>a+b,0)/p;
   }
   function calcMACD(d){
     if(!d||d.length<26) return null;
-    const e12=calcEMA(d,12), e26=calcEMA(d,26);
-    return (e12&&e26) ? e12-e26 : null;
-  }
-  function calcStdDev(d, p=20){
-    if(!d||d.length<p) return 0;
-    const r=d.slice(-p), m=r.reduce((a,b)=>a+b)/p;
-    return Math.sqrt(r.reduce((a,b)=>a+Math.pow(b-m,2),0)/p);
+    const e12=calcEMA(d,12),e26=calcEMA(d,26);
+    return (e12&&e26)?e12-e26:null;
   }
 
-  // ── SIGNAL (crypto-tuned: wider RSI bands for ZEC volatility) ──
-  function computeSignal(){
-    if(candleData.length < 26){ set('waitMsg',`Loading... (${candleData.length}/26 candles)`); return; }
-    const closes = candleData.map(c=>c.close);
-    const ema9   = calcEMA(closes,9);
-    const ema21  = calcEMA(closes,21);
-    const rsi    = calcRSI(closes,14);
-    const atr5   = calcATR(candleData,5);
-    const atr14  = calcATR(candleData,14);
-    const macd   = calcMACD(closes);
-    const stdDev = calcStdDev(closes,20);
-    if(!ema9||!ema21||rsi===null) return;
+  // ── FETCH ONE TF ──
+  async function fetchTF(interval, outputsize){
+    const url=`${BASE_URL}/time_series?symbol=${encodeURIComponent(SYMBOL)}&interval=${interval}&outputsize=${outputsize}&apikey=${apiKey}`;
+    const resp=await fetch(url);
+    const data=await resp.json();
+    if(data.status==='error'||data.code) throw new Error(data.message||'API error');
+    if(!data.values||data.values.length===0) throw new Error('No data returned');
+    return [...data.values].reverse().map(v=>({
+      open:parseFloat(v.open),high:parseFloat(v.high),
+      low:parseFloat(v.low),close:parseFloat(v.close),
+      date:v.datetime, bull:parseFloat(v.close)>=parseFloat(v.open)
+    }));
+  }
 
-    const bullish  = ema9 > ema21;
-    const emaDiff  = Math.abs((ema9-ema21)/ema21*100);
-    const strength = Math.round(Math.min(100,Math.abs(rsi-50)*2)*0.5 + Math.min(100,emaDiff*1000)*0.5);
+  // ── COMPUTE ONE TF ──
+  function computeTF(candles, prefix){
+    if(!candles||candles.length<26) return 'WAIT';
+    const closes=candles.map(c=>c.close);
+    const ema9=calcEMA(closes,9), ema21=calcEMA(closes,21);
+    const rsi=calcRSI(closes,14);
+    const atr14=calcATR(candles,14);
+    const macd=calcMACD(closes);
+    if(!ema9||!ema21||rsi===null) return 'WAIT';
 
-    set('atr5', fmt(atr5,4));
-    set('atr14', fmt(atr14,4));
-    set('rsiVal', fmt(rsi,1));
+    const bullish=ema9>ema21;
+    const macdBull=macd!==null?macd>0:bullish;
+    const macdBear=macd!==null?macd<0:!bullish;
+
+    // Update stats UI
+    set(`${prefix}ema9`,  fmt(ema9,3));
+    set(`${prefix}ema21`, fmt(ema21,3));
+    const rsiEl=el(`${prefix}rsiV`);
+    if(rsiEl){rsiEl.textContent=fmt(rsi,1);rsiEl.className=rsi>70?'sv red':rsi<30?'sv green':'sv zec';}
+    const macdEl=el(`${prefix}macd`);
+    if(macdEl){macdEl.textContent=(macd>=0?'+':'')+fmt(macd,3);macdEl.className=macd>=0?'sv green':'sv red';}
+    set(`${prefix}atr`,   fmt(atr14,3));
+    const trendEl=el(`${prefix}trend`);
+    if(trendEl){trendEl.textContent=bullish?'▲ BULL':'▼ BEAR';trendEl.className=bullish?'sv green':'sv red';}
+    set(`${prefix}count`, candles.length);
+
+    // Update confluence display
+    const biasEl=el(prefix==='h1'?'h1bias':'h4bias');
+    const rsiCEl=el(prefix==='h1'?'h1rsi':'h4rsi');
+    if(biasEl){biasEl.textContent=bullish?'▲ BULL':'▼ BEAR';biasEl.className=bullish?'conf-val green':'conf-val red';}
+    if(rsiCEl){rsiCEl.textContent=fmt(rsi,1);rsiCEl.className=rsi>70?'conf-val red':rsi<30?'conf-val green':'conf-val zec';}
+
+    if(prefix==='h4') atrH4val=atr14;
+
+    // Signal logic (wider bands for crypto)
+    let sig='WAIT';
+    if(bullish && macdBull && rsi>38 && rsi<72) sig='BUY';
+    if(!bullish && macdBear && rsi>28 && rsi<62) sig='SELL';
+    return sig;
+  }
+
+  // ── CONFLUENCE LOGIC ──
+  function updateConfluence(){
+    let newConf='WAIT';
+    let strength=0;
+
+    if(sigH1==='BUY' && sigH4==='BUY'){
+      newConf='BUY';
+      strength=90;
+    } else if(sigH1==='SELL' && sigH4==='SELL'){
+      newConf='SELL';
+      strength=90;
+    } else if(sigH1==='BUY' && sigH4==='WAIT'){
+      newConf='BUY';
+      strength=55;
+    } else if(sigH1==='SELL' && sigH4==='WAIT'){
+      newConf='SELL';
+      strength=55;
+    } else if(sigH1==='WAIT' && sigH4==='BUY'){
+      newConf='BUY';
+      strength=65;
+    } else if(sigH1==='WAIT' && sigH4==='SELL'){
+      newConf='SELL';
+      strength=65;
+    } else {
+      strength=10;
+    }
+
+    confSig=newConf;
+
+    // Update confluence UI
+    const cSigEl=el('confSig');
+    if(cSigEl){
+      cSigEl.textContent=newConf==='BUY'?'BUY ▲':newConf==='SELL'?'SELL ▼':'WAIT ◆';
+      cSigEl.className=newConf==='BUY'?'conf-sig buy':newConf==='SELL'?'conf-sig sell':'conf-sig wait';
+    }
+    if(el('strBar')) el('strBar').style.width=strength+'%';
     set('strPct', strength+'%');
-    set('volVal', `σ = ${fmt(stdDev,4)}`);
-    if(el('strBar')) el('strBar').style.width = strength+'%';
 
-    if(macd!==null){
-      const m=el('macdStatus');
-      if(m){m.textContent=(macd>=0?'+':'')+fmt(macd,4);m.className=macd>=0?'sv green':'sv red';}
+    // H1/H4 individual sig badges
+    const s1=el('h1sig');
+    if(s1){s1.textContent=sigH1;s1.className=sigH1==='BUY'?'tp-sig buy':sigH1==='SELL'?'tp-sig sell':'tp-sig wait';}
+    const s4=el('h4sig');
+    if(s4){s4.textContent=sigH4;s4.className=sigH4==='BUY'?'tp-sig buy':sigH4==='SELL'?'tp-sig sell':'tp-sig wait';}
+
+    // Apply trade levels if signal
+    if(newConf!=='WAIT' && lastPrice){
+      const atr=atrH4val||lastPrice*0.01;
+      applyLevels(newConf, lastPrice, atr);
     }
-    const eEl=el('emaStatus');
-    if(eEl){eEl.textContent=`${bullish?'▲':'▼'} ${fmt(ema9,2)} / ${fmt(ema21,2)}`;eEl.className=bullish?'sv green':'sv red';}
-    const tEl=el('trend');
-    if(tEl){tEl.textContent=bullish?'▲ BULLISH':'▼ BEARISH';tEl.className=bullish?'sv green':'sv red';}
 
-    const bars=el('volBars')?.querySelectorAll('.vol-bar');
-    if(bars) bars.forEach((b,i)=>{b.style.height=Math.min(95,(stdDev/(stdDev*2||1))*60+(i*8))+'%';b.classList.toggle('active',i>=4);});
-
-    // Wider RSI bands for crypto (ZEC can be more volatile than SPY)
-    const macdBull = macd!==null ? macd>0 : bullish;
-    const macdBear = macd!==null ? macd<0 : !bullish;
-    let newSig = 'WAIT';
-    if(bullish && macdBull && rsi>38 && rsi<70) newSig='BUY';
-    if(!bullish && macdBear && rsi>30 && rsi<62) newSig='SELL';
-
-    if(newSig!=='WAIT' && newSig!==currentSignal){
-      currentSignal=newSig;
-      applySignal(newSig, lastPrice||closes[closes.length-1], atr14||1);
-    } else if(newSig==='WAIT' && currentSignal!=='WAIT'){
-      currentSignal='WAIT';
-      const b=el('sigBadge');if(b){b.textContent='WAIT ◆';b.className='sig-badge wait';}
-      set('waitMsg','No signal — monitoring ZEC/USD M5...');
-    } else if(newSig!=='WAIT'){
-      set('waitMsg',`${currentSignal} signal active · ${candleData[candleData.length-1].date}`);
-    }
+    // Flash alert on state change
+    flashAlert(newConf, lastPrice, atrH4val);
   }
 
-  function applySignal(type, price, atr){
-    const isBuy  = type==='BUY';
-    // Crypto uses slightly wider ATR multiplier for stops due to volatility
-    const stop   = isBuy ? price-atr*1.8 : price+atr*1.8;
-    const target = isBuy ? price+atr*3.6 : price-atr*3.6;
-    const b=el('sigBadge');
-    if(b){b.textContent=isBuy?'BUY ▲':'SELL ▼';b.className=isBuy?'sig-badge buy':'sig-badge';}
-    set('entryV', fmt(price,4));
-    set('stopV',  fmt(stop,4));
-    set('targetV',fmt(target,4));
-    set('b-entry',fmt(price,4));
-    set('b-stop', fmt(stop,4));
-    set('b-target',fmt(target,4));
-    set('waitMsg',`${type} signal active · M5 ZEC/USD`);
+  function applyLevels(type, price, atr){
+    const isBuy=type==='BUY';
+    const stop  =isBuy?price-atr*1.8:price+atr*1.8;
+    const target=isBuy?price+atr*3.6:price-atr*3.6;
+    set('b-entry', '$'+fmt(price,3));
+    set('b-stop',  '$'+fmt(stop,3));
+    set('b-target','$'+fmt(target,3));
+    set('b-entry-tf', isBuy?'H1+H4 BULLISH CONFLUENCE':'H1+H4 BEARISH CONFLUENCE');
+  }
+
+  let lastAlertSig='';
+  function flashAlert(sig, price, atr){
+    if(sig===lastAlertSig||sig==='WAIT') return;
+    lastAlertSig=sig;
+    const isBuy=sig==='BUY';
+    const stop=atr?price-(atr*1.8*(isBuy?1:-1)):null;
+    const tp=atr?price+(atr*3.6*(isBuy?1:-1)):null;
     const a=el('signalAlert');
     if(a){
       a.textContent=isBuy
-        ?`🟢 BUY ZEC · Entry: $${fmt(price,4)} · SL: $${fmt(stop,4)} · TP: $${fmt(target,4)}`
-        :`🔴 SELL ZEC · Entry: $${fmt(price,4)} · SL: $${fmt(stop,4)} · TP: $${fmt(target,4)}`;
+        ?`🟢 H1+H4 BUY · Entry: $${fmt(price,3)} · SL: $${fmt(stop,3)} · TP: $${fmt(tp,3)}`
+        :`🔴 H1+H4 SELL · Entry: $${fmt(price,3)} · SL: $${fmt(stop,3)} · TP: $${fmt(tp,3)}`;
       a.className=isBuy?'signal-alert buy':'signal-alert sell';
       a.style.display='block';
-      setTimeout(()=>{a.style.display='none';},6000);
+      setTimeout(()=>{a.style.display='none';},7000);
     }
   }
 
   function forceSignal(type){
     if(!lastPrice) return;
-    const atr=parseFloat(el('atr14')?.textContent)||1;
-    applySignal(type,lastPrice,atr);
+    const atr=atrH4val||lastPrice*0.01;
+    applyLevels(type, lastPrice, atr);
+    const cSigEl=el('confSig');
+    if(cSigEl){
+      cSigEl.textContent=type==='BUY'?'BUY ▲':'SELL ▼';
+      cSigEl.className=type==='BUY'?'conf-sig buy':'conf-sig sell';
+    }
   }
   window.forceSignal=forceSignal;
 
-  // ── CANVAS ──
-  const canvas=el('chart');
-  const ctx=canvas?.getContext('2d');
-
-  function resizeCanvas(){
-    if(!canvas) return;
-    canvas.width  = canvas.parentElement?.clientWidth  || 600;
-    canvas.height = canvas.parentElement?.clientHeight || 320;
-    drawChart();
+  // ── CANVAS DRAWING ──
+  function setupCanvas(id){
+    const c=el(id);
+    if(!c) return null;
+    const ctx=c.getContext('2d');
+    return {c, ctx};
   }
 
-  function drawChart(){
-    if(!ctx||candleData.length===0) return;
-    const W=canvas.width, H=canvas.height;
+  function resizeCanvas(id){
+    const c=el(id);
+    if(!c) return;
+    c.width  = c.parentElement?.clientWidth  || 300;
+    c.height = c.parentElement?.clientHeight || 200;
+  }
+
+  function drawCandles(id, candles, accent){
+    const c=el(id);
+    if(!c||!candles||candles.length===0) return;
+    const ctx=c.getContext('2d');
+    const W=c.width, H=c.height;
     ctx.fillStyle='#090d1c'; ctx.fillRect(0,0,W,H);
-
     // Grid
-    ctx.strokeStyle='#14223a'; ctx.lineWidth=0.5;
-    for(let i=0;i<=5;i++){const y=(H/5)*i;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+    ctx.strokeStyle='#14223a'; ctx.lineWidth=0.4;
+    for(let i=0;i<=4;i++){const y=(H/4)*i;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
 
-    const disp=candleData.slice(-80);
-    if(disp.length===0) return;
+    const disp=candles.slice(-50);
     const minP=Math.min(...disp.map(c=>c.low));
     const maxP=Math.max(...disp.map(c=>c.high));
     const range=maxP-minP||1;
-    const cW=Math.max(3,Math.floor(W/disp.length));
-    const pad=0.05;
+    const cW=Math.max(4,Math.floor(W/disp.length));
+    const pad=0.06;
     const sY=v=>H*(1-pad)-((v-minP)/range)*H*(1-2*pad);
 
     disp.forEach((c,i)=>{
       const x=i*cW+cW/2;
-      // Wick
       ctx.strokeStyle=c.bull?'#00e5b0':'#ff2d55'; ctx.lineWidth=1;
       ctx.beginPath();ctx.moveTo(x,sY(c.high));ctx.lineTo(x,sY(c.low));ctx.stroke();
-      // Body
       ctx.fillStyle=c.bull?'#00e5b030':'#ff2d5530';
       const top=Math.min(sY(c.close),sY(c.open));
       const bH=Math.max(2,Math.abs(sY(c.close)-sY(c.open)));
-      ctx.fillRect(x-cW*0.3,top,cW*0.6,bH);
+      ctx.fillRect(x-cW*0.35,top,cW*0.7,bH);
     });
 
-    // Price line
+    // Price line in accent color
     if(lastPrice!==null){
       const yP=sY(lastPrice);
-      ctx.strokeStyle='#f4b728'; ctx.lineWidth=1;
-      ctx.setLineDash([4,3]);
-      ctx.beginPath();ctx.moveTo(0,yP);ctx.lineTo(W,yP);ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.fillStyle='#f4b728';
-      ctx.font='11px Share Tech Mono,monospace';
-      ctx.textAlign='right';
-      ctx.fillText('$'+fmt(lastPrice,4),W-4,yP-3);
-      ctx.textAlign='left';
+      ctx.strokeStyle=accent; ctx.lineWidth=1; ctx.setLineDash([4,3]);
+      ctx.beginPath();ctx.moveTo(0,yP);ctx.lineTo(W,yP);ctx.stroke();ctx.setLineDash([]);
+      ctx.fillStyle=accent;ctx.font='10px Share Tech Mono,monospace';
+      ctx.textAlign='right';ctx.fillText('$'+fmt(lastPrice,3),W-3,yP-3);ctx.textAlign='left';
     }
   }
 
-  window.addEventListener('resize',resizeCanvas);
-  setTimeout(resizeCanvas,200);
-  setInterval(drawChart,2000);
+  function resizeAll(){
+    resizeCanvas('chartH1'); resizeCanvas('chartH4');
+    drawCandles('chartH1', dataH1, '#3d9bff');
+    drawCandles('chartH4', dataH4, '#aa44ff');
+  }
+  window.addEventListener('resize', resizeAll);
+  setInterval(resizeAll, 3000);
 
-  // ── MAIN ENTRY ──
+  // ── FETCH H1 ──
+  async function fetchH1(){
+    try{
+      dataH1 = await fetchTF('1h', SIZE_H1);
+      lastPrice = dataH1[dataH1.length-1].close;
+      set('confPrice','$'+fmt(lastPrice,3));
+      set('tk-price','$'+fmt(lastPrice,3));
+      set('tk-h1hi', fmt(Math.max(...dataH1.map(c=>c.high)),3));
+      set('tk-h1lo', fmt(Math.min(...dataH1.map(c=>c.low)),3));
+      const open=dataH1[0].open;
+      const chg=lastPrice-open;
+      const chgEl=el('tk-chg');
+      if(chgEl){chgEl.textContent=(chg>=0?'+':'')+fmt(chg,3)+' ('+(chg>=0?'+':'')+fmt(chg/open*100,2)+'%)';chgEl.style.color=chg>=0?'var(--green)':'var(--red)';}
+      sigH1 = computeTF(dataH1,'h1');
+      resizeCanvas('chartH1');
+      drawCandles('chartH1', dataH1, '#3d9bff');
+      cd1Rem = REFRESH_H1/1000;
+    }catch(e){
+      console.error('H1 fetch error:',e.message);
+    }
+  }
+
+  // ── FETCH H4 ──
+  async function fetchH4(){
+    try{
+      dataH4 = await fetchTF('4h', SIZE_H4);
+      set('tk-h4hi', fmt(Math.max(...dataH4.map(c=>c.high)),3));
+      set('tk-h4lo', fmt(Math.min(...dataH4.map(c=>c.low)),3));
+      sigH4 = computeTF(dataH4,'h4');
+      resizeCanvas('chartH4');
+      drawCandles('chartH4', dataH4, '#aa44ff');
+      cd4Rem = REFRESH_H4/1000;
+    }catch(e){
+      console.error('H4 fetch error:',e.message);
+    }
+  }
+
+  // ── START ──
   async function startFeed(){
     apiKey = el('tdKey')?.value?.trim();
     if(!apiKey){ setConn('error','ENTER API KEY FIRST'); return; }
-    if(pollTimer) clearInterval(pollTimer);
-    await fetchCandles();
-    pollTimer = setInterval(async()=>{ await fetchCandles(); }, REFRESH_MS);
+    if(pollH1) clearInterval(pollH1);
+    if(pollH4) clearInterval(pollH4);
+
+    setConn('connecting','LOADING ZEC/USD H1 + H4...');
+    set('tk-status','LOADING');
+
+    // Initial fetch both
+    await Promise.all([fetchH1(), fetchH4()]);
+    updateConfluence();
+
+    setConn('connected','LIVE · ZEC/USD H1+H4 · AUTO-REFRESH');
+    set('tk-status','LIVE');
+    startCountdowns();
+
+    // Poll H1 every 5 min
+    pollH1 = setInterval(async()=>{
+      await fetchH1();
+      updateConfluence();
+    }, REFRESH_H1);
+
+    // Poll H4 every 15 min
+    pollH4 = setInterval(async()=>{
+      await fetchH4();
+      updateConfluence();
+    }, REFRESH_H4);
   }
   window.startFeed=startFeed;
 
@@ -616,38 +731,51 @@
   async function askGroq(){
     const key  = el('groqKey')?.value?.trim();
     const query= el('aiQry')?.value?.trim();
-    const btn  = el('aiBtn'), resp=el('aiResp');
+    const btn=el('aiBtn'), resp=el('aiResp');
     if(!key){resp.textContent='Enter your Groq API key (gsk_...) to use AI analysis.';return;}
     btn.disabled=true;
-    resp.textContent='⚡ Analyzing ZEC/USD data...';
+    resp.textContent='⚡ Analyzing ZEC/USD H1+H4 confluence...';
     resp.className='ai-resp loading';
     try{
-      const closes=candleData.map(c=>c.close);
-      const ema9=calcEMA(closes,9),ema21=calcEMA(closes,21),rsi=calcRSI(closes,14);
-      const atr14=calcATR(candleData,14),macd=calcMACD(closes),stdDev=calcStdDev(closes,20);
-      const prompt=`You are an expert cryptocurrency trader and technical analyst specializing in privacy coins and altcoins. Analyze this LIVE ZEC/USD (Zcash) M5 data from Twelve Data:
+      const h1closes=dataH1.map(c=>c.close);
+      const h4closes=dataH4.map(c=>c.close);
+      const h1ema9=calcEMA(h1closes,9),h1ema21=calcEMA(h1closes,21);
+      const h4ema9=calcEMA(h4closes,9),h4ema21=calcEMA(h4closes,21);
+      const h1rsi=calcRSI(h1closes,14), h4rsi=calcRSI(h4closes,14);
+      const h1macd=calcMACD(h1closes),  h4macd=calcMACD(h4closes);
+      const h1atr=calcATR(dataH1,14),   h4atr=calcATR(dataH4,14);
 
-DATA SOURCE: Twelve Data REST API · Symbol: ZEC/USD · Interval: 5min
-Price: $${fmt(lastPrice,4)} | Session Open: $${fmt(sessionOpen,4)} | High: $${fmt(sessionHigh,4)} | Low: $${fmt(sessionLow,4)}
-Change: ${sessionOpen ? fmt(lastPrice-sessionOpen,4) + ' (' + fmt((lastPrice-sessionOpen)/sessionOpen*100,2) + '%)' : '--'}
+      const prompt=`You are an expert cryptocurrency technical analyst specializing in multi-timeframe analysis and privacy coins. Analyze this LIVE ZEC/USD (Zcash) dual-timeframe data:
 
-INDICATORS (${candleData.length} M5 candles):
-EMA 9: ${fmt(ema9,4)} | EMA 21: ${fmt(ema21,4)} | Bias: ${ema9>ema21?'BULLISH':'BEARISH'}
-RSI(14): ${fmt(rsi,1)} — ${rsi>70?'Overbought':rsi<30?'Oversold':'Neutral'}
-MACD: ${fmt(macd,4)} — ${macd>0?'Bullish':'Bearish'} momentum
-ATR(14): ${fmt(atr14,4)} | Volatility σ: ${fmt(stdDev,4)}
-Current Signal: ${currentSignal}
+SOURCE: Twelve Data REST API · Symbol: ZEC/USD
 
-Note: ZEC/USD is a privacy coin with crypto-native volatility — wider ATR-based stops are used (1.8× ATR).
+CURRENT PRICE: $${fmt(lastPrice,3)}
+
+━━ H1 (1-HOUR) TIMEFRAME ━━
+EMA 9: ${fmt(h1ema9,3)} | EMA 21: ${fmt(h1ema21,3)} | Bias: ${h1ema9>h1ema21?'BULLISH':'BEARISH'}
+RSI(14): ${fmt(h1rsi,1)} — ${h1rsi>70?'Overbought':h1rsi<30?'Oversold':'Neutral'}
+MACD: ${fmt(h1macd,3)} — ${h1macd>0?'Bullish':'Bearish'}
+ATR(14): ${fmt(h1atr,3)} | Candles: ${dataH1.length}
+H1 Signal: ${sigH1}
+
+━━ H4 (4-HOUR) TIMEFRAME ━━
+EMA 9: ${fmt(h4ema9,3)} | EMA 21: ${fmt(h4ema21,3)} | Bias: ${h4ema9>h4ema21?'BULLISH':'BEARISH'}
+RSI(14): ${fmt(h4rsi,1)} — ${h4rsi>70?'Overbought':h4rsi<30?'Oversold':'Neutral'}
+MACD: ${fmt(h4macd,3)} — ${h4macd>0?'Bullish':'Bearish'}
+ATR(14): ${fmt(h4atr,3)} | Candles: ${dataH4.length}
+H4 Signal: ${sigH4}
+
+CONFLUENCE SIGNAL: ${confSig}
+TRADE LEVELS: Entry $${fmt(lastPrice,3)} | SL: $${fmt(lastPrice-(h4atr||0)*1.8,3)} | TP: $${fmt(lastPrice+(h4atr||0)*3.6,3)} (R:R 1:2)
 
 USER QUESTION: ${query}
 
-Provide concise professional analysis: trend strength, RSI/MACD confluence, signal validity, specific entry/SL/TP levels at R:R 1:2, key support/resistance, and crypto-specific risks (liquidity, exchange exposure, BTC correlation). Under 300 words.`;
+Provide concise multi-timeframe analysis: H4 trend direction (higher timeframe bias), H1 entry timing, RSI/MACD confluence across both TFs, entry validity, key S/R levels, and ZEC-specific crypto risks. Max 320 words.`;
 
       const r=await fetch('https://api.groq.com/openai/v1/chat/completions',{
         method:'POST',
         headers:{'Content-Type':'application/json','Authorization':`Bearer ${key}`},
-        body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'user',content:prompt}],max_tokens:450,temperature:0.65})
+        body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'user',content:prompt}],max_tokens:500,temperature:0.65})
       });
       const d=await r.json();
       if(d.error) throw new Error(d.error.message);
@@ -657,6 +785,9 @@ Provide concise professional analysis: trend strength, RSI/MACD confluence, sign
     finally{btn.disabled=false;}
   }
   window.askGroq=askGroq;
+
+  // Initial canvas resize
+  setTimeout(resizeAll, 300);
 
 })();
 </script>
