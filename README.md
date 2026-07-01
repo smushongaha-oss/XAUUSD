@@ -1,1 +1,1 @@
-ZEC USD
+ZZEC USD
